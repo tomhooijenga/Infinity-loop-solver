@@ -7,36 +7,18 @@ Line.prototype.constructor = Line;
 
 Line.prototype.sides = [direction.up, direction.down];
 
-Line.prototype.best = function (board) {
-    var neighbours = this.neighbours,
-        nextdir;
+Line.prototype.best = function () {
+    var sides = Block.prototype.best.apply(this),
+        keys = Object.keys(sides),
+        next;
 
-    for (var dir in neighbours) {
-        if (!neighbours.hasOwnProperty(dir)) continue;
+    if (keys.length > 0) {
+        next = keys[0];
 
-        var neighbour = neighbours[dir];
-
-        // Empty space
-        if (!neighbour) {
-            // Turn opposite side
-            nextdir = (direction[dir] + 1) % 4;
-
-            break;
-        } else if (neighbour.fixed) {
-            var opposite = (direction[dir] + 2) % 4;
-
-            // neighbour doesn't have that side
-            if (neighbour.relative().indexOf(opposite) !== -1) {
-                nextdir = direction[dir];
-            } else {
-                nextdir = (direction[dir] + 1) % 4;
-            }
-        }
-    }
-
-    if (nextdir !== undefined) {
-        this.direction = nextdir;
+        this.direction = sides[next] ? next : direction.next(next);
 
         this.fixed = true;
     }
+
+    return sides;
 };

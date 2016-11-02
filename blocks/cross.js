@@ -10,6 +10,6 @@ Cross.prototype.constructor = Cross;
 
 Cross.prototype.sides = [direction.up, direction.right, direction.down, direction.left];
 
-Cross.prototype.best = function (board) {
+Cross.prototype.best = function () {
     // This line is intentionally left blank
 };

@@ -61,7 +61,7 @@ Solve.prototype.best = function (fixed) {
             if (!block) continue;
 
             if (!block.fixed) {
-                block.best(grid);
+                block.fit(block.best());
             }
 
             if (block.fixed) {

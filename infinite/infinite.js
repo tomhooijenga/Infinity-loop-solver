@@ -40,12 +40,14 @@ Board.prototype.solve = function () {
 
     solve.best(0);
 
+    this.draw();
+
     solve.line = solve.filter();
 
     possibilities = Math.pow(4, solve.line.length);
 
-    if (possibilities < 20000 || confirm('There are ' + possibilities + ' possibilities. This might take a while. Continue?')) {
-        solve.force();
+    if (possibilities < 65536 || confirm('There are ' + possibilities + ' possibilities. This might take a while. Continue?')) {
+        //solve.force();
     }
 };
 
@@ -96,7 +98,7 @@ Board.prototype.draw = function () {
 
             if (!block) continue;
 
-            block.element.style.transform = 'rotate(' + (block.direction) * 90 + 'deg)';
+            block.element.style.transform = 'rotate(' + (direction[block.direction]) * 90 + 'deg)';
         }
     }
 };

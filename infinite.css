@@ -122,6 +122,7 @@ label, #reset {
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
+    border: 1px solid black;
 }
 
 .board > div::before,
@@ -140,15 +141,13 @@ label, #reset {
     background-color: #861e32;
 }
 
-.board > [data-type="cross"]::after,
-.board > [data-type="junc"]::before {
+.board > [data-type="cross"]::after {
     width: 100%;
     height: 0.5rem;
     top: 1.75rem;
     background-color: #861e32;
 }
 
-.board > [data-type="junc"]::after,
 .board > [data-type="turn"]::after {
     height: 2rem;
     width: 0.5rem;
@@ -179,4 +178,17 @@ label, #reset {
     left: 1.75rem;
 }
 
+.board > [data-type="junc"]::before {
+    background-color: #861e32;
+    height: 4rem;
+    width: 0.5rem;
+    left: 1.75rem;
+}
 
+.board > [data-type="junc"]::after {
+    background-color: #861e32;
+    height: 0.5rem;
+    width: 2rem;
+    left: 1.75rem;
+    top: 1.75rem;
+}

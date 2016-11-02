@@ -5,36 +5,26 @@ function Junction() {
 Junction.prototype = Object.create(Block.prototype);
 Junction.prototype.constructor = Junction;
 
-Junction.prototype.sides = [direction.up, direction.right, direction.left];
+Junction.prototype.sides = [direction.up, direction.right, direction.down];
 
-Junction.prototype.best = function (board) {
-    var neighbours = this.neighbours,
-        nextdir;
+Junction.prototype.fit = function (sides) {
+    for (var side in sides) {
+        if (!sides.hasOwnProperty(side)) {
+            continue;
+        }
 
-    for (var dir in neighbours) {
-        if (!neighbours.hasOwnProperty(dir)) continue;
+        if (sides[side] === false) {
+            console.log(this.element, side);
 
-        var neighbour = neighbours[dir];
+            this.fixed = true;
 
-        // Empty space
-        if (!neighbour) {
-            nextdir = (direction[dir] + 2) % 4;
+            this.direction = direction.next(side);
 
-            break;
-        } else if (neighbour.fixed) {
-            // Relative down
-            var relativeDown = (direction.down + direction[dir]) % 4;
-
-            // neighbour doesn't have that side
-            if (neighbour.relative().indexOf(relativeDown) === -1) {
-                nextdir = relativeDown;
-            }
+            return true;
         }
     }
 
-    if (nextdir !== undefined) {
-        this.direction = nextdir;
-
-        this.fixed = true;
+    if (!this.fixed) {
+        return Block.prototype.fit.call(this, sides);
     }
 };

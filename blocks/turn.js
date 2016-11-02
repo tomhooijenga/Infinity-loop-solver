@@ -7,49 +7,19 @@ Turn.prototype.constructor = Turn;
 
 Turn.prototype.sides = [direction.up, direction.right];
 
-Turn.prototype.best = function (board) {
-    var neighbours = this.neighbours,
-        nextdir,
-        filtered = {},
-        connection = [];
+Turn.prototype.best = function () {
+    var sides = Block.prototype.best.apply(this),
+        keys = Object.keys(sides);
 
-    for (var dir in neighbours) {
-        if (!neighbours.hasOwnProperty(dir)) continue;
+    if (keys.length > 0) {
+        keys.forEach(function (dir) {
+            var opp = direction.opposite(dir);
 
-        var neighbour = neighbours[dir];
-
-        if (!neighbour) {
-            connection.push((direction[dir] + 2) % 4);
-
-            continue;
-        }
-
-        if (!neighbour.fixed) continue;
-
-        var relative = (direction[dir] + 2) % 4;
-
-        if (neighbour.relative().indexOf(relative) !== -1) {
-            connection.push(direction[dir]);
-        } else {
-            connection.push((direction[dir] + 2) % 4);
-        }
+            if (sides[opp] === undefined) {
+                sides[opp] = !sides[dir];
+            }
+        });
     }
 
-    connection = connection.filter(function (val, i) {
-        return connection.indexOf(val) === i;
-    });
-
-    if (connection.length >= 2) {
-        if (connection.indexOf(direction.up) !== -1 && connection.indexOf(direction.left) !== -1) {
-            nextdir = direction.left;
-        } else {
-            nextdir = Math.min.apply(null, connection);
-        }
-    }
-
-    if (nextdir !== undefined) {
-        this.direction = nextdir;
-
-        this.fixed = true;
-    }
+    return sides;
 };
