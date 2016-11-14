@@ -60,7 +60,7 @@ label, #reset {
 }
 
 #menu-cover {
-    position: absolute;
+    position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
@@ -85,11 +85,11 @@ label, #reset {
     bottom: 0;
     right: 0;
     margin: 0;
-    width: 26rem;
     transform: translateX(100%);
     transition: transform .2s ease-in-out;
     background-color: #162539;
     z-index: 2;
+    padding: 4rem 4rem 0 4rem;
     overflow: auto;
 }
 
@@ -100,12 +100,18 @@ label, #reset {
 
 #menu .board {
     margin: 8rem auto;
+    border-color: #111c2b;
+}
+
+#menu [data-type="junc"]::after,
+#menu [data-type="cross"]::after {
+    box-shadow: 0 0 0 3px #162539;
 }
 
 .board {
     margin-left: auto;
     margin-right: auto;
-    border: 0.1rem solid #162539;
+    border: 1px solid #162539;
 }
 
 .board::after {
@@ -122,7 +128,7 @@ label, #reset {
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
-    border: 1px solid black;
+    transition: transform .2s ease-in-out
 }
 
 .board > div::before,
@@ -133,7 +139,13 @@ label, #reset {
     box-sizing: border-box;
 }
 
-.board > [data-type="line"]::before,
+.board > [data-type="line"]::before {
+    height: 100%;
+    width: 0.5rem;
+    left: 1.75rem;
+    background-color: #861e32;
+}
+
 .board > [data-type="cross"]::before {
     height: 100%;
     width: 0.5rem;
@@ -146,25 +158,21 @@ label, #reset {
     height: 0.5rem;
     top: 1.75rem;
     background-color: #861e32;
-}
-
-.board > [data-type="turn"]::after {
-    height: 2rem;
-    width: 0.5rem;
-    background-color: #861e32;
-    left: 1.75rem;
+    box-shadow: 0 0 0 3px #1d314b;
 }
 
 .board > [data-type="turn"]::before {
-    width: 2.25rem;
-    height: 0.5rem;
-    background-color: #861e32;
-    top: 1.75rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 0.5rem solid #861e32;
+    border-radius: 100%;
     left: 1.75rem;
+    bottom: 1.75rem;
 }
 
 .board > [data-type="end"]::before {
     border: 0.5rem solid #861e32;
+    border-radius: 100%;
     width: 2rem;
     height: 2rem;
     left: 1rem;
@@ -172,23 +180,27 @@ label, #reset {
 }
 
 .board > [data-type="end"]::after {
-    height: 1rem;
+    height: 1.25rem;
     width: 0.5rem;
     background-color: #861e32;
     left: 1.75rem;
 }
 
 .board > [data-type="junc"]::before {
-    background-color: #861e32;
-    height: 4rem;
-    width: 0.5rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 0.5rem solid #861e32;
+    border-radius: 100%;
     left: 1.75rem;
+    bottom: 1.75rem;
 }
 
 .board > [data-type="junc"]::after {
-    background-color: #861e32;
-    height: 0.5rem;
-    width: 2rem;
+    width: 4.5rem;
+    height: 4.5rem;
+    border: 0.5rem solid #861e32;
+    border-radius: 100%;
     left: 1.75rem;
     top: 1.75rem;
+    box-shadow: 0 0 0 3px #1d314b;
 }
