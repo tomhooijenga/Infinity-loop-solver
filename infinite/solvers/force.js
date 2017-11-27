@@ -2,27 +2,27 @@ var Force = function () {
 
 };
 
-Force.prototype.run = function (blocks) {
-    var _blocks,
+Force.prototype.run = function (tiles) {
+    var _tiles,
         done = false,
         tries = 0,
         max = 0;
 
-    _blocks = blocks.filter(function (block) {
-        if (block && !block.fixed) {
-            block.direction = direction.up;
+    _tiles = tiles.filter(function (tile) {
+        if (tile && !tile.fixed) {
+            tile.direction = direction.up;
 
             return true;
         }
 
         return false;
     });
-    max = Math.pow(4, _blocks.length);
+    max = Math.pow(4, _tiles.length);
 
     do {
-        _blocks = this.rotate(_blocks);
+        _tiles = this.rotate(_tiles);
 
-        done = _blocks.every(this.fits);
+        done = _tiles.every(this.fits);
 
         tries++;
     } while (!done && tries < max);
@@ -30,25 +30,25 @@ Force.prototype.run = function (blocks) {
     return true;
 };
 
-Force.prototype.rotate = function (blocks) {
-    for (var i = 0; i < blocks.length; i++) {
-        var last = blocks[i].direction,
+Force.prototype.rotate = function (tiles) {
+    for (var i = 0; i < tiles.length; i++) {
+        var last = tiles[i].direction,
             next = direction.next(last);
 
-        blocks[i].direction = next;
+        tiles[i].direction = next;
 
         if (last < next) {
             break;
         }
     }
 
-    return blocks;
+    return tiles;
 };
 
-Force.prototype.fits = function (block) {
-    var neighbours = block.neighbours;
+Force.prototype.fits = function (tile) {
+    var neighbours = tile.neighbours;
 
-    return block.open.every(function (isOpen, dir) {
+    return tile.open.every(function (isOpen, dir) {
         if (neighbours[dir] === false) {
             return isOpen === false;
         }

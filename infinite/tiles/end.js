@@ -1,8 +1,8 @@
 function End() {
-    Block.apply(this, arguments);
+    Tile.apply(this, arguments);
 }
 
-End.prototype = Object.create(Block.prototype);
+End.prototype = Object.create(Tile.prototype);
 End.prototype.constructor = End;
 
 End.prototype.sides = [direction.up];

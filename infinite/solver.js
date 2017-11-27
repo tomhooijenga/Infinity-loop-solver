@@ -1,47 +1,46 @@
 /**
- *
- * @param board Obejct
- * @param strategies Array array of strategies
+ * @param {[]} strategies array of strategies
  * @constructor
  */
-var Solver = function (board, strategies) {
-
+var Solver = function (strategies) {
     /**
-     *
-     * @type Object
-     */
-    this.board = board;
-
-    /**
-     * @type Array
+     * @type {[]}
      */
     this.strategies = strategies;
 };
 
 /**
  * Solves a board
+ *
+ * @returns {{}} The board object
  */
-Solver.prototype.run = function () {
-    var blocks = this.board.blocks,
-        width = this.board.width;
+Solver.prototype.run = function (board) {
+    var tiles = board.tiles,
+        width = board.width;
 
-    this.board.blocks.forEach(function (block, index) {
+    board.tiles.map(function (tile) {
+        if (tile instanceof None) {
+            return false;
+        }
+
+        return tile;
+    }).forEach(function (tile, index) {
 
         var notRightEdge = !((index + 1) % width === 0),
             notLeftEdge = !((index) % width  === 0);
 
-        // up, right, left, down
-        block.neighbours = [
-            blocks[index - width] || false,
-            notRightEdge &&  blocks[index + 1] || false,
-            blocks[index + width] || false,
-            notLeftEdge && blocks[index - 1] || false
+        // up, right, down, left
+        tile.neighbours = [
+            tiles[index - width] || false,
+            notRightEdge &&  tiles[index + 1] || false,
+            tiles[index + width] || false,
+            notLeftEdge && tiles[index - 1] || false
         ];
     });
 
     this.strategies.some(function (strategy) {
-        return strategy.run(blocks);
+        return strategy.run(tiles);
     }, this);
 
-    return this.board;
+    return board;
 };

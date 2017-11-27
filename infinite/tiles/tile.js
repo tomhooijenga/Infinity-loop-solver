@@ -1,7 +1,7 @@
 /**
  * @constructor
  */
-function Block(type) {
+function Tile() {
     var _direction;
 
     Object.defineProperty(this, 'direction', {
@@ -21,13 +21,13 @@ function Block(type) {
 
     this.open = [];
 
+    this.neighbours = [];
+
     this.direction = direction.up;
 
     this.fixed = false;
 
-    this.neighbours = [];
-
-    this.type = type;
+    this.type = this.constructor.name.toLowerCase();
 }
 
-Block.prototype.sides = [];
+Tile.prototype.sides = [];

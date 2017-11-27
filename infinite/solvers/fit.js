@@ -2,8 +2,8 @@ var Fit = function () {
 
 };
 
-Fit.prototype.blocks = {
-    junc: {
+Fit.prototype.tiles = {
+    junction: {
         fits: function (sides) {
             return sides.some(function (val, side) {
                 if (val === false) {
@@ -39,40 +39,34 @@ Fit.prototype.blocks = {
     }
 };
 
-Fit.prototype.run = function (blocks) {
+Fit.prototype.run = function (tiles) {
     var last = 0,
         current = 0;
 
     do {
         last = current;
 
-        current = this._run(blocks);
+        current = this._run(tiles);
 
-    } while (current > last);
+    } while (current > last && current < tiles.length);
 
-    return current === blocks.length;
+    return current === tiles.length;
 };
 
-Fit.prototype._run = function (blocks) {
+Fit.prototype._run = function (tiles) {
     var found = 0;
 
-    blocks.forEach(function (block, index) {
-        if (!block) {
+    tiles.forEach(function (tile, index) {
+        if (tile.fixed) {
             found++;
 
             return;
         }
 
-        if (block.fixed) {
-            found++;
+        var available = this.available(tile);
 
-            return;
-        }
-
-        var available = this.available(block);
-
-        if (this.fits(block, available)) {
-            block.fixed = true;
+        if (this.fits(tile, available)) {
+            tile.fixed = true;
 
             found++;
         }
@@ -82,17 +76,17 @@ Fit.prototype._run = function (blocks) {
 };
 
 /**
- * Get the block's available sides
+ * Get the tile's available sides
  *
- * @param block
+ * @param tile
  * @returns {Object}
  */
-Fit.prototype.available = function (block) {
-    var neighbours = block.neighbours,
+Fit.prototype.available = function (tile) {
+    var neighbours = tile.neighbours,
         sides = [];
 
-    if (block.fixed) {
-        return block.open;
+    if (tile.fixed) {
+        return tile.open;
     }
 
     neighbours.forEach(function (neighbour, dir) {
@@ -113,43 +107,45 @@ Fit.prototype.available = function (block) {
         sides[dir] = neighbour.open[neighbourRelative];
     });
 
-    var extension = this.blocks[block.type];
+    var extension = this.tiles[tile.type];
 
     if (extension && extension.available) {
-        sides = extension.available.call(block, sides);
+        return extension.available.call(tile, sides);
     }
 
     return sides;
 };
 
-Fit.prototype.fits = function (block, available) {
-    var extension = this.blocks[block.type];
+Fit.prototype.fits = function (tile, available) {
+
+    if (tile.fixed) {
+        return true;
+    }
+
+    var extension = this.tiles[tile.type];
 
     if (extension && extension.fits) {
-        if (extension.fits.call(block, available)) {
+        if (extension.fits.call(tile, available)) {
             return true;
         }
     }
 
-    if (block.fixed) {
-        return true;
-    }
 
-    var len = block.sides.length;
+    var len = tile.sides.length;
 
     if (available.length === 0) {
         return false;
     }
 
     return direction.values.some(function (unused, dir) {
-        block.direction = dir;
+        tile.direction = dir;
 
         var filled = 0,
             empty = 0,
             fit;
 
         fit = available.every(function (val, side) {
-            if (val === block.open[side]) {
+            if (val === tile.open[side]) {
                 val ? filled++ : empty++;
 
                 return true;
