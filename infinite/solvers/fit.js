@@ -1,9 +1,18 @@
 var Fit = function () {
 
 };
-
+/**
+ * Shortcut functions for parts of the algorithm
+ */
 Fit.prototype.tiles = {
     junction: {
+        /**
+         * A junction has one closed side,
+         * so try to match it to a closed neighbour
+         *
+         * @param {Number[]} sides
+         * @returns {Boolean}
+         */
         fits: function (sides) {
             return sides.some(function (val, side) {
                 if (val === false) {
@@ -15,6 +24,13 @@ Fit.prototype.tiles = {
         }
     },
     turn: {
+        /**
+         * The open and closed sides are symmetric,
+         * so if a side is open, the opposite side is closed.
+         *
+         * @param {Number[]} sides
+         * @returns {Number[]}
+         */
         available: function (sides) {
             var _sides = [];
 
@@ -27,18 +43,29 @@ Fit.prototype.tiles = {
         }
     },
     line: {
+        /**
+         * A line has only two positions. One side is enough
+         * to find a fit.
+         *
+         * @param {Number[]} sides
+         * @returns {Boolean}
+         */
         fits: function (sides) {
             return sides.some(function (val, side) {
-                if (val === false) {
-                    this.direction = val === false ? direction.next(side) : side;
+                this.direction = val === false ? direction.next(side) : side;
 
-                    return true;
-                }
+                return true;
             }, this);
         }
     }
 };
 
+/**
+ * Run the solver
+ *
+ * @param {Tile[]} tiles
+ * @returns {boolean} True when all tiles were solved
+ */
 Fit.prototype.run = function (tiles) {
     var last = 0,
         current = 0;
@@ -53,6 +80,11 @@ Fit.prototype.run = function (tiles) {
     return current === tiles.length;
 };
 
+/**
+ * @param {Tile[]} tiles
+ * @returns {number} The amount of tiles solved this run
+ * @private
+ */
 Fit.prototype._run = function (tiles) {
     var found = 0;
 
@@ -79,7 +111,7 @@ Fit.prototype._run = function (tiles) {
  * Get the tile's available sides
  *
  * @param tile
- * @returns {Object}
+ * @returns {boolean[]} Map of direction => boolean
  */
 Fit.prototype.available = function (tile) {
     var neighbours = tile.neighbours,
@@ -116,6 +148,14 @@ Fit.prototype.available = function (tile) {
     return sides;
 };
 
+/**
+ * Try to find the correct direction of the tile. When found,
+ * set it that way.
+ *
+ * @param {Tile} tile
+ * @param {boolean[]} available Map of side => boolean
+ * @returns {boolean}
+ */
 Fit.prototype.fits = function (tile, available) {
 
     if (tile.fixed) {
@@ -130,23 +170,25 @@ Fit.prototype.fits = function (tile, available) {
         }
     }
 
-
-    var len = tile.sides.length;
-
+    // There are no neighbours to determine a fit
     if (available.length === 0) {
         return false;
     }
 
-    return direction.values.some(function (unused, dir) {
+    var len = tile.sides.length;
+
+    // Try each of the directions until a fit is found
+    return direction.values.some(function (_, dir) {
         tile.direction = dir;
 
-        var filled = 0,
-            empty = 0,
+        var open = 0,
+            closed = 0,
             fit;
 
-        fit = available.every(function (val, side) {
-            if (val === tile.open[side]) {
-                val ? filled++ : empty++;
+        fit = available.every(function (isOpen, side) {
+            // Match this tile's side to the neighbour's side
+            if (isOpen === tile.open[side]) {
+                isOpen ? open++ : closed++;
 
                 return true;
             }
@@ -155,6 +197,6 @@ Fit.prototype.fits = function (tile, available) {
         });
 
         // Legit fit?
-        return fit && (filled === len || empty === 4 - len)
+        return fit && (open === len || closed === 4 - len)
     });
 };
