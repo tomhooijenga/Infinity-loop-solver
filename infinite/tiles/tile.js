@@ -2,22 +2,12 @@
  * @constructor
  */
 function Tile() {
-    var _direction;
-
-    Object.defineProperty(this, 'direction', {
-        get: function () {
-            return _direction;
-        },
-        set: function (value) {
-            _direction = value;
-
-            direction.values.forEach(function (dir) {
-                var relative = direction.next(dir, value);
-
-                this.open[relative] = this.sides.indexOf(direction[dir]) !== -1;
-            }, this);
-        }
-    });
+    /**
+     * The direction the tile is facing
+     *
+     * @type {number}
+     */
+    this.direction = direction.up;
 
     /**
      * Map of side => boolean. True means this side has an
@@ -35,13 +25,6 @@ function Tile() {
     this.neighbours = [];
 
     /**
-     * The direction the tile is facing
-     *
-     * @type {number}
-     */
-    this.direction = direction.up;
-
-    /**
      * Indicates if this tile has been solved
      *
      * @type {boolean}
@@ -54,6 +37,8 @@ function Tile() {
      * @type {string}
      */
     this.type = this.constructor.name.toLowerCase();
+
+    this.setDirection(direction.up);
 }
 
 /**
@@ -62,3 +47,18 @@ function Tile() {
  * @type {number[]}
  */
 Tile.prototype.sides = [];
+
+/**
+ * Rotate a tile
+ *
+ * @param {Number} newDirection
+ */
+Tile.prototype.setDirection = function(newDirection) {
+    this.direction = newDirection;
+
+    direction.values.forEach(function (dir) {
+        var relative = direction.next(dir, newDirection);
+
+        this.open[relative] = this.sides.indexOf(direction[dir]) !== -1;
+    }, this);
+};

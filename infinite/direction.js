@@ -19,6 +19,12 @@ Object.defineProperty(direction, 'opposite', {
 });
 
 Object.defineProperty(direction, 'next', {
+    /**
+     *
+     * @param {Number} dir The current direction
+     * @param {String|Number} amount How many places
+     * @returns {number}
+     */
     value: function (dir, amount) {
         dir = typeof dir === 'number' ? dir : direction[dir];
 

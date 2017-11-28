@@ -17,7 +17,7 @@ Force.prototype.run = function (tiles) {
     // Remove empty and solved tiles
     _tiles = tiles.filter(function (tile) {
         if (tile && !tile.fixed) {
-            tile.direction = direction.up;
+            tile.setDirection(direction.up);
 
             return true;
         }
@@ -49,7 +49,7 @@ Force.prototype.rotate = function (tiles) {
         var last = tiles[i].direction,
             next = direction.next(last);
 
-        tiles[i].direction = next;
+        tiles[i].setDirection(next);
 
         if (last < next) {
             break;

@@ -16,7 +16,7 @@ Fit.prototype.tiles = {
         fits: function (sides) {
             return sides.some(function (val, side) {
                 if (val === false) {
-                    this.direction = direction.next(side);
+                    this.setDirection(direction.next(side));
 
                     return true;
                 }
@@ -52,7 +52,7 @@ Fit.prototype.tiles = {
          */
         fits: function (sides) {
             return sides.some(function (val, side) {
-                this.direction = val === false ? direction.next(side) : side;
+                this.setDirection(val === false ? direction.next(side) : side);
 
                 return true;
             }, this);
@@ -179,7 +179,7 @@ Fit.prototype.fits = function (tile, available) {
 
     // Try each of the directions until a fit is found
     return direction.values.some(function (_, dir) {
-        tile.direction = dir;
+        tile.setDirection(dir);
 
         var open = 0,
             closed = 0,
