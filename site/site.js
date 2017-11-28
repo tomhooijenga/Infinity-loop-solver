@@ -97,7 +97,7 @@ new Vue({
                 {},
                 emptyBoard,
                 {
-                    tiles: board.tiles.map(function (type) {
+                    tiles: emptyBoard.tiles.map(function (type) {
                         return new type();
                     })
                 }

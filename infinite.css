@@ -71,7 +71,7 @@ body {
     clear: both;
 }
 
-.board div {
+.board > div {
     margin: 0;
     width: 4rem;
     height: 4rem;
@@ -79,7 +79,7 @@ body {
     overflow: hidden;
     position: relative;
     box-sizing: border-box;
-    transition: transform .2s ease-in-out
+    transition: transform .2s ease-in-out;
 }
 
 .board > div::before,
@@ -154,4 +154,13 @@ body {
     left: 1.75rem;
     top: 1.75rem;
     box-shadow: 0 0 0 3px #1d314b;
+}
+
+.board > .none::before {
+    top: 1.75rem;
+    left: 1.75rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    background-color: #861e32;
+    border-radius: 100%;
 }
