@@ -28,6 +28,8 @@ var emptyBoard = {
 
 var types = [None, End, Line, Turn, Junction, Cross];
 
+var worker = new Worker('site/worker.js');
+
 new Vue({
     el: '#app',
     data: {
@@ -66,6 +68,10 @@ new Vue({
         done(board) {
             this.solving = false;
 
+            board.tiles = board.tiles.map(function (tile) {
+                return new TileFactory(tile.type, tile);
+            });
+
             this.board = board;
         },
         type(tile) {
@@ -87,11 +93,9 @@ new Vue({
             this.toggle('boards', false);
         },
         clear: function () {
-            var board = emptyBoard;
-
             this.board = Object.assign(
                 {},
-                board,
+                emptyBoard,
                 {
                     tiles: board.tiles.map(function (type) {
                         return new type();
