@@ -14,108 +14,49 @@ body {
     color: whitesmoke;
     font-family: 'Open Sans', sans-serif;
     overflow-x: hidden;
-
 }
 
-input:not([type="checkbox"]) {
-    text-align: center;
-    font-size: 2rem;
-    height: 4rem;
-    border: none;
-    box-sizing: border-box;
-    background-color: #861e32;
-    color: whitesmoke;
+.button {
+    background: #162539;
     font-family: 'Open Sans', sans-serif;
-}
-
-input[type="number"] {
-    width: 4rem;
-    padding: 0;
-}
-
-input[type="button"] {
+    color: #f5f5f5;
+    font-size: 2rem;
+    border: none;
     padding: 0.5rem;
-    background-color: #4b1b23;
+}
+.button[disabled] {
+    opacity: .5;
 }
 
-label, #reset {
-    color: #861e32;
-    height: auto;
-    border-bottom: 0.1rem solid #861e32;
-    display: inline-block;
-}
-
-#reset {
-    border: 0.1rem solid #861e32;
+.button--clear {
+    color: #cccccc;
+    border: 1px solid #162539;
     background: none;
-    padding: 0 0.5rem;
 }
 
-#menu-toggle {
-    visibility: hidden;
-    width: 0;
-    height: 0;
-    padding: 0;
-    margin: 0;
+.button--solve {
 }
 
-#menu-cover {
+.modal {
     position: fixed;
     top: 0;
-    bottom: 0;
-    right: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, .1);
     margin: 0;
-    left: 0;
-    z-index: 1;
-    transition: background-color 0.2s ease-in-out, visibility 0s 0.2s;
-    background-color: transparent;
-    visibility: hidden;
 }
 
-#menu-toggle:checked ~ #menu-cover {
-    visibility: visible;
-    transition-delay: 0s;
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-#menu {
-    pointer-events: none;
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    margin: 0;
-    transform: translateX(100%);
-    transition: transform .2s ease-in-out;
-    background-color: #162539;
-    z-index: 2;
-    padding: 4rem 4rem 0 4rem;
+.modal__body {
     overflow: auto;
-}
-
-#menu-toggle:checked ~ #menu {
-    pointer-events: auto;
-    transform: translateX(0);
-}
-
-@media all and (max-width: 38rem){
-    html {
-        font-size: 50%;
-    }
-    #menu {
-        width: 100%;
-        padding: 4rem 0 0 0;
-    }
-}
-
-#menu .board {
-    margin: 8rem auto;
-    border-color: #111c2b;
-}
-
-#menu [data-type="junc"]::after,
-#menu [data-type="cross"]::after {
-    box-shadow: 0 0 0 3px #162539;
+    max-height: 80vh;
+    width: 70vw;
+    margin: 10vh 15vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    border: 1px solid #162539;
+    background-color: #1d314b;
 }
 
 .board {
@@ -149,21 +90,21 @@ label, #reset {
     box-sizing: border-box;
 }
 
-.board > [data-type="line"]::before {
+.board > .line::before {
     height: 100%;
     width: 0.5rem;
     left: 1.75rem;
     background-color: #861e32;
 }
 
-.board > [data-type="cross"]::before {
+.board > .cross::before {
     height: 100%;
     width: 0.5rem;
     left: 1.75rem;
     background-color: #861e32;
 }
 
-.board > [data-type="cross"]::after {
+.board > .cross::after {
     width: 100%;
     height: 0.5rem;
     top: 1.75rem;
@@ -171,7 +112,7 @@ label, #reset {
     box-shadow: 0 0 0 3px #1d314b;
 }
 
-.board > [data-type="turn"]::before {
+.board > .turn::before {
     width: 4.5rem;
     height: 4.5rem;
     border: 0.5rem solid #861e32;
@@ -180,7 +121,7 @@ label, #reset {
     bottom: 1.75rem;
 }
 
-.board > [data-type="end"]::before {
+.board > .end::before {
     border: 0.5rem solid #861e32;
     border-radius: 100%;
     width: 2rem;
@@ -189,14 +130,14 @@ label, #reset {
     top: 1rem;
 }
 
-.board > [data-type="end"]::after {
+.board > .end::after {
     height: 1.25rem;
     width: 0.5rem;
     background-color: #861e32;
     left: 1.75rem;
 }
 
-.board > [data-type="junc"]::before {
+.board > .junction::before {
     width: 4.5rem;
     height: 4.5rem;
     border: 0.5rem solid #861e32;
@@ -205,7 +146,7 @@ label, #reset {
     bottom: 1.75rem;
 }
 
-.board > [data-type="junc"]::after {
+.board > .junction::after {
     width: 4.5rem;
     height: 4.5rem;
     border: 0.5rem solid #861e32;

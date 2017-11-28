@@ -5,46 +5,74 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Title</title>
     <link href="infinite.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans" type="text/css"/>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
 </head>
 <body>
-<input type="number" id="width" value="4" min="1"/>
-&times;
-<input type="number" id="height" value="4" min="1"/>
-<input type="button" id="solve" value="Solve!"/>
-<br/>
 
-<label for="menu-toggle">
-    Load&hellip;
-</label>
-<input id="menu-toggle" type="checkbox"/>
-<input type="button" id="reset" value="Reset"/>
+<div id="app">
 
-<label for="menu-toggle" id="menu-cover"></label>
+    <button type="button" class="button" @click="toggle('info')">Help</button>
+    <button type="button" class="button" @click="toggle('boards')">Load a board</button>
+    <button type="button" class="button button--clear" @click="clear">Clear</button>
 
-<div id="menu">
-    <label for="menu-toggle">Close</label>
+    <div class="board"
+         :style="{ width: board.width * 4 + 'rem', height: board.height * 4 + 'rem'}">
+        <div v-for="(tile, index) in board.tiles"
+             :data-tile="index"
+             :class="tile.type"
+             :style="{ transform: 'rotate(' + tile.direction * 90 + 'deg)' }"
+             @click="change(tile, index)">
+        </div>
+    </div>
+
+    <div v-show="modal === 'boards'"
+         @click.self="toggle('boards')"
+         class="modal"
+         style="display: none;">
+        <div class="modal__body">
+            <button class="modal__close button" type="button" @click="toggle('boards')">close</button>
+            <div class="board" v-for="(board, index) in boards"
+                 :style="{ width: board.width * 4 + 'rem', height: board.height * 4 + 'rem'}"
+                 @click="load(index)">
+                <div v-for="(tile, index) in board.tiles"
+                     :class="type(tile)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" class="button button--solve" @click="solve" :disabled="solving">Solve</button>
+
+
+    <div v-show="modal === 'info'"
+         @click="toggle('info')"
+         class="modal"
+         style="display: none">
+        <div class="modal__body">
+            <button class="modal__close" type="button" @click="toggle('info')">close</button>
+            asdfasdf
+        </div>
+    </div>
 </div>
 
-<div id="board" class="board">
-</div>
-
+<!-- Solver -->
 <script src="infinite/direction.js"></script>
 
-<script src="infinite/blocks/block.js"></script>
-<script src="infinite/blocks/cross.js"></script>
-<script src="infinite/blocks/end.js"></script>
-<script src="infinite/blocks/turn.js"></script>
-<script src="infinite/blocks/line.js"></script>
-<script src="infinite/blocks/junc.js"></script>
+<script src="infinite/tiles/tile.js"></script>
+<script src="infinite/tiles/cross.js"></script>
+<script src="infinite/tiles/end.js"></script>
+<script src="infinite/tiles/junction.js"></script>
+<script src="infinite/tiles/line.js"></script>
+<script src="infinite/tiles/none.js"></script>
+<script src="infinite/tiles/turn.js"></script>
 
 <script src="infinite/solvers/fit.js"></script>
 <script src="infinite/solvers/force.js"></script>
 
 <script src="infinite/solver.js"></script>
 
-<script src="site/parser.js"></script>
-<script src="site/board.js"></script>
-<script src="site/index.js"></script>
+<!-- UI -->
+<script src="https://unpkg.com/vue"></script>
+<script src="site/site.js"></script>
 </body>
 </html>
