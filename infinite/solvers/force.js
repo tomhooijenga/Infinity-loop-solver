@@ -69,10 +69,6 @@ Force.prototype.fits = function (tile) {
     var neighbours = tile.neighbours;
 
     return tile.open.every(function (isOpen, dir) {
-        if (neighbours[dir] === false) {
-            return isOpen === false;
-        }
-
         var opposite = direction.opposite(dir),
             isNeighbourOpen = neighbours[dir].open[opposite];
 

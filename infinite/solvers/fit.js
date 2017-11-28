@@ -122,12 +122,6 @@ Fit.prototype.available = function (tile) {
     }
 
     neighbours.forEach(function (neighbour, dir) {
-        if (neighbour === false) {
-            sides[dir] = false;
-
-            return;
-        }
-
         // Can't know
         if (!neighbour.fixed) {
             return;
