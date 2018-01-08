@@ -108,7 +108,7 @@ Fit.prototype._run = function (tiles) {
 };
 
 /**
- * Get the tile's available sides
+ * Get the tile's sides that have a neighbour facing it
  *
  * @param tile
  * @returns {boolean[]} Map of direction => boolean

@@ -1,19 +1,46 @@
 /**
 colors: http://colorpalettes.net/color-palette-2615/
 */
-
-* + * {
-    margin-top: 4rem;
-}
-
 body {
     background-color: #1d314b;
     text-align: center;
-    font-size: 2rem;
+    font-size: 1rem;
     margin: 0;
     color: whitesmoke;
     font-family: 'Open Sans', sans-serif;
     overflow-x: hidden;
+    font-weight: lighter;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: lighter;
+    margin: 3rem 0 1rem 0;
+}
+
+p {
+    margin: 1rem 0;
+}
+
+strong {
+    font-weight: bold;
+}
+
+a {
+    color: whitesmoke;
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+    box-sizing: border-box;
+    padding: 4rem;
+}
+
+.wrapper > * + * {
+    margin-top: 4rem;
 }
 
 .button {
@@ -24,17 +51,63 @@ body {
     border: none;
     padding: 0.5rem;
 }
+
 .button[disabled] {
     opacity: .5;
 }
 
-.button--clear {
+.button--secondary {
     color: #cccccc;
     border: 1px solid #162539;
     background: none;
 }
 
-.button--solve {
+.button--primary {
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.row--vertical {
+    align-items: center;
+}
+
+.input {
+    flex: 1;
+    width: 200px;
+    font-size: 0.8rem;
+    color: #cccccc;
+    display: inline-block;
+    text-align: left;
+    padding: 0.5rem;
+    margin: 0;
+}
+
+.input__control {
+    font-size: 2rem;
+    height: 3rem;
+    color: #cccccc;
+    border: solid #162539;
+    border-width: 0 0 2px 0;
+    background: none;
+    padding: 0;
+    display: block;
+    width: 100%;
+    margin-bottom: 0.5rem;
+}
+
+.input__control--checkbox {
+    display: inline;
+    width: auto;
+    height: auto;
+}
+
+.input__text {
+    display: inline-block;
+    margin: 0 1rem;
 }
 
 .modal {
@@ -44,25 +117,45 @@ body {
     height: 100vh;
     background: rgba(255, 255, 255, .1);
     margin: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 .modal__body {
     overflow: auto;
     max-height: 80vh;
-    width: 70vw;
-    margin: 10vh 15vw;
-    position: absolute;
-    top: 0;
-    left: 0;
+    width: 50vw;
     z-index: 100;
     border: 1px solid #162539;
     background-color: #1d314b;
+    padding: 4rem;
+}
+
+.modal__body > * + * {
+    margin-top: 4rem;
+}
+
+.board-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: auto;
 }
 
 .board {
+    border: 1px solid #162539;
     margin-left: auto;
     margin-right: auto;
-    border: 1px solid #162539;
+}
+
+.board--wrapped {
+    flex: 0 0 auto;
+    margin: auto;
+}
+
+.board + .board {
+    margin-top: 4rem;
 }
 
 .board::after {

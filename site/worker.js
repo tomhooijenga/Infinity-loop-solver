@@ -12,7 +12,7 @@ importScripts(
 
     '../infinite/solvers/fit.js',
     '../infinite/solvers/force.js',
-    '../infinite/solver.js',
+    '../infinite/solver.js'
 );
 
 var solver = new Solver([
@@ -27,7 +27,7 @@ var tasks = {
         // Tiles were converted to normal objects,
         // convert them back to tiles
         board.tiles = board.tiles.map(function (tile) {
-            return new TileFactory(tile.type, tile);
+            return TileFactory.create(tile.type, tile);
         });
 
         board = solver.run(board);

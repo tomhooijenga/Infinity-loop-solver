@@ -30,13 +30,26 @@ var types = [None, End, Line, Turn, Junction, Cross];
 
 var worker = new Worker('site/worker.js');
 
-new Vue({
+var generator = new Generator();
+
+app = new Vue({
     el: '#app',
     data: {
         board: null,
         boards: boards,
         modal: null,
-        solving: false
+        solving: false,
+        custom: {
+            width: 5,
+            height: 8,
+            options: {
+                ratio: 70,
+                symmetric: {
+                    x: false,
+                    y: false
+                }
+            }
+        }
     },
     created: function () {
         this.load(0);
@@ -56,6 +69,18 @@ new Vue({
                 this.modal = name === this.modal ? null : name;
             }
         },
+        generate: function () {
+            this.toggle('custom');
+
+            var board =  generator.generate(this.custom.width, this.custom.height, this.custom.options);
+
+            board.tiles.forEach(function (tile) {
+                tile.fixed = false;
+                tile.setDirection(direction.up);
+            });
+
+            this.board = board;
+        },
         solve: function (event) {
             if (event.target.disabled) {
                 return;
@@ -65,16 +90,16 @@ new Vue({
 
             worker.postMessage(['solve', this.board]);
         },
-        done(board) {
+        done: function(board) {
             this.solving = false;
 
             board.tiles = board.tiles.map(function (tile) {
-                return new TileFactory(tile.type, tile);
+                return TileFactory.create(tile.type, tile);
             });
 
             this.board = board;
         },
-        type(tile) {
+        type: function(tile) {
             return tile.name.toLowerCase();
         },
         load: function (index) {
