@@ -43,16 +43,17 @@ var tasks = {
 
         board = solver.run(board);
 
+        // Chrome can not deal with this many inter-connected objects.
+        board.tiles.map(function (tile) {
+            tile.neighbours = [];
+        });
+
         postMessage(['solved', board]);
     },
     /**
      * Generate a board
      *
      * @see Generator#generate
-     *
-     * @param width
-     * @param height
-     * @param options
      */
     generate: function (width, height, options) {
         var board = generator.generate(width, height, options);

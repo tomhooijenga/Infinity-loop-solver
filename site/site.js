@@ -121,17 +121,13 @@ var app = new Vue({
             this.toggle('boards', false);
         },
         clear: function () {
-            this.board = Object.assign(
-                {},
-                emptyBoard,
-                {
-                    tiles: emptyBoard.tiles.map(function (type) {
-                        return new type();
-                    })
-                }
-            );
+            var board = Object.assign({}, emptyBoard);
 
-            this.toggle('boards', false);
+            board.tiles = emptyBoard.tiles.map(function () {
+                return TileFactory.create('none');
+            });
+
+            this.board = board;
         },
         change: function (type, tile) {
             var index = types.indexOf(type.constructor);
