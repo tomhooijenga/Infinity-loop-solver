@@ -22,21 +22,13 @@ var TileFactory = {
      * @returns {Tile}
      */
     create: function (type, data) {
-        data = data || {};
+        var tileConstructor = TileFactory.types[type];
+        var tile = new tileConstructor();
 
-        var constructor = TileFactory.types[type];
-        var instance = new constructor();
+        if (data !== undefined) {
+            Object.assign(tile, data);
+        }
 
-        Object.keys(data).forEach(function (key) {
-            var setter = 'set' + key[0].toUpperCase() + key.slice(1);
-
-            if (setter in instance) {
-                instance[setter](data[key]);
-            } else {
-                instance[key] = data[key];
-            }
-        });
-
-        return instance;
+        return tile;
     }
 };

@@ -76,7 +76,7 @@ var app = new Vue({
 
             worker.postMessage(['solve', this.board]);
         },
-        solved: function(board) {
+        solved: function (board) {
             this.solving = false;
 
             board.tiles = board.tiles.map(function (tile) {
@@ -85,20 +85,25 @@ var app = new Vue({
 
             this.board = board;
         },
-        generate: function () {
+        generate: function (event) {
+            if (event.target.disabled) {
+                return;
+            }
+
+            this.solving = true;
+
             this.toggle('custom');
 
-            worker.postMessage(['generate',this.custom.width, this.custom.height, this.custom.options]);
+            worker.postMessage(['generate', this.custom.width, this.custom.height, this.custom.options]);
         },
         generated: function (board) {
+            this.solving = false;
+
             board.tiles = board.tiles.map(function (tile) {
                 return TileFactory.create(tile.type);
             });
 
             this.board = board;
-        },
-        type: function(tile) {
-            return tile.name.toLowerCase();
         },
         load: function (index) {
             var board = this.boards[index];

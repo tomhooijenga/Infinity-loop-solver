@@ -21,7 +21,6 @@
             <div class="board board--wrapped"
                  :style="{ width: board.width * 4 + 'rem', height: board.height * 4 + 'rem' }">
                 <div v-for="(tile, index) in board.tiles"
-                     :data-tile="index"
                      :class="tile.type"
                      :style="{ transform: 'rotate(' + tile.direction * 90 + 'deg)' }"
                      @click="change(tile, index)">
@@ -44,7 +43,7 @@
                  :style="{ width: board.width * 4 + 'rem', height: board.height * 4 + 'rem'}"
                  @click="load(index)">
                 <div v-for="(tile, index) in board.tiles"
-                     :class="type(tile)">
+                     :class="tile.name.toLowerCase()">
                 </div>
             </div>
         </div>
@@ -95,7 +94,7 @@
                     every square is covered. Note that 100% might take a while. Recommended is 70.
                 </label>
             </div>
-            <button class="button" type="button" @click="generate">Generate</button>
+            <button class="button" type="button" @click="generate" :disabled="solving">Generate</button>
         </div>
     </div>
 </div>

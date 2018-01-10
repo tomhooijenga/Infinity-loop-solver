@@ -135,8 +135,6 @@ Generator.prototype.determine = function (tile, neighbours, isHorizontal, isLast
         return neighbour;
     });
 
-    console.log(isHorizontal);
-
     for (var type in TileFactory.types) {
         var newTile = TileFactory.create(type, {
                 fixed: false,
