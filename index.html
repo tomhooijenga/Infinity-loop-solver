@@ -11,7 +11,7 @@
 
 <div id="app">
     <section class="wrapper">
-        <section>
+        <section class="row">
             <button type="button" class="button" @click="toggle('info')">Help</button>
             <button type="button" class="button" @click="toggle('boards')">Load</button>
             <button type="button" class="button" @click="toggle('custom')">Create</button>
@@ -29,7 +29,7 @@
             </div>
         </div>
 
-        <section>
+        <section class="row">
             <button type="button" class="button button--primary" @click="solve" :disabled="solving">Solve</button>
         </section>
     </section>
@@ -100,9 +100,8 @@
     </div>
 </div>
 
-<!-- Solver -->
 <script src="infinite/direction.js"></script>
-
+<!-- Tiles -->
 <script src="infinite/tiles/tile.js"></script>
 <script src="infinite/tiles/cross.js"></script>
 <script src="infinite/tiles/end.js"></script>
@@ -112,14 +111,15 @@
 <script src="infinite/tiles/turn.js"></script>
 <script src="infinite/tiles/tile-factory.js"></script>
 
+<!-- Solver -->
 <script src="infinite/solvers/fit.js"></script>
 <script src="infinite/solvers/force.js"></script>
-
-<script src="infinite/generator.js"></script>
 <script src="infinite/solver.js"></script>
+<!-- Generator -->
+<script src="infinite/generator.js"></script>
 
 <!-- UI -->
-<script src="https://unpkg.com/vue"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.13/dist/vue.min.js" integrity="sha256-1Q2q5hg2YXp9fYlM++sIEXOcUb8BRSDUsQ1zXvLBqmA=" crossorigin="anonymous"></script>
 <script src="site/site.js"></script>
 </body>
 </html>
