@@ -4,9 +4,6 @@
 var Generator = function () {
     this.fit = new Fit();
     // Reset 'fit' shortcuts to avoid false positives
-    // for (var type in this.fit.tiles) {
-    //     delete this.fit.tiles[type].fits;
-    // }
     this.fit.tiles = {};
 };
 

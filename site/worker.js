@@ -12,17 +12,28 @@ importScripts(
 
     '../infinite/solvers/fit.js',
     '../infinite/solvers/force.js',
-    '../infinite/solver.js'
+    '../infinite/solver.js',
+
+    '../infinite/generator.js'
 );
+
+[None, End, Line, Turn, Junction, Cross].forEach(function (tile) {
+    TileFactory.register(tile.name.toLowerCase(), tile);
+});
 
 var solver = new Solver([
     new Fit(),
     new Force()
 ]);
 
-
+var generator = new Generator();
 
 var tasks = {
+    /**
+     * Solve a board
+     *
+     * @see Solver#solve
+     */
     solve: function (board) {
         // Tiles were converted to normal objects,
         // convert them back to tiles
@@ -32,7 +43,21 @@ var tasks = {
 
         board = solver.run(board);
 
-        postMessage(['done', board]);
+        postMessage(['solved', board]);
+    },
+    /**
+     * Generate a board
+     *
+     * @see Generator#generate
+     *
+     * @param width
+     * @param height
+     * @param options
+     */
+    generate: function (width, height, options) {
+        var board = generator.generate(width, height, options);
+
+        postMessage(['generated', board]);
     }
 };
 

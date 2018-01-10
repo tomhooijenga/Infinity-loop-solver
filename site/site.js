@@ -28,11 +28,20 @@ var emptyBoard = {
 
 var types = [None, End, Line, Turn, Junction, Cross];
 
+types.forEach(function (tile) {
+    TileFactory.register(tile.name.toLowerCase(), tile);
+});
+
 var worker = new Worker('site/worker.js');
 
-var generator = new Generator();
+worker.onmessage = function (event) {
+    var method = event.data[0],
+        data = event.data.slice(1);
 
-app = new Vue({
+    app[method].apply(null, data);
+};
+
+var app = new Vue({
     el: '#app',
     data: {
         board: null,
@@ -43,23 +52,12 @@ app = new Vue({
             width: 5,
             height: 8,
             options: {
-                ratio: 70,
-                symmetric: {
-                    x: false,
-                    y: false
-                }
+                ratio: 70
             }
         }
     },
     created: function () {
         this.load(0);
-
-        worker.onmessage = function (event) {
-            var method = event.data[0],
-                data = event.data.slice(1);
-
-            this[method].apply(null, data);
-        }.bind(this);
     },
     methods: {
         toggle: function (name, show) {
@@ -68,18 +66,6 @@ app = new Vue({
             } else {
                 this.modal = name === this.modal ? null : name;
             }
-        },
-        generate: function () {
-            this.toggle('custom');
-
-            var board =  generator.generate(this.custom.width, this.custom.height, this.custom.options);
-
-            board.tiles.forEach(function (tile) {
-                tile.fixed = false;
-                tile.setDirection(direction.up);
-            });
-
-            this.board = board;
         },
         solve: function (event) {
             if (event.target.disabled) {
@@ -90,11 +76,23 @@ app = new Vue({
 
             worker.postMessage(['solve', this.board]);
         },
-        done: function(board) {
+        solved: function(board) {
             this.solving = false;
 
             board.tiles = board.tiles.map(function (tile) {
                 return TileFactory.create(tile.type, tile);
+            });
+
+            this.board = board;
+        },
+        generate: function () {
+            this.toggle('custom');
+
+            worker.postMessage(['generate',this.custom.width, this.custom.height, this.custom.options]);
+        },
+        generated: function (board) {
+            board.tiles = board.tiles.map(function (tile) {
+                return TileFactory.create(tile.type);
             });
 
             this.board = board;
