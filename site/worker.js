@@ -31,8 +31,9 @@ var generator = new Generator();
 var tasks = {
     /**
      * Solve a board
+     * @see Solver#run
      *
-     * @see Solver#solve
+     * @param {{width: Number, height: Number, tiles: Tile[]}} board A board object
      */
     solve: function (board) {
         // Tiles were converted to normal objects,
@@ -52,8 +53,11 @@ var tasks = {
     },
     /**
      * Generate a board
-     *
      * @see Generator#generate
+     *
+     * @param {Number} width
+     * @param {Number} height
+     * @param {Object} [options]
      */
     generate: function (width, height, options) {
         var board = generator.generate(width, height, options);
