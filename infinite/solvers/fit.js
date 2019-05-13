@@ -88,7 +88,7 @@ Fit.prototype.run = function (tiles) {
 Fit.prototype._run = function (tiles) {
     var found = 0;
 
-    tiles.forEach(function (tile, index) {
+    tiles.forEach(function (tile) {
         if (tile.fixed) {
             found++;
 
@@ -169,7 +169,9 @@ Fit.prototype.fits = function (tile, available) {
         return false;
     }
 
-    var len = tile.sides.length;
+    var len = tile.sides.filter(function (side) {
+        return side;
+    }).length;
 
     // Try each of the directions until a fit is found
     return direction.values.some(function (_, dir) {

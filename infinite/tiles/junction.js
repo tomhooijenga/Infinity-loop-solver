@@ -1,8 +1,8 @@
 function Junction() {
-    Tile.apply(this, arguments);
+    Tile.call(this);
 }
 
 Junction.prototype = Object.create(Tile.prototype);
 Junction.prototype.constructor = Junction;
 
-Junction.prototype.sides = [direction.up, direction.right, direction.down];
+Junction.prototype.sides = [true, true, true, false];

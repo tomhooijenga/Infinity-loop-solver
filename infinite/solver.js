@@ -11,8 +11,8 @@ var Solver = function (strategies) {
 
 /**
  * Solves a board
- *
- * @returns {{}} The board object
+ * @param {{width: Number, height: Number, tiles: Tile[]}} board A board object
+ * @return {{width: Number, height: Number, tiles: Tile[]}} The board object
  */
 Solver.prototype.run = function (board) {
     var tiles = board.tiles,

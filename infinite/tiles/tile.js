@@ -44,7 +44,7 @@ function Tile() {
 /**
  * The sides that this tile has. (up, right, left, down)
  *
- * @type {number[]}
+ * @type {boolean[]}
  */
 Tile.prototype.sides = [];
 
@@ -56,9 +56,8 @@ Tile.prototype.sides = [];
 Tile.prototype.setDirection = function(newDirection) {
     this.direction = newDirection;
 
-    direction.values.forEach(function (dir) {
-        var relative = direction.next(dir, newDirection);
-
-        this.open[relative] = this.sides.indexOf(direction[dir]) !== -1;
-    }, this);
+    this.open[direction.next(direction.up, newDirection)] = this.sides[direction.up];
+    this.open[direction.next(direction.right, newDirection)] = this.sides[direction.right];
+    this.open[direction.next(direction.down, newDirection)] = this.sides[direction.down];
+    this.open[direction.next(direction.left, newDirection)] = this.sides[direction.left];
 };

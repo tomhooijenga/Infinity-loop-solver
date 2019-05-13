@@ -44,7 +44,7 @@ var tasks = {
         board = solver.run(board);
 
         // Chrome can not deal with this many inter-connected objects.
-        board.tiles.map(function (tile) {
+        board.tiles.forEach(function (tile) {
             tile.neighbours = [];
         });
 

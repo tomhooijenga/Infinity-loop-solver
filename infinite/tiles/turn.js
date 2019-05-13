@@ -1,8 +1,8 @@
 function Turn() {
-    Tile.apply(this, arguments);
+    Tile.call(this);
 }
 
 Turn.prototype = Object.create(Tile.prototype);
 Turn.prototype.constructor = Turn;
 
-Turn.prototype.sides = [direction.up, direction.right];
+Turn.prototype.sides = [true, true, false, false];

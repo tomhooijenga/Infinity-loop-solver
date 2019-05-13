@@ -1,8 +1,8 @@
 function Line() {
-    Tile.apply(this, arguments);
+    Tile.call(this);
 }
 
 Line.prototype = Object.create(Tile.prototype);
 Line.prototype.constructor = Line;
 
-Line.prototype.sides = [direction.up, direction.down];
+Line.prototype.sides = [true, false, true, false];
