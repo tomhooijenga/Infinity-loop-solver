@@ -13,19 +13,10 @@ export abstract class Board {
         this.grid = this.toGrid(tiles);
     }
 
-    toGrid(tiles: Tile[]): Tile[][] {
-        const grid: Tile[][] = [];
-        tiles.forEach((tile) => {
-            const {x, y} = tile;
-            if (!(x in grid)) {
-                grid[x] = [];
-            }
-            grid[x][y] = tile
-        });
-        return grid;
-    }
-
-    solve(solvers: Solver[]) {
+    /**
+     * Attempt to solve the board with the given solvers. Solvers are called with each tile until no progress is made.
+     */
+    public solve(solvers: Solver[]) {
         let lastSolved = -1;
         let solved = 0;
         while (solved > lastSolved) {
@@ -46,8 +37,6 @@ export abstract class Board {
                 return solved;
             }, 0)
 
-            console.log(`last: ${lastSolved}, solved: ${solved}`)
-
             if (solved === this.tiles.length) {
                 return true;
             }
@@ -56,8 +45,14 @@ export abstract class Board {
         return false;
     }
 
+    /**
+     * Get the neighbours of the tile.
+     */
     public abstract neighbours(tile: Tile): Tile[];
 
+    /**
+     * Get the IsFacing state for each side.
+     */
     public facing(tile: Tile): IsFacing[] {
         return this
             .neighbours(tile)
@@ -72,7 +67,25 @@ export abstract class Board {
             });
     }
 
+    /**
+     * Get a the tile for the given coordinates, or the NONE when there is no tile.
+     */
     protected getOrNone(x: number, y: number): Tile {
         return this.grid[x]?.[y] || NONE;
+    }
+
+    /**
+     * Convert an array of tiles to a grid (nested array).
+     */
+    protected toGrid(tiles: Tile[]): Tile[][] {
+        const grid: Tile[][] = [];
+        tiles.forEach((tile) => {
+            const {x, y} = tile;
+            if (!(x in grid)) {
+                grid[x] = [];
+            }
+            grid[x][y] = tile
+        });
+        return grid;
     }
 }
