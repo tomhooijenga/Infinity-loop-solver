@@ -1,15 +1,10 @@
 import {Solver} from "../../base/solvers/Solver";
 import {Tile} from "../../base/Tile";
 import {Line} from "../tiles";
-import {Board} from "../Board";
 import {DirectionUtil} from "../../base/DirectionUtil";
 import {IsFacing} from "../../base/IsFacing";
 
 export class LineSolver extends Solver {
-    constructor(public board: Board) {
-        super(board);
-    }
-
     /**
      * A line has only two positions, so one known side is enough.
      */

@@ -11,7 +11,7 @@
     "strict": true
   },
   "include": [
-    "./infinite-2/src"
+    "./src"
   ],
   "exclude": ["node_modules", "**/__tests__/*"]
 }
