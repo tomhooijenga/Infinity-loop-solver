@@ -38,16 +38,13 @@ export default {
     const tilesStyle = computed(() => {
       return {
         'grid-template-columns': `repeat(${props.x}, 1fr)`,
-        'grid-template-rows': `repeat(${props.y}, 1fr)`
+        'grid-template-rows': `repeat(${props.y}, 1fr)`,
+        'aspect-ratio': `${props.x}/${props.y}`
       }
     })
 
     function getTileStyle (tile: Tile): Record<string, string> {
       return {
-        // width: size + 'px',
-        // height: size + 'px',
-        // top: tile.y * size + 'px',
-        // left: tile.x * size + 'px',
         transform: `rotate(${tile.direction * 90}deg)`
       }
     }
@@ -63,6 +60,9 @@ export default {
 <style scoped>
 .tiles {
   display: grid;
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
 }
 
 .tile {
