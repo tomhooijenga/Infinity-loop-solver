@@ -48,7 +48,7 @@ export default defineComponent({
       board.value = boards[name]()
     }
 
-    loadBoard('robot')
+    loadBoard('ends')
 
     return {
       toggleSection,
