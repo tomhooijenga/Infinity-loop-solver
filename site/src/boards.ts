@@ -8,6 +8,7 @@ import { LineSolver } from '../../src/solver/square/solvers/LineSolver'
 import { FitSolver } from '../../src/solver/base/solvers/FitSolver'
 import { TurnSolver } from '../../src/solver/square/solvers/TurnSolver'
 import { DirectionUtil } from '../../src/solver/base/DirectionUtil'
+import { ForceSolver } from '../../src/solver/base/solvers/ForceSolver'
 
 type TileConstructor = new (...args: ConstructorParameters<typeof Tile>) => Tile;
 export interface BoardData {
@@ -64,19 +65,25 @@ export const boards = {
 
 DirectionUtil.NUM_SIDES = 4
 
-export const solve = (tiles: Tile[]) => {
+export const solve = (tiles: Tile[]): boolean => {
   tiles.forEach((tile) => {
     tile.solved = false
   })
 
   const board = new Board(tiles)
 
-  return board.solve([
-    new NoneSolver(board),
-    new AllSidesSolver(board)
-  ]) || board.solve([
-    new LineSolver(board),
-    new TurnSolver(board),
-    new FitSolver(board)
-  ])
+  return [
+    board.solve([
+      new NoneSolver(board),
+      new AllSidesSolver(board)
+    ]),
+    board.solve([
+      new LineSolver(board),
+      new TurnSolver(board),
+      new FitSolver(board)
+    ]),
+    board.solve([
+      new ForceSolver(board)
+    ])
+  ].some(Boolean)
 }
