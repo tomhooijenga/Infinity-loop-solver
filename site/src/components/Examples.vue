@@ -1,23 +1,26 @@
 <template>
-  <square-board v-once
-                v-for="[name, board] of boards"
-                :key="board"
-                :tiles="board.tiles"
-                :x="board.width"
-                :y="board.height"
-                class="board"
-                @click="$emit('change', name)"/>
+  <component :is="`${boardData.type}-board`"
+             v-for="[name, boardData] of boards"
+             v-once
+             :key="name"
+             :tiles="boardData.tiles"
+             :x="boardData.width"
+             :y="boardData.height"
+             class="board"
+             @click="$emit('change', name)"/>
 </template>
 
 <script>
 import { boards } from '@/boards'
-import Board from '@/components/square/Board'
+import SquareBoard from '@/components/square/Board'
+import HexBoard from '@/components/hex/Board'
 
 export default {
   name: 'Examples',
 
   components: {
-    SquareBoard: Board
+    SquareBoard,
+    HexBoard
   },
 
   emits: ['change'],

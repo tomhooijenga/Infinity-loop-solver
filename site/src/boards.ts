@@ -1,5 +1,6 @@
 import { None } from '../../src/solver/base/None'
-import { Turn, End, Cross, Line, Junction } from '../../src/solver/square/tiles'
+import * as sq from '../../src/solver/square/tiles'
+import * as hex from '../../src/solver/hex/tiles'
 import { Tile } from '../../src/solver/base/Tile'
 import { Board } from '../../src/solver/square/Board'
 import { NoneSolver } from '../../src/solver/base/solvers/NoneSolver'
@@ -11,14 +12,17 @@ import { DirectionUtil } from '../../src/solver/base/DirectionUtil'
 import { ForceSolver } from '../../src/solver/base/solvers/ForceSolver'
 
 type TileConstructor = new (...args: ConstructorParameters<typeof Tile>) => Tile;
+
 export interface BoardData {
-  tiles: Tile[],
+  type: 'square' | 'hex';
+  tiles: Tile[];
   width: number;
   height: number;
 }
 
-function constructTiles (tiles: TileConstructor[], width: number): BoardData {
+function constructTiles (type: BoardData['type'], width: number, tiles: TileConstructor[]): BoardData {
   return {
+    type,
     width,
     height: Math.floor(tiles.length / width),
     tiles: tiles.map((Ctor, index) => new Ctor({
@@ -28,35 +32,40 @@ function constructTiles (tiles: TileConstructor[], width: number): BoardData {
   }
 }
 
-const robot = (): BoardData => constructTiles([
-  None, Turn, Turn, End,
-  Turn, Cross, Cross, Turn,
-  End, Line, Line, None,
-  None, End, End, None
-], 4)
+const robot = (): BoardData => constructTiles('square', 4, [
+  None, sq.Turn, sq.Turn, sq.End,
+  sq.Turn, sq.Cross, sq.Cross, sq.Turn,
+  sq.End, sq.Line, sq.Line, None,
+  None, sq.End, sq.End, None
+])
 
-const turns = (): BoardData => constructTiles([
-  None, Turn, Turn, Turn, Turn, None,
-  Turn, Turn, Turn, Turn, Turn, Turn,
-  Turn, Turn, Turn, Turn, Turn, Turn,
-  None, Turn, Turn, Turn, Turn, None
-], 6)
+const turns = (): BoardData => constructTiles('square', 6, [
+  None, sq.Turn, sq.Turn, sq.Turn, sq.Turn, None,
+  sq.Turn, sq.Turn, sq.Turn, sq.Turn, sq.Turn, sq.Turn,
+  sq.Turn, sq.Turn, sq.Turn, sq.Turn, sq.Turn, sq.Turn,
+  None, sq.Turn, sq.Turn, sq.Turn, sq.Turn, None
+])
 
-const hard = (): BoardData => constructTiles([
-  None, None, End, Line, Turn, None,
-  End, Turn, Junction, Line, Cross, Turn,
-  End, Line, Junction, Line, Junction, Line,
-  Turn, Cross, Turn, End, Turn, Junction,
-  Junction, Cross, End, Line, Turn, Junction,
-  Turn, Cross, Junction, Junction, Junction, Turn,
-  Turn, Cross, Junction, Turn, Line, End,
-  Junction, Turn, Turn, Junction, Turn, End,
-  Turn, Line, End, Turn, Turn, None
-], 6)
+const hard = (): BoardData => constructTiles('square', 6, [
+  None, None, sq.End, sq.Line, sq.Turn, None,
+  sq.End, sq.Turn, sq.Junction, sq.Line, sq.Cross, sq.Turn,
+  sq.End, sq.Line, sq.Junction, sq.Line, sq.Junction, sq.Line,
+  sq.Turn, sq.Cross, sq.Turn, sq.End, sq.Turn, sq.Junction,
+  sq.Junction, sq.Cross, sq.End, sq.Line, sq.Turn, sq.Junction,
+  sq.Turn, sq.Cross, sq.Junction, sq.Junction, sq.Junction, sq.Turn,
+  sq.Turn, sq.Cross, sq.Junction, sq.Turn, sq.Line, sq.End,
+  sq.Junction, sq.Turn, sq.Turn, sq.Junction, sq.Turn, sq.End,
+  sq.Turn, sq.Line, sq.End, sq.Turn, sq.Turn, None
+])
 
-const empty = (): BoardData => constructTiles(new Array(9).fill(None), 3)
+const empty = (): BoardData => constructTiles('square', 3, new Array(9).fill(None))
+
+const ends = (): BoardData => constructTiles('hex', 2, [
+  ...Object.values(hex)
+])
 
 export const boards = {
+  ends,
   empty,
   robot,
   turns,
