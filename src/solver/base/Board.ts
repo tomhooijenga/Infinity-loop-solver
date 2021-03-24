@@ -19,6 +19,7 @@ export abstract class Board {
     public solve(solvers: Solver[]) {
         let lastSolved = -1;
         let solved = 0;
+
         while (solved > lastSolved) {
             lastSolved = solved;
             solved = this.tiles.reduce((solved: number, tile: Tile) => {

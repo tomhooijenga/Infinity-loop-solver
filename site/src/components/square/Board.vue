@@ -4,7 +4,8 @@
                v-for="tile of tiles"
                :key="tile"
                :style="getTileStyle(tile)"
-               class="tile"/>
+               class="tile"
+               :class="{solved: tile.solved}"/>
   </section>
 </template>
 
@@ -16,6 +17,7 @@ import Line from '@/components/square/Line.vue'
 import None from '@/components/square/None.vue'
 import Cross from '@/components/square/Cross.vue'
 import Turn from '@/components/square/Turn.vue'
+import Junction from '@/components/square/Junction.vue'
 
 export default {
   name: 'Board',
@@ -25,7 +27,8 @@ export default {
     Line,
     None,
     Cross,
-    Turn
+    Turn,
+    Junction
   },
 
   props: {
