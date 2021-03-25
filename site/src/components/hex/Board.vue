@@ -43,9 +43,22 @@ export default {
 
   setup (props: Props) {
     const tilesStyle = computed(() => {
+      const width = 1.1547
+      const height = 1
+
+      // Horizontally, each tile shares a "wing"
+      const x = props.x * 0.75 * width + 0.25 * width
+
+      let y = props.y * height
+
+      // Add half a tile if an odd columns have an even count
+      if (props.tiles.length % props.x % 2 === 0) {
+        y += 0.5 * height
+      }
+
       return {
         gridTemplateColumns: `repeat(${props.x}, 1fr 2fr) 1fr`,
-        aspectRatio: `${props.x * 1.1547}/${props.y}`
+        aspectRatio: `${x}/${y}`
       }
     })
 
@@ -70,13 +83,14 @@ export default {
 
 .tiles {
   display: grid;
+  overflow: hidden;
 }
 
 .tile {
   position: relative;
   transition: transform .2s ease-out;
+  //aspect-ratio: 1.1547 / 1;
   height: 0;
-  // aspect-ratio: 1.1547 / 1
   padding-bottom: 86.60%;
   //clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
   //background: gray;

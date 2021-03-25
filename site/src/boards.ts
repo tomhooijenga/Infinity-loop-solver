@@ -20,7 +20,7 @@ export interface BoardData {
 function constructTiles (type: BoardData['type'], width: number, tiles: TileConstructor[]): BoardData {
   return {
     type,
-    width,
+    width: Math.min(tiles.length, width),
     height: Math.ceil(tiles.length / width),
     tiles: tiles.map((Ctor, index) => new Ctor({
       x: index % width,

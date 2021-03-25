@@ -63,8 +63,6 @@ export default {
 <style scoped>
 .tiles {
   display: grid;
-  max-width: 100%;
-  max-height: 100%;
   overflow: hidden;
 }
 

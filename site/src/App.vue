@@ -11,7 +11,7 @@
     <Examples @change="loadBoard"/>
   </div>
   <Nav class="nav" @clear="clear" @open="toggleSection"/>
-  <Board :board-data="board" class="board"/>
+  <board-area :board-data="board" />
 </template>
 
 <script lang="ts">
@@ -22,11 +22,12 @@ import About from '@/components/About.vue'
 import Generate from '@/components/Generate.vue'
 import Examples from '@/components/Examples.vue'
 import { BoardData, boards } from '@/boards'
-import Board from '@/components/Board.vue'
+import BoardArea from '@/components/BoardArea.vue'
+import { DirectionUtil } from "../../src/solver/base/DirectionUtil";
 
 export default defineComponent({
   name: 'App',
-  components: { Board, Examples, Generate, About, Modal, Nav },
+  components: { BoardArea, Examples, Generate, About, Modal, Nav },
   setup () {
     const sections = reactive({
       help: false,
@@ -46,6 +47,7 @@ export default defineComponent({
 
     const loadBoard = (name: keyof typeof boards) => {
       board.value = boards[name]()
+      DirectionUtil.NUM_SIDES = board.value.type === 'square' ? 4 : 6
     }
 
     loadBoard('ends')
@@ -62,14 +64,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-.row {
-  display: flex;
-  flex: 1;
-}
-
 .examples {
   grid-area: sidebar;
-  background: #162539;
   overflow: auto;
 }
 
@@ -80,7 +76,7 @@ export default defineComponent({
 
 <style lang="scss">
 body {
-  background-color: #1d314b;
+  background-color: #162539;
   margin: 0;
   color: whitesmoke;
   font-weight: lighter;
@@ -98,7 +94,7 @@ body {
 button {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   flex: 1;
-  background: #162539;
+  background: #1d314b;
   color: #f5f5f5;
   font-size: 1rem;
   border: none;

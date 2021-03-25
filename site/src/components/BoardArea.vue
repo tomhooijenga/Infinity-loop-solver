@@ -35,7 +35,7 @@ export default {
     }
 
     const solveBoard = () => {
-      solve(props.boardData.tiles)
+      solve(props.boardData)
     }
 
     return {
@@ -50,13 +50,13 @@ export default {
 .board-area {
   background: #1d314b;
   grid-area: board;
-  justify-content: center;
   min-height: 0;
 }
 
 .board {
   max-width: min(800px, 100%);
   max-height: min(800px, 100%);
+  margin: 0 auto;
 }
 
 .buttons {
