@@ -7,9 +7,9 @@ export class ForceSolver extends Solver {
     /**
      * The neighbours are computed once, reducing calls from (sides^length) to (length).
      */
-    neighbours = new Map<Tile, Tile[]>()
+    protected neighbours = new Map<Tile, Tile[]>()
 
-    solveBoard(tiles: Tile[]): boolean {
+    public solveBoard(tiles: Tile[]): boolean {
         const unsolved = tiles.filter(({solved}) => !solved);
         const combinations = Math.pow(DirectionUtil.NUM_SIDES, unsolved.length);
 

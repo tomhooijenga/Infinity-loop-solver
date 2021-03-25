@@ -16,7 +16,7 @@ export abstract class Board {
     /**
      * Attempt to solve the board with the given solvers. Solvers are called with each tile until no progress is made.
      */
-    public solve(solvers: Solver[]) {
+    public solve(solvers: Solver[]): boolean {
         let lastSolved = -1;
         let solved = 0;
 
@@ -43,7 +43,7 @@ export abstract class Board {
             }
         }
 
-        return false;
+        return solvers.some((solver) => solver.solveBoard(this.tiles));
     }
 
     /**
