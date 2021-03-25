@@ -1,5 +1,5 @@
 import {Solver} from "./Solver";
-import {Tile} from "../Tile";
+import {Tile, TileConstructor} from "../Tile";
 import {DirectionUtil} from "../DirectionUtil";
 import {IsFacing} from "../IsFacing";
 
@@ -28,7 +28,7 @@ export class FitSolver extends Solver {
         let checkedOpen = 0;
         let checkedClosed = 0;
 
-        const openSides = (tile.constructor as typeof Tile).SIDES.filter(Boolean).length;
+        const openSides = (tile.constructor as TileConstructor).SIDES.filter(Boolean).length;
 
         const couldFit = neighbours.every((facing, side) => {
             if (facing === IsFacing.Unsure) {

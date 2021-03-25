@@ -1,17 +1,14 @@
 import { None } from '../../src/solver/base/None'
 import * as sq from '../../src/solver/square/tiles'
 import * as hex from '../../src/solver/hex/tiles'
-import { Tile } from '../../src/solver/base/Tile'
+import { Tile, TileConstructor } from '../../src/solver/base/Tile'
 import { Board } from '../../src/solver/square/Board'
 import { NoneSolver } from '../../src/solver/base/solvers/NoneSolver'
 import { AllSidesSolver } from '../../src/solver/base/solvers/AllSidesSolver'
 import { LineSolver } from '../../src/solver/square/solvers/LineSolver'
 import { FitSolver } from '../../src/solver/base/solvers/FitSolver'
 import { TurnSolver } from '../../src/solver/square/solvers/TurnSolver'
-import { DirectionUtil } from '../../src/solver/base/DirectionUtil'
 import { ForceSolver } from '../../src/solver/base/solvers/ForceSolver'
-
-type TileConstructor = new (...args: ConstructorParameters<typeof Tile>) => Tile;
 
 export interface BoardData {
   type: 'square' | 'hex';
@@ -24,7 +21,7 @@ function constructTiles (type: BoardData['type'], width: number, tiles: TileCons
   return {
     type,
     width,
-    height: Math.floor(tiles.length / width),
+    height: Math.ceil(tiles.length / width),
     tiles: tiles.map((Ctor, index) => new Ctor({
       x: index % width,
       y: Math.floor(index / width)
@@ -60,7 +57,8 @@ const hard = (): BoardData => constructTiles('square', 6, [
 
 const empty = (): BoardData => constructTiles('square', 3, new Array(9).fill(None))
 
-const ends = (): BoardData => constructTiles('hex', 2, [
+const ends = (): BoardData => constructTiles('hex', 4, [
+  None, hex.End, hex.TurnL, hex.End,
   ...Object.values(hex)
 ])
 
@@ -71,8 +69,6 @@ export const boards = {
   turns,
   hard
 }
-
-DirectionUtil.NUM_SIDES = 4
 
 export const solve = (tiles: Tile[]): boolean => {
   tiles.forEach((tile) => {
@@ -94,5 +90,8 @@ export const solve = (tiles: Tile[]): boolean => {
     board.solve([
       new ForceSolver(board)
     ])
-  ].some(Boolean)
+  ].some(x => {
+    console.log(x)
+    return x
+  })
 }

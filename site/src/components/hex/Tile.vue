@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import { computed } from 'vue'
-import { Tile } from '../../../../src/solver/base/Tile'
+import {Tile, TileConstructor} from '../../../../src/solver/base/Tile'
 import { Square, Star, Triangle, Diamond } from '../../../../src/solver/hex/tiles'
 
 export default {
@@ -23,14 +23,14 @@ export default {
   setup (props: { tile: Tile }) {
     const RADIUS = 60
 
-    const closed = new Set([Square, Triangle, Diamond, Star])
+    const closed = new Set<TileConstructor>([Square, Triangle, Diamond, Star])
 
     const arcs = computed(() => {
       const arcs = []
 
       const sides = (props.tile.constructor as typeof Tile).SIDES
 
-      let start: number
+      let start = 0
       let end = 0
 
       while (end !== -1) {
@@ -42,14 +42,15 @@ export default {
         }
       }
 
-      if (closed.has(props.tile.constructor)) {
+      if (closed.has(props.tile.constructor as TileConstructor)) {
         arcs.push(arcToPoints(start, 0))
       }
 
       return arcs
     })
 
-    type Point = {x: number; y: number}
+    type Point = {side: number; x: number; y: number}
+    type Arc = {start: Point; end: Point;}
     function directionToRad (direction: number): number {
       // to degrees
       direction *= 60
@@ -59,12 +60,11 @@ export default {
       return direction * Math.PI / 180
     }
 
-    function arcToPoints (start: number, end: number): {start: Point, end: Point} {
+    function arcToPoints (start: number, end: number): Arc {
       const startRad = directionToRad(start)
       const endRad = directionToRad(end)
 
       return {
-        sides: end - start,
         start: {
           side: start,
           x: Math.cos(startRad) * RADIUS,
@@ -78,12 +78,16 @@ export default {
       }
     }
 
-    function bezier (arc): string {
-      const sides = arc.sides > 0 ? arc.sides : 6 + arc.sides
+    function bezier (arc: Arc): string {
+      const start = arc.start.side
+      const end = arc.end.side
+      let sides = end - start
+
+      if (sides < 0) {
+        sides = 6 + sides
+      }
 
       if (sides === 1) {
-        const start = arc.start.side
-        const end = arc.end.side
         const radius = RADIUS / 2
 
         const startRad = directionToRad(start)

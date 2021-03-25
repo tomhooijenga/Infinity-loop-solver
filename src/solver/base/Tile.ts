@@ -7,6 +7,8 @@ export interface TileParams {
     solved?: boolean;
 }
 
+export type TileConstructor = typeof Tile;
+
 export class Tile {
     public x: number = 0;
     public y: number = 0;
@@ -31,7 +33,7 @@ export class Tile {
     }
 
     public getSide(direction: number): boolean {
-        return (this.constructor as typeof Tile).SIDES[DirectionUtil.rotate(direction, -this.direction)];
+        return (this.constructor as TileConstructor).SIDES[DirectionUtil.rotate(direction, -this.direction)];
     }
 
     public static fromSides(sides: boolean[], type: string = 'unknown') {
