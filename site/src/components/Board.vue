@@ -1,5 +1,7 @@
 <template>
-  <component :is="`${boardData.type}-board`" :tiles="boardData.tiles" :x="boardData.width" :y="boardData.height" class="board" />
+  <div class="board-area">
+    <component :is="`${boardData.type}-board`" :tiles="boardData.tiles" :x="boardData.width" :y="boardData.height" class="board" />
+  </div>
   <section class="buttons">
     <button type="button" class="button" @click="scrambleBoard">Scramble</button>
     <button type="button" class="button" @click="solveBoard">Solve</button>
@@ -14,7 +16,7 @@ import SquareBoard from '@/components/square/Board.vue'
 import HexBoard from '@/components/hex/Board.vue'
 
 export default {
-  name: 'Board',
+  name: 'BoardArea',
 
   components: {
     SquareBoard,
@@ -45,12 +47,16 @@ export default {
 </script>
 
 <style scoped>
-.board {
+.board-area {
+  background: #1d314b;
   grid-area: board;
+  justify-content: center;
   min-height: 0;
+}
+
+.board {
   max-width: min(800px, 100%);
   max-height: min(800px, 100%);
-  /*justify-self: center;*/
 }
 
 .buttons {
