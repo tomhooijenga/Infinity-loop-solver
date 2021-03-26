@@ -2,7 +2,8 @@ import { None } from '../../src/solver/base/None'
 import * as sq from '../../src/solver/square/tiles'
 import * as hex from '../../src/solver/hex/tiles'
 import { Tile, TileConstructor } from '../../src/solver/base/Tile'
-import { Board } from '../../src/solver/square/Board'
+import { Board as SquareBoard } from '../../src/solver/square/Board'
+import { Board as HexBoard } from '../../src/solver/hex/Board'
 import { NoneSolver } from '../../src/solver/base/solvers/NoneSolver'
 import { AllSidesSolver } from '../../src/solver/base/solvers/AllSidesSolver'
 import { LineSolver } from '../../src/solver/square/solvers/LineSolver'
@@ -72,12 +73,8 @@ export const boards = {
   hard
 }
 
-export const solve = (tiles: Tile[]): boolean => {
-  tiles.forEach((tile) => {
-    tile.solved = false
-  })
-
-  const board = new Board(tiles)
+function solveSquare (tiles: Tile[]): boolean {
+  const board = new SquareBoard(tiles)
 
   return [
     board.solve([
@@ -92,8 +89,34 @@ export const solve = (tiles: Tile[]): boolean => {
     board.solve([
       new ForceSolver(board)
     ])
-  ].some(x => {
-    console.log(x)
-    return x
+  ].some(Boolean)
+}
+
+function solveHex (tiles: Tile[]): boolean {
+  const board = new HexBoard(tiles)
+
+  return [
+    board.solve([
+      new NoneSolver(board),
+      new AllSidesSolver(board)
+    ]),
+    board.solve([
+      new FitSolver(board)
+    ]),
+    board.solve([
+      new ForceSolver(board)
+    ])
+  ].some(Boolean)
+}
+
+export function solve (boardData: BoardData): boolean {
+  boardData.tiles.forEach((tile) => {
+    tile.solved = false
   })
+
+  if (boardData.type === 'square') {
+    return solveSquare(boardData.tiles)
+  } else {
+    return solveHex(boardData.tiles)
+  }
 }
