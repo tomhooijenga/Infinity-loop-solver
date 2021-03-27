@@ -58,11 +58,10 @@ const hard = (): BoardData => constructTiles('square', 6, [
 
 const empty = (): BoardData => constructTiles('square', 3, new Array(9).fill(None))
 
-const ends = (): BoardData => constructTiles('hex', 4, [
-  None, None,
-  hex.End, hex.TurnL, hex.End,
+const ends = (): BoardData => constructTiles('hex', 5, [
+  None, hex.End, hex.TurnL, hex.End,
   ...Object.values(hex),
-  ...Object.values(hex)
+  // ...Object.values(hex)
 ])
 
 export const boards = {

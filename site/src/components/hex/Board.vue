@@ -4,10 +4,7 @@
               :key="tile">
       <div :style="tileStyle(tile)"
            class="tile">
-        <End v-if="tile.type === 'End'" />
-        <None v-else-if="tile.type === 'None'" />
-        <Tile v-else
-              :tile="tile" />
+        <Tile :tile="tile" />
       </div>
     </template>
   </section>
@@ -17,8 +14,6 @@
 import { computed, PropType } from 'vue'
 import { Tile } from '../../../../src/solver/base/Tile'
 import TileComponent from './Tile.vue'
-import End from '@/components/hex/End.vue'
-import None from '@/components/hex/None.vue'
 
 type Props = {
   tiles: Tile[];
@@ -30,8 +25,6 @@ export default {
   name: 'Board',
 
   components: {
-    None,
-    End,
     Tile: TileComponent
   },
 
@@ -92,8 +85,8 @@ export default {
   //aspect-ratio: 1.1547 / 1;
   height: 0;
   padding-bottom: 86.60%;
-  //clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
-  //background: gray;
+  clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
+  //background: rgba(0,0,0,0.2);
 
   > * {
     position: absolute;

@@ -1,34 +1,22 @@
 <template>
   <section :style="tilesStyle" class="tiles">
-    <component :is="tile.type.toLowerCase()"
-               v-for="tile of tiles"
-               :key="tile"
-               :style="getTileStyle(tile)"
-               class="tile"
-               :class="{solved: tile.solved}"/>
+    <Tile v-for="tile of tiles"
+          :style="getTileStyle(tile)"
+          :tile="tile"
+          class="tile" />
   </section>
 </template>
 
 <script lang="ts">
-import { PropType, computed } from 'vue'
+import { computed, PropType } from 'vue'
 import { Tile } from '../../../../src/solver/base/Tile'
-import End from '@/components/square/End.vue'
-import Line from '@/components/square/Line.vue'
-import None from '@/components/square/None.vue'
-import Cross from '@/components/square/Cross.vue'
-import Turn from '@/components/square/Turn.vue'
-import Junction from '@/components/square/Junction.vue'
+import TileComponent from '@/components/square/Tile.vue'
 
 export default {
   name: 'Board',
 
   components: {
-    End,
-    Line,
-    None,
-    Cross,
-    Turn,
-    Junction
+    Tile: TileComponent
   },
 
   props: {
@@ -46,7 +34,7 @@ export default {
       }
     })
 
-    function getTileStyle (tile: Tile): Record<string, string> {
+    function getTileStyle (tile: Tile) {
       return {
         transform: `rotate(${tile.direction * 90}deg)`
       }
