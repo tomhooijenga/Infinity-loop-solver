@@ -1,9 +1,9 @@
 <template>
   <nav>
-    <button type="button" @click="$emit('open', 'help')">
+    <button type="button" @click="$emit('open', 'about')">
       About
     </button>
-    <button type="button" @click="$emit('open', 'generate')">
+    <button type="button" @click="$emit('open', 'settings')">
       Settings
     </button>
     <button type="button" @click="$emit('generate')">

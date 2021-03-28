@@ -1,9 +1,9 @@
 <template>
-  <Modal v-if="sections.help" @close="toggleSection('help')">
-    <About @close="toggleSection('help')"/>
+  <Modal v-if="sections.about" @close="toggleSection('about')">
+    <About @close="toggleSection('about')"/>
   </Modal>
 
-  <Modal v-if="sections.generate" @close="toggleSection('settings')">
+  <Modal v-if="sections.settings" @close="toggleSection('settings')">
     <Settings @close="toggleSection('settings')"/>
   </Modal>
 
@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue'
+import { defineComponent, reactive, watch } from 'vue'
 import Nav from '@/components/Nav.vue'
 import Modal from '@/components/Modal.vue'
 import About from '@/components/About.vue'
@@ -36,8 +36,7 @@ export default defineComponent({
   },
   setup () {
     const sections = reactive({
-      help: false,
-      examples: false,
+      about: false,
       settings: false
     })
 

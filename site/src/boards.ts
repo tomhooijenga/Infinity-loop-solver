@@ -18,7 +18,7 @@ export interface BoardData {
   height: number;
 }
 
-function constructTiles (type: BoardData['type'], width: number, tiles: TileConstructor[]): BoardData {
+export function constructTiles (type: BoardData['type'], width: number, tiles: TileConstructor[]): BoardData {
   return {
     type,
     width: Math.min(tiles.length, width),
