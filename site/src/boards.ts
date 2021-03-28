@@ -56,18 +56,28 @@ const hard = (): BoardData => constructTiles('square', 6, [
   sq.Turn, sq.Line, sq.End, sq.Turn, sq.Turn, None
 ])
 
-const empty = (): BoardData => constructTiles('square', 3, new Array(9).fill(None))
+export const empty = (): BoardData => constructTiles('square', 3, new Array(9).fill(None))
 
-const ends = (): BoardData => constructTiles('hex', 5, [
-  None, hex.End, hex.TurnL, hex.End,
-  ...Object.values(hex),
-  // ...Object.values(hex)
+const heart = (): BoardData => constructTiles('hex', 5, [
+  None, hex.TurnL, None, hex.TurnL, None,
+  hex.TurnL, None, hex.TurnL, None, hex.TurnL,
+  hex.TurnL, hex.Line, None, hex.Line, hex.TurnL,
+  None, None, hex.TurnL, None, None
+])
+
+const clover = (): BoardData => constructTiles('hex', 5, [
+  None, hex.TurnL, None, hex.TurnL, None,
+  hex.TurnL, None, hex.Triangle, None, hex.TurnL,
+  hex.TurnL, hex.Square, hex.Triangle, hex.Square, hex.TurnL,
+  hex.TurnL, None, hex.Triangle, None, hex.TurnL,
+  hex.TurnL, hex.TurnL, hex.Triangle, hex.TurnL, hex.TurnL
+
 ])
 
 export const boards = {
-  ends,
-  empty,
+  heart,
   robot,
+  clover,
   turns,
   hard
 }

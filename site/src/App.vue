@@ -21,9 +21,9 @@ import Modal from '@/components/Modal.vue'
 import About from '@/components/About.vue'
 import Generate from '@/components/Generate.vue'
 import Examples from '@/components/Examples.vue'
-import { BoardData, boards } from '@/boards'
+import { BoardData, boards, empty } from '@/boards'
 import BoardArea from '@/components/BoardArea.vue'
-import { DirectionUtil } from "../../src/solver/base/DirectionUtil";
+import { DirectionUtil } from '../../src/solver/base/DirectionUtil'
 
 export default defineComponent({
   name: 'App',
@@ -42,7 +42,7 @@ export default defineComponent({
     const board = ref<BoardData>(boards.robot())
 
     const clear = () => {
-      board.value = boards.empty()
+      board.value = empty()
     }
 
     const loadBoard = (name: keyof typeof boards) => {
@@ -50,7 +50,7 @@ export default defineComponent({
       DirectionUtil.NUM_SIDES = board.value.type === 'square' ? 4 : 6
     }
 
-    loadBoard('ends')
+    loadBoard('heart')
 
     return {
       toggleSection,
