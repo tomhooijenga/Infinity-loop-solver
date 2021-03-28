@@ -1,10 +1,10 @@
 <template>
-  <span>Generate</span>
+  <span>Settings</span>
 </template>
 
 <script>
 export default {
-  name: 'Generate'
+  name: 'Settings'
 }
 </script>
 

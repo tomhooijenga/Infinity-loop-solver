@@ -1,9 +1,12 @@
 <template>
   <nav>
     <button type="button" @click="$emit('open', 'help')">
-      Help
+      About
     </button>
     <button type="button" @click="$emit('open', 'generate')">
+      Settings
+    </button>
+    <button type="button" @click="$emit('generate')">
       Generate
     </button>
     <button class="clear" type="button" @click="$emit('clear')">
@@ -20,7 +23,6 @@ export default {
 
 <style scoped>
 nav {
-  border-bottom: 1px solid #162539;
   text-align: center;
   padding: 1rem;
 }

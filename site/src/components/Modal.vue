@@ -24,7 +24,7 @@ export default {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.2);
     transition: opacity 0.3s ease;
     display: flex;
     justify-content: center;
@@ -39,7 +39,9 @@ export default {
     transition: all 0.3s ease;
     font-family: Helvetica, Arial, sans-serif;
     border: 1px solid #162539;
-    background-color: #1d314b;
+    background-color: #162539;
+    padding: 1rem;
+    box-sizing: border-box;
   }
 
   .modal-enter-active,
