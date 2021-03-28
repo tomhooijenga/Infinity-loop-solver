@@ -3,7 +3,7 @@
   <p>This is a solver and generator for the <a href="http://loopgame.co/" target="_blank">&infin; Loop</a> game.</p>
 
   <h1>What can I do?</h1>
-  <p>Create and solve your own, or check it out with one of the examples!</p>
+  <p>Tap on a tile to change it's type. Create and solve your own, or check it out with one of the examples!</p>
   <dl>
     <dt>Settings</dt>
     <dd>Control the parameters of the board.</dd>
@@ -23,7 +23,9 @@
 
 <script>
 export default {
-  name: 'About'
+  name: 'About',
+
+  emits: ['close']
 }
 </script>
 

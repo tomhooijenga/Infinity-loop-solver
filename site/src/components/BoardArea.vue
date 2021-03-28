@@ -1,6 +1,11 @@
 <template>
   <div class="board-area">
-    <component :is="`${boardData.type}-board`" :tiles="boardData.tiles" :x="boardData.width" :y="boardData.height" class="board" />
+    <component :is="`${board.type}-board`"
+               :tiles="board.tiles"
+               :x="board.width"
+               :y="board.height"
+               @change="nextTile"
+               class="board" />
   </div>
   <section class="buttons">
     <button type="button" class="button" @click="scrambleBoard">Scramble</button>
@@ -9,11 +14,20 @@
 </template>
 
 <script lang="ts">
-import { PropType } from 'vue'
 import { BoardData, solve } from '@/boards'
 import { DirectionUtil } from '../../../src/solver/base/DirectionUtil'
 import SquareBoard from '@/components/square/Board.vue'
 import HexBoard from '@/components/hex/Board.vue'
+import { useBoard } from '@/use-board'
+import { Tile, TileConstructor } from '../../../src/solver/base/Tile'
+import * as sq from '../../../src/solver/square/tiles'
+import * as hex from '../../../src/solver/hex/tiles'
+import { None } from '../../../src/solver/base/None'
+
+const order: Record<BoardData['type'], TileConstructor[]> = {
+  square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross],
+  hex: [None, hex.End, hex.TurnS, hex.TurnL, hex.Line, hex.Junction, hex.CheckL, hex.CheckR, hex.Triangle, hex.Diamond, hex.Square, hex.Star]
+}
 
 export default {
   name: 'BoardArea',
@@ -23,24 +37,35 @@ export default {
     HexBoard
   },
 
-  props: {
-    boardData: Object as PropType<BoardData>
-  },
+  setup () {
+    const { board, setTile } = useBoard()
 
-  setup (props: { boardData: BoardData }) {
-    const scrambleBoard = () => {
-      props.boardData.tiles.forEach((tile) => {
+    function scrambleBoard () {
+      board.tiles.forEach((tile) => {
         tile.rotate(DirectionUtil.random())
       })
     }
 
-    const solveBoard = () => {
-      solve(props.boardData)
+    function solveBoard () {
+      solve(board)
+    }
+
+    function nextTile (index: number, tile: Tile, direction: -1 | 1) {
+      const typeOrder = order[board.type]
+      const typeIndex = (typeOrder.indexOf(tile.constructor as TileConstructor) + direction) % typeOrder.length
+      const Tile = typeOrder[typeIndex]
+
+      setTile(index, new Tile({
+        x: tile.x,
+        y: tile.y
+      }))
     }
 
     return {
+      board,
       scrambleBoard,
-      solveBoard
+      solveBoard,
+      nextTile
     }
   }
 }

@@ -1,10 +1,12 @@
 <template>
   <section :style="tilesStyle" class="tiles">
-    <template v-for="tile of tiles"
+    <template v-for="(tile, index) of tiles"
               :key="tile">
       <div :style="tileStyle(tile)"
            class="tile">
-        <Tile :tile="tile" />
+        <Tile :tile="tile"
+              @click="$emit('change', index, tile, 1)"
+              @contextmenu.prevent="$emit('change', index, tile, -1)"/>
       </div>
     </template>
   </section>

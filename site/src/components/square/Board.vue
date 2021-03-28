@@ -1,9 +1,11 @@
 <template>
   <section :style="tilesStyle" class="tiles">
-    <Tile v-for="tile of tiles"
+    <Tile v-for="(tile, index) of tiles"
           :style="getTileStyle(tile)"
           :tile="tile"
-          class="tile" />
+          class="tile"
+          @click="$emit('change', index, tile)"
+          @contextmenu.prevent="$emit('change', index, tile, -1)"/>
   </section>
 </template>
 

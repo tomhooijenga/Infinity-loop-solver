@@ -10,20 +10,19 @@
   <div class="examples">
     <Examples @change="loadBoard"/>
   </div>
-  <Nav class="nav" @clear="clear" @open="toggleSection"/>
-  <board-area :board-data="board" />
+  <Nav class="nav" @clear="clearBoard" @open="toggleSection"/>
+  <board-area />
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import Nav from '@/components/Nav.vue'
 import Modal from '@/components/Modal.vue'
 import About from '@/components/About.vue'
 import Settings from '@/components/Settings.vue'
 import Examples from '@/components/Examples.vue'
-import { BoardData, boards, empty } from '@/boards'
 import BoardArea from '@/components/BoardArea.vue'
-import { DirectionUtil } from '../../src/solver/base/DirectionUtil'
+import { useBoard } from '@/use-board'
 
 export default defineComponent({
   name: 'App',
@@ -46,25 +45,15 @@ export default defineComponent({
       sections[id] = !sections[id]
     }
 
-    const board = ref<BoardData>(boards.robot())
-
-    const clear = () => {
-      board.value = empty()
-    }
-
-    const loadBoard = (name: keyof typeof boards) => {
-      board.value = boards[name]()
-      DirectionUtil.NUM_SIDES = board.value.type === 'square' ? 4 : 6
-    }
+    const { loadBoard, clearBoard } = useBoard()
 
     loadBoard('heart')
 
     return {
       toggleSection,
-      clear,
       sections,
       loadBoard,
-      board
+      clearBoard
     }
   }
 })
