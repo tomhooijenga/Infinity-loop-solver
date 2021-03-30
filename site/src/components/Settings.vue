@@ -34,17 +34,18 @@
 </template>
 
 <script lang="ts">
+import { reactive, defineComponent } from 'vue'
 import { useBoard } from '@/use-board'
-import { reactive } from 'vue'
 import { None } from '../../../src/solver/base/None'
 import { constructTiles } from '@/boards'
+import { TileConstructor } from '../../../src/solver/base/Tile'
 
-export default {
+export default defineComponent({
   name: 'Settings',
 
   emits: ['close'],
 
-  setup (_, { emit }) {
+  setup (_: unknown, { emit }) {
     const { board } = useBoard()
 
     const { type, width, height } = board
@@ -59,12 +60,12 @@ export default {
       const { type, width, height } = settings
       const newLength = width * height
 
-      let tiles = board.tiles
+      let tiles: TileConstructor[]
 
       if (type === board.type) {
-        tiles = tiles.map((tile) => tile.constructor)
+        tiles = board.tiles.map((tile) => tile.constructor as TileConstructor)
       } else {
-        tiles.fill(None)
+        tiles = new Array(newLength).fill(None)
       }
 
       if (tiles.length > newLength) {
@@ -84,7 +85,7 @@ export default {
       apply
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

@@ -10,7 +10,7 @@
   <div class="examples">
     <Examples @change="loadBoard"/>
   </div>
-  <Nav class="nav" @clear="clearBoard" @open="toggleSection"/>
+  <Nav class="nav" @clear="clearBoard" @open="toggleSection" @generate="generateBoard"/>
   <board-area />
 </template>
 
@@ -44,7 +44,7 @@ export default defineComponent({
       sections[id] = !sections[id]
     }
 
-    const { loadBoard, clearBoard } = useBoard()
+    const { loadBoard, clearBoard, generateBoard } = useBoard()
 
     loadBoard('heart')
 
@@ -52,7 +52,8 @@ export default defineComponent({
       toggleSection,
       sections,
       loadBoard,
-      clearBoard
+      clearBoard,
+      generateBoard
     }
   }
 })

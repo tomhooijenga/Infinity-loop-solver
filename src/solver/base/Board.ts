@@ -4,13 +4,19 @@ import {IsFacing} from "./IsFacing";
 import {DirectionUtil} from "./DirectionUtil";
 import {None} from "./None";
 
-const NONE = Object.freeze(new None({solved: true}));
+const NONE = Object.freeze(new None({
+    x: Infinity,
+    y: Infinity,
+    solved: true
+}));
 
 export abstract class Board {
-    public grid: Tile[][];
 
-    constructor(public tiles: Tile[]) {
-        this.grid = this.toGrid(tiles);
+    public tiles: Tile[] = [];
+    public grid: Tile[][] = [];
+
+    constructor(tiles: Tile[] = []) {
+        this.setTiles(tiles)
     }
 
     /**
@@ -73,6 +79,14 @@ export abstract class Board {
      */
     protected getOrNone(x: number, y: number): Tile {
         return this.grid[x]?.[y] || NONE;
+    }
+
+    /**
+     * Set new tiles and grid.
+     */
+    public setTiles(tiles: Tile[]): void {
+        this.tiles = tiles;
+        this.grid = this.toGrid(tiles);
     }
 
     /**
