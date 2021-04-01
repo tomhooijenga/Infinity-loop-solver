@@ -6,10 +6,10 @@ import { Board as SquareBoard } from '../../src/solver/square/Board'
 import { Board as HexBoard } from '../../src/solver/hex/Board'
 import { NoneSolver } from '../../src/solver/base/solvers/NoneSolver'
 import { AllSidesSolver } from '../../src/solver/base/solvers/AllSidesSolver'
-import { LineSolver } from '../../src/solver/square/solvers/LineSolver'
 import { FitSolver } from '../../src/solver/base/solvers/FitSolver'
 import { TurnSolver } from '../../src/solver/square/solvers/TurnSolver'
 import { ForceSolver } from '../../src/solver/base/solvers/ForceSolver'
+import { SymmetricSolver } from '../../src/solver/base/solvers/SymmetricSolver'
 
 export interface BoardData {
   type: 'square' | 'hex';
@@ -91,7 +91,7 @@ function solveSquare (tiles: Tile[]): boolean {
       new AllSidesSolver(board)
     ]),
     board.solve([
-      new LineSolver(board),
+      new SymmetricSolver(board, sq.Line, true, true),
       new TurnSolver(board),
       new FitSolver(board)
     ]),
@@ -110,10 +110,10 @@ function solveHex (tiles: Tile[]): boolean {
       new AllSidesSolver(board)
     ]),
     board.solve([
+      new SymmetricSolver(board, hex.Line, true, false),
+      new SymmetricSolver(board, hex.Triangle, true, true),
+      new SymmetricSolver(board, hex.Square, false, true),
       new FitSolver(board)
-    ]),
-    board.solve([
-      new ForceSolver(board)
     ])
   ].some(Boolean)
 }

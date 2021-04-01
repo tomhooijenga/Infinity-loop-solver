@@ -5,11 +5,11 @@ export abstract class Solver {
     constructor(protected board: Board) {
     }
 
-    solveTile(tile: Tile): boolean {
+    public solveTile(tile: Tile): boolean {
         return false;
     }
 
-    solveBoard(tiles: Tile[]): boolean {
+    public solveBoard(tiles: Tile[]): boolean {
         return false;
     }
 }

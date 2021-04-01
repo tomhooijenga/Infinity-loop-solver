@@ -5,7 +5,7 @@ import {DirectionUtil} from "../../base/DirectionUtil";
 import {IsFacing} from "../../base/IsFacing";
 
 export class TurnSolver extends FitSolver {
-    solveTile(tile: Tile): boolean {
+    public solveTile(tile: Tile): boolean {
         if (!(tile instanceof Turn)) {
             return false;
         }
