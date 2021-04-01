@@ -7,3 +7,9 @@ export class None extends Tile {
         return false;
     }
 }
+
+export const NONE = Object.freeze(new None({
+    x: Infinity,
+    y: Infinity,
+    solved: true
+}));

@@ -2,13 +2,7 @@ import {Tile} from "./Tile";
 import {Solver} from "./solvers/Solver";
 import {IsFacing} from "./IsFacing";
 import {DirectionUtil} from "./DirectionUtil";
-import {None} from "./None";
-
-const NONE = Object.freeze(new None({
-    x: Infinity,
-    y: Infinity,
-    solved: true
-}));
+import {NONE} from "./None";
 
 export abstract class Board {
 
@@ -87,6 +81,18 @@ export abstract class Board {
     public setTiles(tiles: Tile[]): void {
         this.tiles = tiles;
         this.grid = this.toGrid(tiles);
+    }
+
+    /**
+     * Replace a tile on the board.
+     */
+    public replaceTile(old: Tile, tile: Tile) {
+        const {x, y} = old;
+        const width = this.grid.length;
+        const index = y * width + x;
+
+        this.grid[x][y] = tile;
+        this.tiles[index] = tile;
     }
 
     /**

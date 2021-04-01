@@ -1,11 +1,12 @@
 import {Board} from "../solver/base/Board";
 import {Tile, TileConstructor} from "../solver/base/Tile";
-import {None} from "../solver/base/None";
+import {None, NONE} from "../solver/base/None";
 import {DirectionUtil} from "../solver/base/DirectionUtil";
+import {IsFacing} from "../solver/base/IsFacing";
 
 export class Generator {
 
-    private tileInstances: Map<TileConstructor, Tile>
+    protected tileInstances: Map<TileConstructor, Tile>
 
     constructor(private board: Board, private tileTypes: TileConstructor[]) {
         this.tileInstances = new Map(
@@ -15,81 +16,90 @@ export class Generator {
 
     public generate(width: number, height: number): Tile[] {
         const amount = width * height;
-        const grid = this.grid(width, height);
-
-        for (let i = 0; i < amount; i++) {
-            this.add(grid, width, height)
-        }
-
         const tiles = Array
             .from({length: amount})
             .map((_, index) => new None({
+                solved: true,
                 x: index % width,
                 y: Math.floor(index / width)
             }));
 
-        this.board.setTiles(tiles)
+        this.board.setTiles(tiles);
 
-        return tiles.map((tile) => this.getType(tile, grid));
+        for (let i = 0; i < amount / 3; i++) {
+            this.addLine(tiles, width, height);
+        }
+
+        return tiles;
     }
 
-    protected add(grid: boolean[][], width: number, height: number): void {
+    protected addLine(tiles: Tile[], width: number, height: number): void {
         const x = this.random(0, width - 1);
         const y = this.random(0, height - 1);
+        const axis = this.random(0, (DirectionUtil.NUM_SIDES / 2) - 1)
+        const length = this.random(2, Math.min(width, height));
 
-        grid[x][y] = true;
+        let tile = this.board.grid[x][y];
+
+        for (let i = 0; i < length; i++) {
+            const neighbours = this.board.neighbours(tile);
+            const facing = this.board.facing(tile);
+            const next = i < length - 1 ? neighbours[axis] : NONE;
+
+            if (next !== NONE  && this.isNextOpen(next, axis)) {
+                facing[axis] = IsFacing.Yes;
+            }
+
+            this.addTile(tile, next, facing);
+
+            if (next === NONE) {
+                break;
+            }
+
+            tile = next
+        }
+    }
+
+    protected addTile(tile: Tile, next: Tile, facing: IsFacing[]) {
+        for (const [ctor, t] of this.tileInstances) {
+
+            if (this.tileFits(t, facing)) {
+                this.board.replaceTile(tile, new ctor({
+                    x: tile.x,
+                    y: tile.y,
+                    direction: t.direction,
+                    solved: true,
+                }));
+            }
+        }
+    }
+
+    protected isNextOpen(next: Tile, axis: number): boolean {
+        const facing = this.board.facing(next);
+
+        facing[DirectionUtil.opposite(axis)] = IsFacing.Yes;
+
+        return [...this.tileInstances.values()].some((tile) => this.tileFits(tile, facing));
+    }
+
+    protected tileFits(tile: Tile, facing: IsFacing[]): boolean {
+        for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
+            tile.rotate(direction);
+
+            const fits = facing.every((isFacing, side) => {
+                const isOpen = isFacing === IsFacing.Yes;
+                return isOpen === tile.getSide(side);
+            });
+
+            if (fits) {
+                return true
+            }
+        }
+
+        return false;
     }
 
     protected random(min: number, max: number): number {
         return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    protected grid(width: number, height: number): boolean[][] {
-        return Array.from({length: width}).map(() => {
-            return new Array(height).fill(false);
-        });
-    }
-
-    protected getType(tile: Tile, grid: boolean[][]): Tile {
-        if (!grid[tile.x][tile.y]) {
-            return new None({
-                x: tile.x,
-                y: tile.y
-            });
-        }
-
-        const neighbours = this.board
-            .neighbours(tile)
-            .map(({x, y}) => {
-                return grid[x]?.[y] ?? false;
-            });
-
-        const TileConstructor = this.tileTypes.find((tileConstructor) => {
-            const tile = this.tileInstances.get(tileConstructor)!;
-
-            for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
-                tile.rotate(direction);
-
-                const fits = neighbours.every((open, dir) => tile.getSide(dir) === open);
-
-                if (fits) {
-                    return true
-                }
-            }
-
-            return false
-        })
-
-        if (TileConstructor) {
-            return new TileConstructor({
-                x: tile.x,
-                y: tile.y
-            })
-        }
-
-        return new None({
-            x: tile.x,
-            y: tile.y
-        });
     }
 }
