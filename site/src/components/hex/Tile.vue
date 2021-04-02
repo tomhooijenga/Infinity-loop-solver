@@ -1,49 +1,30 @@
 <template>
-  <svg viewBox="-60 -52 120 104" :type="tile.type">
+  <svg :type="tile.type" viewBox="-60 -52 120 104">
     <template v-if="tile.type === 'None'">
-      <circle r="2"
-              fill="#861e32" />
+      <circle r="2" class="none"/>
     </template>
 
     <template v-else-if="tile.type === 'End'">
-      <circle r="15"
-              fill="none"
-              stroke="#1d314b"
-              stroke-width="10"/>
-      <rect fill="#1d314b" height="40" width="10" x="-5" y="-50%" />
-      <circle r="15"
-              fill="none"
-              stroke="#861e32"
-              stroke-width="6"/>
-      <rect fill="#861e32" height="40" width="6" x="-3" y="-50%" />
+      <circle r="15" class="line" />
+      <path d="M 0 -15 L 0 -52" class="line" />
     </template>
 
-    <template v-else
-              v-for="arc of arcs"
+    <template v-for="arc of arcs"
+              v-else
               :key="arc">
       <template v-if="arc.end - arc.start === 1 || (arc.start === 5 && arc.end === 0)">
-        <circle r="30.02"
-                :cx="corners[arc.start].x"
+        <circle :cx="corners[arc.start].x"
                 :cy="corners[arc.start].y"
-                fill="none"
-                stroke="#1d314b"
-                stroke-width="10"/>
-        <circle r="30.02"
-                :cx="corners[arc.start].x"
+                r="30.02"
+                class="line-background" />
+        <circle :cx="corners[arc.start].x"
                 :cy="corners[arc.start].y"
-                fill="none"
-                stroke="#861e32"
-                stroke-width="6"/>
+                r="30.02"
+                class="line" />
       </template>
       <template v-else>
-        <path :d="path(arc)"
-              fill="none"
-              stroke="#1d314b"
-              stroke-width="10"/>
-        <path :d="path(arc)"
-              fill="none"
-              stroke="#861e32"
-              stroke-width="6"/>
+        <path :d="path(arc)" class="line-background" />
+        <path :d="path(arc)" class="line" />
       </template>
     </template>
   </svg>
@@ -52,10 +33,10 @@
 <script lang="ts">
 import { computed } from 'vue'
 import { Tile, TileConstructor } from '../../../../src/solver/base/Tile'
-import { Square, Star, Triangle, Diamond } from '../../../../src/solver/hex/tiles'
+import { Diamond, Square, Star, Triangle } from '../../../../src/solver/hex/tiles'
 
-type Arc = {start: number; end: number;}
-type Point = {x: number; y: number}
+type Arc = { start: number; end: number; }
+type Point = { x: number; y: number }
 
 const closed = new Set<TileConstructor>([Square, Triangle, Diamond, Star])
 const RADIUS = 60
@@ -123,8 +104,24 @@ export default {
 </script>
 
 <style scoped>
-  svg {
-    height: 100%;
-    width: 100%;
-  }
+svg {
+  height: 100%;
+  width: 100%;
+}
+
+.none {
+  fill: #861e32;
+}
+
+.line-background {
+  fill: none;
+  stroke: #1d314b;
+  stroke-width: 10;
+}
+
+.line {
+  fill: none;
+  stroke: #861e32;
+  stroke-width: 6;
+}
 </style>

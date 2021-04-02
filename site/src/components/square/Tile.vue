@@ -1,26 +1,16 @@
 <template>
   <svg viewBox="-50 -50 100 100">
     <template v-if="tile.type === 'None'">
-      <circle r="2"
-              fill="#861e32" />
+      <circle r="2" class="none"/>
     </template>
 
     <template v-else-if="tile.type === 'End'">
-      <circle r="25"
-              fill="none"
-              stroke="#1d314b"
-              stroke-width="10"/>
-      <rect fill="#1d314b" height="25" width="10" x="-5" y="-50%" />
-      <circle r="25"
-              fill="none"
-              stroke="#861e32"
-              stroke-width="6"/>
-      <rect fill="#861e32" height="25" width="6" x="-3" y="-50%" />
+      <circle r="25" class="line" />
+      <path d="M 0 -25 L 0 -50" class="line" />
     </template>
 
     <template v-else-if="tile.type === 'Line'">
-      <rect fill="#1d314b" height="100%" width="10" x="-5" y="-50%" />
-      <rect fill="#861e32" height="100%" width="6" x="-3" y="-50%" />
+      <path d="M 0 -50 L 0 50" class="line" />
     </template>
 
     <template v-else
@@ -29,15 +19,11 @@
         <circle r="50"
                 :cx="corners[arc.start].x"
                 :cy="corners[arc.start].y"
-                fill="none"
-                stroke="#1d314b"
-                stroke-width="10"/>
+                class="line-background" />
         <circle r="50"
                 :cx="corners[arc.start].x"
                 :cy="corners[arc.start].y"
-                fill="none"
-                stroke="#861e32"
-                stroke-width="6"/>
+                class="line" />
     </template>
   </svg>
 </template>
@@ -109,5 +95,21 @@ export default {
 svg {
   height: 100%;
   width: 100%;
+}
+
+.none {
+  fill: #861e32;
+}
+
+.line-background {
+  fill: none;
+  stroke: #1d314b;
+  stroke-width: 10;
+}
+
+.line {
+  fill: none;
+  stroke: #861e32;
+  stroke-width: 6;
 }
 </style>
