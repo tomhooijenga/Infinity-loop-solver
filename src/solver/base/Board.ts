@@ -86,7 +86,7 @@ export abstract class Board {
     /**
      * Replace a tile on the board.
      */
-    public replaceTile(old: Tile, tile: Tile) {
+    public replaceTile(old: Tile, tile: Tile): void {
         const {x, y} = old;
         const width = this.grid.length;
         const index = y * width + x;

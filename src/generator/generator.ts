@@ -50,7 +50,7 @@ export class Generator {
                 facing[axis] = IsFacing.Yes;
             }
 
-            this.addTile(tile, next, facing);
+            this.addTile(tile, facing);
 
             if (next === NONE) {
                 break;
@@ -60,7 +60,7 @@ export class Generator {
         }
     }
 
-    protected addTile(tile: Tile, next: Tile, facing: IsFacing[]) {
+    protected addTile(tile: Tile, facing: IsFacing[]) {
         for (const [ctor, t] of this.tileInstances) {
             if (this.tileFits(t, facing)) {
                 this.board.replaceTile(tile, new ctor({
@@ -69,6 +69,7 @@ export class Generator {
                     direction: t.direction,
                     solved: true,
                 }));
+                return;
             }
         }
     }
