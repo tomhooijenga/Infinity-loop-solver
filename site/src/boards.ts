@@ -7,9 +7,7 @@ import { Board as HexBoard } from '../../src/solver/hex/Board'
 import { NoneSolver } from '../../src/solver/base/solvers/NoneSolver'
 import { AllSidesSolver } from '../../src/solver/base/solvers/AllSidesSolver'
 import { FitSolver } from '../../src/solver/base/solvers/FitSolver'
-import { TurnSolver } from '../../src/solver/square/solvers/TurnSolver'
-import { ForceSolver } from '../../src/solver/base/solvers/ForceSolver'
-import { SymmetricSolver } from '../../src/solver/base/solvers/SymmetricSolver'
+import { PatternSolver } from '../../src/solver/base/solvers/PatternSolver'
 
 export interface BoardData {
   type: 'square' | 'hex';
@@ -91,8 +89,8 @@ function solveSquare (tiles: Tile[]): boolean {
       new AllSidesSolver(board)
     ]),
     board.solve([
-      new SymmetricSolver(board, sq.Line, true, true),
-      new TurnSolver(board),
+      new PatternSolver(board, sq.Line, [[true], [false]]),
+      new PatternSolver(board, sq.Turn, [[true, false]]),
       new FitSolver(board)
     ]),
     board.solve([
@@ -110,9 +108,13 @@ function solveHex (tiles: Tile[]): boolean {
       new AllSidesSolver(board)
     ]),
     board.solve([
-      new SymmetricSolver(board, hex.Line, true, false),
-      new SymmetricSolver(board, hex.Triangle, true, true),
-      new SymmetricSolver(board, hex.Square, false, true),
+      new PatternSolver(board, hex.Line, [[true], [false, false]]),
+      new PatternSolver(board, hex.TurnL, [[false, false, false]]),
+      new PatternSolver(board, hex.CheckL, [[true, true], [true, false, true]]),
+      new PatternSolver(board, hex.CheckR, [[true, true], [true, false, true]]),
+      new PatternSolver(board, hex.Triangle, [[true], [false]]),
+      new PatternSolver(board, hex.Diamond, [[true, true, true]]),
+      new PatternSolver(board, hex.Square, [[false], [true, true], [true, false, true]]),
       new FitSolver(board)
     ])
   ].some(Boolean)
