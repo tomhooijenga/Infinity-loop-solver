@@ -3,11 +3,11 @@
     <template v-for="(tile, index) of tiles"
               :key="tile">
       <div :style="tileStyle(tile)"
-           class="tile">
+           class="tile"
+           :class="{solved: tile.solved}">
         <Tile :tile="tile"
               @click="$emit('change', index, tile, 1)"
-              @contextmenu.prevent="$emit('change', index, tile, -1)"
-              :class="{solved: tile.solved}"/>
+              @contextmenu.prevent="$emit('change', index, tile, -1)"/>
       </div>
     </template>
   </section>
