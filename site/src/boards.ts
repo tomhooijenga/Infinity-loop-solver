@@ -54,8 +54,6 @@ const hard = (): BoardData => constructTiles('square', 6, [
   sq.Turn, sq.Line, sq.End, sq.Turn, sq.Turn, None
 ])
 
-export const empty = (): BoardData => constructTiles('square', 3, new Array(9).fill(None))
-
 const heart = (): BoardData => constructTiles('hex', 5, [
   None, hex.TurnL, None, hex.TurnL, None,
   hex.TurnL, None, hex.TurnL, None, hex.TurnL,
@@ -93,9 +91,9 @@ function solveSquare (tiles: Tile[]): boolean {
       new PatternSolver(board, sq.Turn, [[true, false]]),
       new FitSolver(board)
     ]),
-    board.solve([
-      new ForceSolver(board)
-    ])
+    // board.solve([
+    //   new ForceSolver(board)
+    // ])
   ].some(Boolean)
 }
 
@@ -116,7 +114,10 @@ function solveHex (tiles: Tile[]): boolean {
       new PatternSolver(board, hex.Diamond, [[true, true, true]]),
       new PatternSolver(board, hex.Square, [[false], [true, true], [true, false, true]]),
       new FitSolver(board)
-    ])
+    ]),
+    // board.solve([
+    //   new ForceSolver(board)
+    // ])
   ].some(Boolean)
 }
 

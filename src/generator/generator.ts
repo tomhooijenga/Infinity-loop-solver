@@ -62,7 +62,6 @@ export class Generator {
 
     protected addTile(tile: Tile, next: Tile, facing: IsFacing[]) {
         for (const [ctor, t] of this.tileInstances) {
-
             if (this.tileFits(t, facing)) {
                 this.board.replaceTile(tile, new ctor({
                     x: tile.x,

@@ -7,15 +7,17 @@
     <Settings @close="toggleSection('settings')"/>
   </Modal>
 
-  <div class="examples">
-    <Examples @change="loadBoard"/>
+  <div class="examples-background" :class="{show: sections.examples}" @click="toggleSection('examples')"></div>
+  <div :class="{show: sections.examples}" class="examples">
+    <Examples @change="selectBoard"/>
   </div>
-  <Nav class="nav" @clear="clearBoard" @open="toggleSection" @generate="generateBoard"/>
+
+  <Nav class="nav" @open="toggleSection" @generate="generateBoard"/>
   <board-area />
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, watch } from 'vue'
+import { defineComponent, reactive } from 'vue'
 import Nav from '@/components/Nav.vue'
 import Modal from '@/components/Modal.vue'
 import About from '@/components/About.vue'
@@ -23,6 +25,7 @@ import Settings from '@/components/Settings.vue'
 import Examples from '@/components/Examples.vue'
 import BoardArea from '@/components/BoardArea.vue'
 import { useBoard } from '@/use-board'
+import { boards } from '@/boards'
 
 export default defineComponent({
   name: 'App',
@@ -37,22 +40,28 @@ export default defineComponent({
   setup () {
     const sections = reactive({
       about: false,
-      settings: false
+      settings: false,
+      examples: true
     })
 
     const toggleSection = (id: keyof typeof sections) => {
       sections[id] = !sections[id]
     }
 
-    const { loadBoard, clearBoard, generateBoard } = useBoard()
+    const { loadBoard, generateBoard } = useBoard()
 
     loadBoard('heart')
+
+    function selectBoard (board: keyof typeof boards): void {
+      loadBoard(board)
+
+      sections.examples = false
+    }
 
     return {
       toggleSection,
       sections,
-      loadBoard,
-      clearBoard,
+      selectBoard,
       generateBoard
     }
   }
@@ -63,6 +72,39 @@ export default defineComponent({
 .examples {
   grid-area: sidebar;
   overflow: auto;
+
+  @media (max-width: 768px) {
+    background: #162539;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 60vw;
+    z-index: 2;
+    transform: translateX(-60vw);
+    transition: transform .2s ease-in-out;
+
+    &.show {
+      transform: translateX(0);
+    }
+  }
+}
+
+.examples-background {
+  position: fixed;
+  display: none;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.2);
+
+  @media (max-width: 768px) {
+    &.show {
+      display: block;
+    }
+  }
 }
 
 .nav {
@@ -71,6 +113,12 @@ export default defineComponent({
 </style>
 
 <style lang="scss">
+// #D3F6F8
+// #45D7E2
+
+// #D9E8D1
+// #628D4A
+
 body {
   background-color: #162539;
   margin: 0;
@@ -90,6 +138,14 @@ h1 {
   grid-template-areas: "sidebar nav" "sidebar board" "sidebar controls";
   grid-template-columns: min(30vw, 400px) 1fr;
   grid-template-rows: auto 1fr auto;
+}
+
+@media (max-width: 768px) {
+  #app {
+    grid-template-areas: "nav" "board" "controls";
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+  }
 }
 
 a {

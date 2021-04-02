@@ -1,4 +1,4 @@
-<template>
+  <template>
   <section :style="tilesStyle" class="tiles">
     <template v-for="(tile, index) of tiles"
               :key="tile">
@@ -6,7 +6,8 @@
            class="tile">
         <Tile :tile="tile"
               @click="$emit('change', index, tile, 1)"
-              @contextmenu.prevent="$emit('change', index, tile, -1)"/>
+              @contextmenu.prevent="$emit('change', index, tile, -1)"
+              :class="{solved: tile.solved}"/>
       </div>
     </template>
   </section>

@@ -1,5 +1,5 @@
-import {reactive, watch} from 'vue'
-import { BoardData, boards, empty } from '@/boards'
+import { reactive, watch } from 'vue'
+import { BoardData, boards } from '@/boards'
 import { Tile } from '../../src/solver/base/Tile'
 import { DirectionUtil } from '../../src/solver/base/DirectionUtil'
 import { Generator } from '../../src/generator/generator'
@@ -14,10 +14,6 @@ const board = reactive<BoardData>({
   width: 0,
   height: 0
 })
-
-const clearBoard = () => {
-  Object.assign(board, empty())
-}
 
 const loadBoard = (name: keyof typeof boards) => {
   Object.assign(board, boards[name]())
@@ -46,7 +42,6 @@ function generateBoard () {
 export function useBoard () {
   return {
     board,
-    clearBoard,
     loadBoard,
     generateBoard,
     setTile

@@ -4,6 +4,7 @@
           :style="getTileStyle(tile)"
           :tile="tile"
           class="tile"
+          :class="{solved: tile.solved}"
           @click="$emit('change', index, tile)"
           @contextmenu.prevent="$emit('change', index, tile, -1)"/>
   </section>

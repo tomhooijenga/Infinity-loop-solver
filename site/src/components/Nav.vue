@@ -1,5 +1,8 @@
 <template>
   <nav>
+    <button type="button" class="examples" @click="$emit('open', 'examples')">
+      Examples
+    </button>
     <button type="button" @click="$emit('open', 'about')">
       About
     </button>
@@ -8,9 +11,6 @@
     </button>
     <button type="button" @click="$emit('generate')">
       Generate
-    </button>
-    <button class="clear" type="button" @click="$emit('clear')">
-      Clear
     </button>
   </nav>
 </template>
@@ -21,10 +21,31 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 nav {
   text-align: center;
   padding: 1rem;
+  position: relative;
+
+  @media (max-width: 768px) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+button {
+  @media (max-width: 768px) {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+.examples {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: initial;
+  }
 }
 
 .clear {
