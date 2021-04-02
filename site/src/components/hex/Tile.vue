@@ -9,6 +9,14 @@
       <path d="M 0 -15 L 0 -52" class="line" />
     </template>
 
+    <template v-else-if="tile.type === 'Star'">
+      <circle v-for="i of 3"
+              :cx="corners[arcs[(i - 1) * 2].start].x"
+              :cy="corners[arcs[(i - 1) * 2].start].y"
+              r="30.02"
+              class="line" />
+    </template>
+
     <template v-for="arc of arcs"
               v-else
               :key="arc">

@@ -26,7 +26,7 @@ import { None } from '../../../src/solver/base/None'
 
 const order: Record<BoardData['type'], TileConstructor[]> = {
   square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross],
-  hex: [None, hex.End, hex.TurnS, hex.TurnL, hex.Line, hex.Junction, hex.CheckL, hex.CheckR, hex.Triangle, hex.Diamond, hex.Square, hex.Star]
+  hex: [None, hex.End, hex.TurnS, hex.TurnL, hex.Line, hex.Junction, hex.CheckL, hex.CheckR, hex.Triangle, hex.Diamond, hex.Square, hex.Knuckles, hex.Star]
 }
 
 export default {

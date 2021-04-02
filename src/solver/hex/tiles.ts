@@ -8,6 +8,7 @@ export const Junction = Tile.fromSides([true, true, true, false, false, false], 
 export const CheckL = Tile.fromSides([false, false, true, true, false, true], 'CheckL');
 export const CheckR = Tile.fromSides([false, true, false, true, true, false], 'CheckR');
 export const Square = Tile.fromSides([true, false, true, true, false, true], 'Square');
+export const Knuckles = Tile.fromSides([true, true, true, true, false, false], 'Knuckles')
 export const Triangle = Tile.fromSides([true, false, true, false, true, false], 'Triangle');
 export const Diamond = Tile.fromSides([true, true, false, true, false, true], 'Diamond');
 export const Star = Tile.fromSides([true, true, true, true, true, true], 'Star');
