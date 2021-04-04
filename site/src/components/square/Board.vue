@@ -51,13 +51,17 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .tiles {
   display: grid;
   overflow: hidden;
 }
 
 .tile {
-  transition: transform .2s ease-in-out;
+  transition: transform .2s ease-in-out, background-color .2s ease-in-out;
+
+  &:hover {
+    background: rgba(0,0,0,0.2);
+  }
 }
 </style>

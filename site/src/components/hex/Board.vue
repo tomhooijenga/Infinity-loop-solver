@@ -84,12 +84,15 @@ export default {
 
 .tile {
   position: relative;
-  transition: transform .2s ease-out;
+  transition: transform .2s ease-in-out, background-color .2s ease-in-out;
   //aspect-ratio: 1.1547 / 1;
   height: 0;
   padding-bottom: 86.60%;
   clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
-  //background: rgba(0,0,0,0.2);
+
+  &:hover {
+    background: rgba(0,0,0,0.2);
+  }
 
   > * {
     position: absolute;
