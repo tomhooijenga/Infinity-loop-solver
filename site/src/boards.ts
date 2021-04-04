@@ -67,7 +67,6 @@ const clover = (): BoardData => constructTiles('hex', 5, [
   hex.TurnL, hex.Square, hex.Triangle, hex.Square, hex.TurnL,
   hex.TurnL, None, hex.Triangle, None, hex.TurnL,
   hex.TurnL, hex.TurnL, hex.Triangle, hex.TurnL, hex.TurnL
-
 ])
 
 export const boards = {
@@ -88,7 +87,7 @@ function solveSquare (tiles: Tile[]): boolean {
     ]),
     board.solve([
       new PatternSolver(board, sq.Line, [[true], [false]]),
-      new PatternSolver(board, sq.Turn, [[true, false]]),
+      new PatternSolver(board, sq.Turn, [[true, false], [false, true]]),
       new FitSolver(board)
     ]),
     // board.solve([
@@ -107,12 +106,29 @@ function solveHex (tiles: Tile[]): boolean {
     ]),
     board.solve([
       new PatternSolver(board, hex.Line, [[true], [false, false]]),
-      new PatternSolver(board, hex.TurnL, [[false, false, false]]),
-      new PatternSolver(board, hex.CheckL, [[true, true], [true, false, true]]),
-      new PatternSolver(board, hex.CheckR, [[true, true], [true, false, true]]),
+      new PatternSolver(board, hex.TurnS, [[true, false], [false, true]]),
+      new PatternSolver(board, hex.TurnL, [
+        [false, false, false],
+        [true, false, false],
+        [false, false, true]
+      ]),
+      new PatternSolver(board, hex.CheckL, [
+        [true, true],
+        [false, false],
+        [true, false, true],
+        [false, true, false]
+      ]),
+      new PatternSolver(board, hex.CheckR, [
+        [true, true],
+        [false, false],
+        [true, false, true],
+        [false, true, false]
+      ]),
+      new PatternSolver(board, hex.Junction, [[true, false], [false, true]]),
+      new PatternSolver(board, hex.Knuckles, [[true, false], [false, true]]),
       new PatternSolver(board, hex.Triangle, [[true], [false]]),
-      new PatternSolver(board, hex.Diamond, [[true, true, true]]),
-      new PatternSolver(board, hex.Square, [[false], [true, true], [true, false, true]]),
+      new PatternSolver(board, hex.Diamond, [[true, true, true], [true, false, true, true], [true, true, false, true]]),
+      new PatternSolver(board, hex.Square, [[false], [true, true]]),
       new FitSolver(board)
     ]),
     // board.solve([

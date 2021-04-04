@@ -79,8 +79,8 @@ export default {
 }
 
 .board {
-  max-width: min(1200px, 100%);
-  max-height: min(1200px, 100%);
+  max-width: 100%;
+  max-height: 100%;
   margin: 0 auto;
 }
 
