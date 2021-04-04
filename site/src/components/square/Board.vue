@@ -5,7 +5,7 @@
           :tile="tile"
           class="tile"
           :class="{solved: tile.solved}"
-          @click="$emit('change', index, tile)"
+          @click="$emit('change', index, tile, 1)"
           @contextmenu.prevent="$emit('change', index, tile, -1)"/>
   </section>
 </template>
