@@ -26,7 +26,7 @@ export class Generator {
 
         this.board.setTiles(tiles);
 
-        for (let i = 0; i < amount / 3; i++) {
+        for (let i = 0; i < amount / 4; i++) {
             this.addLine(tiles, width, height);
         }
 
@@ -36,31 +36,39 @@ export class Generator {
     protected addLine(tiles: Tile[], width: number, height: number): void {
         const x = this.random(0, width - 1);
         const y = this.random(0, height - 1);
-        const axis = this.random(0, (DirectionUtil.NUM_SIDES / 2) - 1)
-        const length = this.random(2, Math.min(width, height));
+        const length = this.random(2, 10);
 
         let tile = this.board.grid[x][y];
 
         for (let i = 0; i < length; i++) {
+            const direction = this.random(0, DirectionUtil.NUM_SIDES - 1);
             const neighbours = this.board.neighbours(tile);
             const facing = this.board.facing(tile);
-            const next = i < length - 1 ? neighbours[axis] : NONE;
+            const next = i < length - 1 ? neighbours[direction] : NONE;
 
-            if (next !== NONE  && this.isNextOpen(next, axis)) {
-                facing[axis] = IsFacing.Yes;
+            if (this.isNextOpen(next, direction)) {
+                facing[direction] = IsFacing.Yes;
+
+                const added = this.addTile(tile, facing);
+
+                if (!added) {
+                    facing[direction] = IsFacing.No;
+                    this.addTile(tile, facing);
+                    break;
+                }
+            } else {
+                this.addTile(tile, facing)
             }
-
-            this.addTile(tile, facing);
 
             if (next === NONE) {
                 break;
             }
 
-            tile = next
+            tile = next;
         }
     }
 
-    protected addTile(tile: Tile, facing: IsFacing[]) {
+    protected addTile(tile: Tile, facing: IsFacing[]): boolean {
         for (const [ctor, t] of this.tileInstances) {
             if (this.tileFits(t, facing)) {
                 this.board.replaceTile(tile, new ctor({
@@ -69,15 +77,20 @@ export class Generator {
                     direction: t.direction,
                     solved: true,
                 }));
-                return;
+                return true;
             }
         }
+        return false;
     }
 
-    protected isNextOpen(next: Tile, axis: number): boolean {
+    protected isNextOpen(next: Tile, direction: number): boolean {
+        if (next === NONE) {
+            return false;
+        }
+
         const facing = this.board.facing(next);
 
-        facing[DirectionUtil.opposite(axis)] = IsFacing.Yes;
+        facing[DirectionUtil.opposite(direction)] = IsFacing.Yes;
 
         return [...this.tileInstances.values()].some((tile) => this.tileFits(tile, facing));
     }
@@ -92,7 +105,7 @@ export class Generator {
             });
 
             if (fits) {
-                return true
+                return true;
             }
         }
 
