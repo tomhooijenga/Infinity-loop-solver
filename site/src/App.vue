@@ -74,7 +74,6 @@ export default defineComponent({
   overflow: auto;
 
   @media (max-width: 768px) {
-    background: #162539;
     position: fixed;
     left: 0;
     top: 0;
@@ -113,14 +112,10 @@ export default defineComponent({
 </style>
 
 <style lang="scss">
-// #D3F6F8
-// #45D7E2
-
-// #D9E8D1
-// #628D4A
+@import "@/assets/theme";
 
 body {
-  background-color: #162539;
+  background-color: $app-bg;
   margin: 0;
   color: whitesmoke;
   font-weight: lighter;
@@ -155,8 +150,8 @@ a {
 button {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   flex: 1;
-  background: #1d314b;
-  color: #f5f5f5;
+  background-color: $button-bg;
+  color: $button-color;
   font-size: 1rem;
   border: none;
   padding: 0.5rem 1rem;

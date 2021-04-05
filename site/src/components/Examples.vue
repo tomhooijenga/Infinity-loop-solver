@@ -33,10 +33,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/theme";
 
 .board {
   margin: 1rem;
-  background: #1d314b;
+  background: $board-bg;
 }
 </style>

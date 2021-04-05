@@ -1,10 +1,11 @@
 <template>
   <section :style="tilesStyle" class="tiles">
     <Tile v-for="(tile, index) of tiles"
-          :style="getTileStyle(tile)"
+          :key="tile"
+          :style="`transform: rotate(${tile.direction * 90}deg)`"
           :tile="tile"
           class="tile"
-          :class="{solved: tile.solved}"
+          :class="{unsolved: !tile.solved}"
           @click="$emit('change', index, tile, 1)"
           @contextmenu.prevent="$emit('change', index, tile, -1)"/>
   </section>
@@ -37,21 +38,16 @@ export default {
       }
     })
 
-    function getTileStyle (tile: Tile) {
-      return {
-        transform: `rotate(${tile.direction * 90}deg)`
-      }
-    }
-
     return {
-      tilesStyle,
-      getTileStyle
+      tilesStyle
     }
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
+@import "@/assets/theme";
+
 .tiles {
   display: grid;
   overflow: hidden;
@@ -60,8 +56,12 @@ export default {
 .tile {
   transition: transform .2s ease-in-out, background-color .2s ease-in-out;
 
+  &.unsolved {
+    background: $tile-unsolved-bg;
+  }
+
   &:hover {
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
   }
 }
 </style>

@@ -71,9 +71,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/theme";
+
 .board-area {
-  background: #1d314b;
+  background: $board-bg;
   grid-area: board;
   min-height: 0;
 }
@@ -86,7 +88,6 @@ export default {
 
 .buttons {
   grid-area: controls;
-  border-top: 1px solid #162539;
   padding: 1rem;
   text-align: center;
 }

@@ -4,7 +4,7 @@
               :key="tile">
       <div :style="tileStyle(tile)"
            class="tile"
-           :class="{solved: tile.solved}">
+           :class="{unsolved: !tile.solved}">
         <Tile :tile="tile"
               @click="$emit('change', index, tile, 1)"
               @contextmenu.prevent="$emit('change', index, tile, -1)"/>
@@ -76,6 +76,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/theme";
 
 .tiles {
   display: grid;
@@ -89,6 +90,10 @@ export default {
   height: 0;
   padding-bottom: 86.60%;
   clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
+
+  &.unsolved {
+    background: $tile-unsolved-bg;
+  }
 
   &:hover {
     background: rgba(0,0,0,0.2);

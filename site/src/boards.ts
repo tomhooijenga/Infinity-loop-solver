@@ -23,7 +23,8 @@ export function constructTiles (type: BoardData['type'], width: number, tiles: T
     height: Math.ceil(tiles.length / width),
     tiles: tiles.map((Ctor, index) => new Ctor({
       x: index % width,
-      y: Math.floor(index / width)
+      y: Math.floor(index / width),
+      solved: true
     }))
   }
 }

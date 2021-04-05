@@ -1,5 +1,5 @@
 <template>
-  <svg :type="tile.type" viewBox="-60 -52 120 104">
+  <svg viewBox="-60 -52 120 104">
     <template v-if="tile.type === 'None'">
       <circle r="2" class="none"/>
     </template>
@@ -111,25 +111,27 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "@/assets/theme";
+
 svg {
   height: 100%;
   width: 100%;
 }
 
 .none {
-  fill: #861e32;
+  fill: $line-bg;
 }
 
 .line-background {
   fill: none;
-  stroke: #1d314b;
+  stroke: $line-shadow;
   stroke-width: 10;
 }
 
 .line {
   fill: none;
-  stroke: #861e32;
+  stroke: $line-bg;
   stroke-width: 6;
 }
 </style>
