@@ -5,6 +5,7 @@ $app-bg: $color-default-darker;
 $board-bg: $color-default;
 
 $button-bg: $color-default;
+$button-hover-bg: darken($color-default, 10%);
 $button-color: #f5f5f5;
 
 $line-bg: #861e32;
