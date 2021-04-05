@@ -58,23 +58,7 @@ export default defineComponent({
 
     function apply () {
       const { type, width, height } = settings
-      const newLength = width * height
-
-      let tiles: TileConstructor[]
-
-      if (type === board.type) {
-        tiles = board.tiles.map((tile) => tile.constructor as TileConstructor)
-      } else {
-        tiles = new Array(newLength).fill(None)
-      }
-
-      if (tiles.length > newLength) {
-        tiles = tiles.slice(0, newLength)
-      } else if (tiles.length < newLength) {
-        tiles = tiles.concat(
-          new Array(newLength - tiles.length).fill(None)
-        )
-      }
+      const tiles = new Array(width * height).fill(None)
 
       Object.assign(board, constructTiles(type, width, tiles))
       emit('close')

@@ -44,10 +44,14 @@ export default {
       board.tiles.forEach((tile) => {
         tile.rotate(DirectionUtil.random())
       })
+
+      board.tiles = [...board.tiles]
     }
 
     function solveBoard () {
       solve(board)
+
+      board.tiles = [...board.tiles]
     }
 
     function nextTile (index: number, tile: Tile, direction: -1 | 1) {
@@ -56,6 +60,7 @@ export default {
       const Tile = typeOrder[typeIndex]
 
       setTile(index, new Tile({
+        solved: true,
         x: tile.x,
         y: tile.y
       }))

@@ -1,4 +1,4 @@
-import { reactive, watch } from 'vue'
+import { shallowReactive, watch } from 'vue'
 import { BoardData, boards } from '@/boards'
 import { Tile } from '../../src/solver/base/Tile'
 import { DirectionUtil } from '../../src/solver/base/DirectionUtil'
@@ -8,7 +8,7 @@ import { Board as HexBoard } from '../../src/solver/hex/Board'
 import * as sq from '../../src/solver/square/tiles'
 import * as hex from '../../src/solver/hex/tiles'
 
-const board = reactive<BoardData>({
+const board = shallowReactive<BoardData>({
   type: 'square',
   tiles: [],
   width: 0,
@@ -20,7 +20,9 @@ const loadBoard = (name: keyof typeof boards) => {
 }
 
 function setTile (index: number, tile: Tile) {
-  board.tiles[index] = tile
+  const { tiles } = board
+  tiles[index] = tile
+  board.tiles = [...tiles]
 }
 
 watch(() => board.type, () => {
