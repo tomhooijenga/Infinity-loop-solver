@@ -38,7 +38,6 @@ import { reactive, defineComponent } from 'vue'
 import { useBoard } from '@/use-board'
 import { None } from '../../../src/solver/base/None'
 import { constructTiles } from '@/boards'
-import { TileConstructor } from '../../../src/solver/base/Tile'
 
 export default defineComponent({
   name: 'Settings',

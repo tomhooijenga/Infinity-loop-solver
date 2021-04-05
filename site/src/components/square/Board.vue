@@ -1,7 +1,7 @@
 <template>
   <section :style="tilesStyle" class="tiles">
     <Tile v-for="(tile, index) of tiles"
-          :key="tile"
+          :key="tile.type + index"
           :style="`transform: rotate(${tile.direction * 90}deg)`"
           :tile="tile"
           class="tile"

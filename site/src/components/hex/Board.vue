@@ -1,15 +1,14 @@
-  <template>
+<template>
   <section :style="tilesStyle" class="tiles">
-    <template v-for="(tile, index) of tiles"
-              :key="tile">
-      <div :style="tileStyle(tile)"
-           class="tile"
-           :class="{unsolved: !tile.solved}">
-        <Tile :tile="tile"
-              @click="$emit('change', index, tile, 1)"
-              @contextmenu.prevent="$emit('change', index, tile, -1)"/>
-      </div>
-    </template>
+    <div v-for="(tile, index) of tiles"
+         :key="tile.type + index"
+         :class="{unsolved: !tile.solved}"
+         :style="tileStyle(tile)"
+         class="tile">
+      <Tile :tile="tile"
+            @click="$emit('change', index, tile, 1)"
+            @contextmenu.prevent="$emit('change', index, tile, -1)"/>
+    </div>
   </section>
 </template>
 
@@ -96,7 +95,7 @@ export default {
   }
 
   &:hover {
-    background: rgba(0,0,0,0.2);
+    background: rgba(0, 0, 0, 0.2);
   }
 
   > * {

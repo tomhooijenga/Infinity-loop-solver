@@ -10,10 +10,10 @@ export interface TileParams {
 export type TileConstructor = typeof Tile;
 
 export class Tile {
-    public x: number = 0;
-    public y: number = 0;
-    public direction: number = 0
-    public solved: boolean = false
+    public x: number;
+    public y: number;
+    public direction: number;
+    public solved: boolean;
 
     public get type(): string {
         return this.constructor.name;
