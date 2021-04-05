@@ -13,6 +13,10 @@ export class ForceSolver extends Solver {
         const unsolved = tiles.filter(({solved}) => !solved);
         const combinations = Math.pow(DirectionUtil.NUM_SIDES, unsolved.length);
 
+        if (combinations === 0) {
+            return true;
+        }
+
         unsolved.forEach((tile) => {
             tile.rotate(0);
 
@@ -30,17 +34,23 @@ export class ForceSolver extends Solver {
                 return true;
             }
 
-            this.rotate(unsolved, i);
+            this.rotate(unsolved);
         }
 
         return false;
     }
 
-    protected rotate(unsolved: Tile[], combination: number): void {
-        const positions = combination.toString(DirectionUtil.NUM_SIDES);
+    protected rotate(unsolved: Tile[]): void {
+        for (let i = 0; i < unsolved.length; i++) {
+            const last = unsolved[i].direction;
+            const next = DirectionUtil.rotate(last, 1);
 
-        for (let j = 0; j < positions.length; j++) {
-            unsolved[j].rotate(+positions[j]);
+            unsolved[i].direction = next;
+
+            // If it wrapped around we need to rotate the next tile as well.
+            if (last < next) {
+                break;
+            }
         }
     }
 
