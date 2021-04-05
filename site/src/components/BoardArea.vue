@@ -56,10 +56,13 @@ export default {
 
     function nextTile (index: number, tile: Tile, direction: -1 | 1) {
       const typeOrder = order[board.type]
-      const typeIndex = (typeOrder.indexOf(tile.constructor as TileConstructor) + direction) % typeOrder.length
-      const Tile = typeOrder[typeIndex]
+      let typeIndex = (typeOrder.indexOf(tile.constructor as TileConstructor) + direction) % typeOrder.length
+      if (typeIndex < 0) {
+        typeIndex += typeOrder.length
+      }
+      const TileType = typeOrder[typeIndex]
 
-      setTile(index, new Tile({
+      setTile(index, new TileType({
         solved: true,
         x: tile.x,
         y: tile.y

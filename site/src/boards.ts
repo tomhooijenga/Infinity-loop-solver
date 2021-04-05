@@ -21,7 +21,7 @@ export function constructTiles (type: BoardData['type'], width: number, tiles: T
     type,
     width: Math.min(tiles.length, width),
     height: Math.ceil(tiles.length / width),
-    tiles: tiles.map((Ctor, index) => new Ctor({
+    tiles: tiles.map((TileType, index) => new TileType({
       x: index % width,
       y: Math.floor(index / width),
       solved: true
@@ -90,10 +90,7 @@ function solveSquare (tiles: Tile[]): boolean {
       new PatternSolver(board, sq.Line, [[true], [false]]),
       new PatternSolver(board, sq.Turn, [[true, false], [false, true]]),
       new FitSolver(board)
-    ]),
-    // board.solve([
-    //   new ForceSolver(board)
-    // ])
+    ])
   ].some(Boolean)
 }
 
@@ -131,10 +128,7 @@ function solveHex (tiles: Tile[]): boolean {
       new PatternSolver(board, hex.Diamond, [[true, true, true], [true, false, true, true], [true, true, false, true]]),
       new PatternSolver(board, hex.Square, [[false], [true, true]]),
       new FitSolver(board)
-    ]),
-    // board.solve([
-    //   new ForceSolver(board)
-    // ])
+    ])
   ].some(Boolean)
 }
 

@@ -10,7 +10,7 @@ export class Generator {
 
     constructor(private board: Board, private tileTypes: TileConstructor[]) {
         this.tileInstances = new Map(
-            tileTypes.map((type) => [type, new type()])
+            tileTypes.map((TileType) => [TileType, new TileType()])
         );
     }
 
@@ -69,9 +69,9 @@ export class Generator {
     }
 
     protected addTile(tile: Tile, facing: IsFacing[]): boolean {
-        for (const [ctor, t] of this.tileInstances) {
+        for (const [TileType, t] of this.tileInstances) {
             if (this.tileFits(t, facing)) {
-                this.board.replaceTile(tile, new ctor({
+                this.board.replaceTile(tile, new TileType({
                     x: tile.x,
                     y: tile.y,
                     direction: t.direction,
