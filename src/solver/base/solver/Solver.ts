@@ -7,7 +7,6 @@ export class Solver {
      */
     public solve(grid: Grid, steps: SolveStep[]): boolean {
         for (const progress of this.solveSteps(grid, steps)) {
-            console.log(progress)
             if (progress === grid.tiles.length) {
                 return true;
             }
