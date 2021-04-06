@@ -1,4 +1,4 @@
-import {Board} from "../solver/base/Board";
+import {Grid} from "../solver/base/Grid";
 import {Tile, TileConstructor} from "../solver/base/Tile";
 import {None, NONE} from "../solver/base/None";
 import {DirectionUtil} from "../solver/base/DirectionUtil";
@@ -8,7 +8,7 @@ export class Generator {
 
     protected tileInstances: Map<TileConstructor, Tile>
 
-    constructor(private board: Board, private tileTypes: TileConstructor[]) {
+    constructor(private grid: Grid, private tileTypes: TileConstructor[]) {
         this.tileInstances = new Map(
             tileTypes.map((TileType) => [TileType, new TileType()])
         );
@@ -24,7 +24,7 @@ export class Generator {
                 y: Math.floor(index / width)
             }));
 
-        this.board.setTiles(tiles);
+        this.grid.setTiles(tiles);
 
         for (let i = 0; i < amount / 4; i++) {
             this.addLine(tiles, width, height);
@@ -38,12 +38,12 @@ export class Generator {
         const y = this.random(0, height - 1);
         const length = this.random(2, 10);
 
-        let tile = this.board.grid[x][y];
+        let tile = this.grid.grid[x][y];
 
         for (let i = 0; i < length; i++) {
             const direction = this.random(0, DirectionUtil.NUM_SIDES - 1);
-            const neighbours = this.board.neighbours(tile);
-            const facing = this.board.facing(tile);
+            const neighbours = this.grid.neighbours(tile);
+            const facing = this.grid.facing(tile);
             const next = i < length - 1 ? neighbours[direction] : NONE;
 
             if (this.isNextOpen(next, direction)) {
@@ -71,7 +71,7 @@ export class Generator {
     protected addTile(tile: Tile, facing: IsFacing[]): boolean {
         for (const [TileType, t] of this.tileInstances) {
             if (this.tileFits(t, facing)) {
-                this.board.replaceTile(tile, new TileType({
+                this.grid.replaceTile(tile, new TileType({
                     x: tile.x,
                     y: tile.y,
                     direction: t.direction,
@@ -88,7 +88,7 @@ export class Generator {
             return false;
         }
 
-        const facing = this.board.facing(next);
+        const facing = this.grid.facing(next);
 
         facing[DirectionUtil.opposite(direction)] = IsFacing.Yes;
 

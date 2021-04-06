@@ -24,7 +24,7 @@ type Props = {
 }
 
 export default {
-  name: 'Board',
+  name: 'Grid',
 
   components: {
     Tile: TileComponent

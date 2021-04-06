@@ -10,8 +10,8 @@ importScripts(
     '../infinite/tiles/turn.js',
     '../infinite/tiles/tile-factory.js',
 
-    '../infinite/solvers/fit.js',
-    '../infinite/solvers/force.js',
+    '../infinite/steps/fit.js',
+    '../infinite/steps/force.js',
     '../infinite/solver.js',
 
     '../infinite/generator.js'

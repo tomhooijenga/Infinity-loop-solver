@@ -17,7 +17,7 @@ import { Tile } from '../../../../src/solver/base/Tile'
 import TileComponent from '@/components/square/Tile.vue'
 
 export default {
-  name: 'Board',
+  name: 'Grid',
 
   components: {
     Tile: TileComponent

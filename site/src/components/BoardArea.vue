@@ -1,6 +1,6 @@
 <template>
   <div class="board-area">
-    <component :is="`${board.type}-board`"
+    <component :is="`${board.type}-grid`"
                :tiles="board.tiles"
                :x="board.width"
                :y="board.height"
@@ -16,25 +16,25 @@
 <script lang="ts">
 import { BoardData, solve } from '@/boards'
 import { DirectionUtil } from '../../../src/solver/base/DirectionUtil'
-import SquareBoard from '@/components/square/Board.vue'
-import HexBoard from '@/components/hex/Board.vue'
+import HexGrid from '@/components/hex/Grid.vue'
+import SquareGrid from '@/components/square/Grid.vue'
 import { useBoard } from '@/use-board'
 import { Tile, TileConstructor } from '../../../src/solver/base/Tile'
-import * as sq from '../../../src/solver/square/tiles'
 import * as hex from '../../../src/solver/hex/tiles'
+import * as sq from '../../../src/solver/square/tiles'
 import { None } from '../../../src/solver/base/None'
 
 const order: Record<BoardData['type'], TileConstructor[]> = {
-  square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross],
-  hex: [None, hex.End, hex.TurnS, hex.TurnL, hex.Line, hex.Junction, hex.CheckL, hex.CheckR, hex.Triangle, hex.Diamond, hex.Square, hex.Knuckles, hex.Star]
+  hex: [None, hex.End, hex.TurnS, hex.TurnL, hex.Line, hex.Junction, hex.CheckL, hex.CheckR, hex.Triangle, hex.Diamond, hex.Square, hex.Knuckles, hex.Star],
+  square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross]
 }
 
 export default {
   name: 'BoardArea',
 
   components: {
-    SquareBoard,
-    HexBoard
+    HexGrid,
+    SquareGrid
   },
 
   setup () {

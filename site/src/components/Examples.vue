@@ -12,8 +12,8 @@
 
 <script>
 import { boards } from '@/boards'
-import SquareBoard from '@/components/square/Board'
-import HexBoard from '@/components/hex/Board'
+import SquareBoard from '@/components/square/Grid'
+import HexBoard from '@/components/hex/Grid'
 
 export default {
   name: 'Examples',

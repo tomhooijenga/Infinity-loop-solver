@@ -1,49 +1,15 @@
 import {Tile} from "./Tile";
-import {Solver} from "./solvers/Solver";
 import {IsFacing} from "./IsFacing";
 import {DirectionUtil} from "./DirectionUtil";
 import {NONE} from "./None";
 
-export abstract class Board {
+export abstract class Grid {
 
     public tiles: Tile[] = [];
     public grid: Tile[][] = [];
 
     constructor(tiles: Tile[] = []) {
         this.setTiles(tiles)
-    }
-
-    /**
-     * Attempt to solve the board with the given solvers. Solvers are called with each tile until no progress is made.
-     */
-    public solve(solvers: Solver[]): boolean {
-        let lastSolved = -1;
-        let solved = 0;
-
-        while (solved > lastSolved) {
-            lastSolved = solved;
-            solved = this.tiles.reduce((solved: number, tile: Tile) => {
-                if (tile.solved) {
-                    return solved + 1;
-                }
-
-                const wasSolved = solvers.some((solver) => solver.solveTile(tile))
-
-                if (wasSolved) {
-                    tile.solved = true;
-
-                    return solved + 1;
-                }
-
-                return solved;
-            }, 0)
-
-            if (solved === this.tiles.length) {
-                return true;
-            }
-        }
-
-        return solvers.some((solver) => solver.solveBoard(this.tiles));
     }
 
     /**
@@ -84,7 +50,7 @@ export abstract class Board {
     }
 
     /**
-     * Replace a tile on the board.
+     * Replace a tile on the grid.
      */
     public replaceTile(old: Tile, tile: Tile): void {
         const {x, y} = old;

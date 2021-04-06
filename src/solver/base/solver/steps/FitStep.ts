@@ -1,15 +1,16 @@
-import {Solver} from "./Solver";
-import {Tile, TileConstructor} from "../Tile";
-import {DirectionUtil} from "../DirectionUtil";
-import {IsFacing} from "../IsFacing";
+import {SolveStep} from "../SolveStep";
+import {Tile, TileConstructor} from "../../Tile";
+import {DirectionUtil} from "../../DirectionUtil";
+import {IsFacing} from "../../IsFacing";
+import {Grid} from "../../Grid";
 
-export class FitSolver extends Solver {
-    public solveTile(tile: Tile): boolean {
-        return this.findFit(tile, this.getFacing(tile));
+export class FitStep extends SolveStep {
+    public solveTile(tile: Tile, grid: Grid): boolean {
+        return this.findFit(tile, this.getFacing(tile, grid));
     }
 
-    protected getFacing(tile: Tile): IsFacing[] {
-        return this.board.facing(tile);
+    protected getFacing(tile: Tile, grid: Grid): IsFacing[] {
+        return grid.facing(tile);
     }
 
     protected findFit(tile: Tile, neighbours: IsFacing[]): boolean {

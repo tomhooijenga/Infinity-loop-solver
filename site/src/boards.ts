@@ -2,12 +2,14 @@ import { None } from '../../src/solver/base/None'
 import * as sq from '../../src/solver/square/tiles'
 import * as hex from '../../src/solver/hex/tiles'
 import { Tile, TileConstructor } from '../../src/solver/base/Tile'
-import { Board as SquareBoard } from '../../src/solver/square/Board'
-import { Board as HexBoard } from '../../src/solver/hex/Board'
-import { NoneSolver } from '../../src/solver/base/solvers/NoneSolver'
-import { AllSidesSolver } from '../../src/solver/base/solvers/AllSidesSolver'
-import { FitSolver } from '../../src/solver/base/solvers/FitSolver'
-import { PatternSolver } from '../../src/solver/base/solvers/PatternSolver'
+import { Grid as SquareBoard } from '../../src/solver/square/Grid'
+import { Grid as HexBoard } from '../../src/solver/hex/Grid'
+import { NoneStep } from '../../src/solver/base/solver/steps/NoneStep'
+import { AllSideStep } from '../../src/solver/base/solver/steps/AllSideStep'
+import { FitStep } from '../../src/solver/base/solver/steps/FitStep'
+import { PatternStep } from '../../src/solver/base/solver/steps/PatternStep'
+import { SolveStep } from '../../src/solver/base/solver/SolveStep'
+import {Solver} from "../../src/solver/base/solver/Solver";
 
 export interface BoardData {
   type: 'square' | 'hex';
@@ -80,54 +82,56 @@ export const boards = {
 
 function solveSquare (tiles: Tile[]): boolean {
   const board = new SquareBoard(tiles)
+  const solver = new Solver()
 
   return [
-    board.solve([
-      new NoneSolver(board),
-      new AllSidesSolver(board)
+    solver.solve(board, [
+      new NoneStep(),
+      new AllSideStep()
     ]),
-    board.solve([
-      new PatternSolver(board, sq.Line, [[true], [false]]),
-      new PatternSolver(board, sq.Turn, [[true, false], [false, true]]),
-      new FitSolver(board)
+    solver.solve(board, [
+      new PatternStep(sq.Line, [[true], [false]]),
+      new PatternStep(sq.Turn, [[true, false], [false, true]]),
+      new FitStep()
     ])
   ].some(Boolean)
 }
 
 function solveHex (tiles: Tile[]): boolean {
   const board = new HexBoard(tiles)
+  const solver = new Solver()
 
   return [
-    board.solve([
-      new NoneSolver(board),
-      new AllSidesSolver(board)
+    solver.solve(board, [
+      new NoneStep(),
+      new AllSideStep()
     ]),
-    board.solve([
-      new PatternSolver(board, hex.Line, [[true], [false, false]]),
-      new PatternSolver(board, hex.TurnS, [[true, false], [false, true]]),
-      new PatternSolver(board, hex.TurnL, [
+    solver.solve(board, [
+      new PatternStep(hex.Line, [[true], [false, false]]),
+      new PatternStep(hex.TurnS, [[true, false], [false, true]]),
+      new PatternStep(hex.TurnL, [
         [false, false, false],
         [true, false, false],
         [false, false, true]
       ]),
-      new PatternSolver(board, hex.CheckL, [
+      new PatternStep(hex.CheckL, [
         [true, true],
         [false, false],
         [true, false, true],
         [false, true, false]
       ]),
-      new PatternSolver(board, hex.CheckR, [
+      new PatternStep(hex.CheckR, [
         [true, true],
         [false, false],
         [true, false, true],
         [false, true, false]
       ]),
-      new PatternSolver(board, hex.Junction, [[true, false], [false, true]]),
-      new PatternSolver(board, hex.Knuckles, [[true, false], [false, true]]),
-      new PatternSolver(board, hex.Triangle, [[true], [false]]),
-      new PatternSolver(board, hex.Diamond, [[true, true, true], [true, false, true, true], [true, true, false, true]]),
-      new PatternSolver(board, hex.Square, [[false], [true, true]]),
-      new FitSolver(board)
+      new PatternStep(hex.Junction, [[true, false], [false, true]]),
+      new PatternStep(hex.Knuckles, [[true, false], [false, true]]),
+      new PatternStep(hex.Triangle, [[true], [false]]),
+      new PatternStep(hex.Diamond, [[true, true, true], [true, false, true, true], [true, true, false, true]]),
+      new PatternStep(hex.Square, [[false], [true, true]]),
+      new FitStep()
     ])
   ].some(Boolean)
 }

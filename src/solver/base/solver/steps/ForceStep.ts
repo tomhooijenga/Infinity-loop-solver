@@ -1,15 +1,16 @@
-import {Solver} from "./Solver";
-import {Tile} from "../Tile";
-import {DirectionUtil} from "../DirectionUtil";
+import {SolveStep} from "../SolveStep";
+import {Tile} from "../../Tile";
+import {DirectionUtil} from "../../DirectionUtil";
+import {Grid} from "../../Grid";
 
-export class ForceSolver extends Solver {
+export class ForceStep extends SolveStep {
 
     /**
      * The neighbours are computed once, reducing calls from (sides^length) to (length).
      */
     protected neighbours = new Map<Tile, Tile[]>()
 
-    public solveBoard(tiles: Tile[]): boolean {
+    public solveGrid(tiles: Tile[], grid: Grid): boolean {
         const unsolved = tiles.filter(({solved}) => !solved);
         const combinations = Math.pow(DirectionUtil.NUM_SIDES, unsolved.length);
 
@@ -20,7 +21,7 @@ export class ForceSolver extends Solver {
         unsolved.forEach((tile) => {
             tile.rotate(0);
 
-            this.neighbours.set(tile, this.board.neighbours(tile));
+            this.neighbours.set(tile, grid.neighbours(tile));
         });
 
         for (let i = 0; i < combinations; i++) {
