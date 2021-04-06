@@ -1,8 +1,8 @@
-import {Grid} from "../solver/base/Grid";
-import {Tile, TileConstructor} from "../solver/base/Tile";
-import {None, NONE} from "../solver/base/None";
-import {DirectionUtil} from "../solver/base/DirectionUtil";
-import {IsFacing} from "../solver/base/IsFacing";
+import {Grid} from "../base/Grid";
+import {Tile, TileConstructor} from "../base/Tile";
+import {None, NONE} from "../base/None";
+import {DirectionUtil} from "../base/DirectionUtil";
+import {IsFacing} from "../base/IsFacing";
 
 export class Generator {
 

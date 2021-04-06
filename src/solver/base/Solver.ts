@@ -1,5 +1,5 @@
-import {Grid} from "../Grid";
 import {SolveStep} from "./SolveStep";
+import {Grid} from "../../base/Grid";
 
 export class Solver {
     /**

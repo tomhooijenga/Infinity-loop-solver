@@ -1,8 +1,9 @@
 import {SolveStep} from "../SolveStep";
-import {Tile, TileConstructor} from "../../Tile";
-import {Grid} from "../../Grid";
-import {IsFacing} from "../../IsFacing";
-import {DirectionUtil} from "../../DirectionUtil";
+import {IsFacing} from "../../../base/IsFacing";
+import {Tile, TileConstructor} from "../../../base/Tile";
+import {Grid} from "../../../base/Grid";
+import {DirectionUtil} from "../../../base/DirectionUtil";
+
 
 export class PatternStep extends SolveStep {
 

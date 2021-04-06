@@ -1,7 +1,7 @@
 import {SolveStep} from "../SolveStep";
-import {Tile} from "../../Tile";
-import {None} from "../../None";
-import {Grid} from "../../Grid";
+import {Tile} from "../../../base/Tile";
+import {Grid} from "../../hex/Grid";
+import {None} from "../../../base/None";
 
 export class NoneStep extends SolveStep {
     public solveTile(tile: Tile, grid: Grid): boolean {

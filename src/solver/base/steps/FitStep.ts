@@ -1,8 +1,8 @@
 import {SolveStep} from "../SolveStep";
-import {Tile, TileConstructor} from "../../Tile";
-import {DirectionUtil} from "../../DirectionUtil";
-import {IsFacing} from "../../IsFacing";
-import {Grid} from "../../Grid";
+import {Tile, TileConstructor} from "../../../base/Tile";
+import {Grid} from "../../hex/Grid";
+import {IsFacing} from "../../../base/IsFacing";
+import {DirectionUtil} from "../../../base/DirectionUtil";
 
 export class FitStep extends SolveStep {
     public solveTile(tile: Tile, grid: Grid): boolean {

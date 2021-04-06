@@ -40,7 +40,7 @@
 
 <script lang="ts">
 import { computed } from 'vue'
-import { Tile, TileConstructor } from '../../../../src/solver/base/Tile'
+import { Tile, TileConstructor } from '../../../../src/base/Tile'
 import { Diamond, Square, Star, Triangle } from '../../../../src/solver/hex/tiles'
 
 type Arc = { start: number; end: number; }

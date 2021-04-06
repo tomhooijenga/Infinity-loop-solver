@@ -1,15 +1,15 @@
-import { None } from '../../src/solver/base/None'
+import { None } from '../../src/base/None'
 import * as sq from '../../src/solver/square/tiles'
 import * as hex from '../../src/solver/hex/tiles'
-import { Tile, TileConstructor } from '../../src/solver/base/Tile'
+import { Tile, TileConstructor } from '../../src/base/Tile'
 import { Grid as SquareBoard } from '../../src/solver/square/Grid'
 import { Grid as HexBoard } from '../../src/solver/hex/Grid'
-import { NoneStep } from '../../src/solver/base/solver/steps/NoneStep'
-import { AllSideStep } from '../../src/solver/base/solver/steps/AllSideStep'
-import { FitStep } from '../../src/solver/base/solver/steps/FitStep'
-import { PatternStep } from '../../src/solver/base/solver/steps/PatternStep'
-import { Solver } from '../../src/solver/base/solver/Solver'
-import { ForceStep } from '../../src/solver/base/solver/steps/ForceStep'
+import { NoneStep } from '../../src/solver/base/steps/NoneStep'
+import { AllSideStep } from '../../src/solver/base/steps/AllSideStep'
+import { FitStep } from '../../src/solver/base/steps/FitStep'
+import { PatternStep } from '../../src/solver/base/steps/PatternStep'
+import { Solver } from '../../src/solver/base/Solver'
+import { ForceStep } from '../../src/solver/base/steps/ForceStep'
 
 export interface BoardData {
   type: 'square' | 'hex';

@@ -1,7 +1,7 @@
 import {SolveStep} from "../SolveStep";
-import {Tile} from "../../Tile";
-import {DirectionUtil} from "../../DirectionUtil";
-import {Grid} from "../../Grid";
+import {Tile} from "../../../base/Tile";
+import {Grid} from "../../hex/Grid";
+import {DirectionUtil} from "../../../base/DirectionUtil";
 
 export class ForceStep extends SolveStep {
 

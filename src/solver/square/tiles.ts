@@ -1,4 +1,4 @@
-import {Tile} from "../base/Tile";
+import {Tile} from "../../base/Tile";
 
 export const Cross = Tile.fromSides([true, true, true, true], 'Cross');
 export const End = Tile.fromSides([true, false, false, false], 'End');

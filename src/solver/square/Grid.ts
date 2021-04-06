@@ -1,5 +1,5 @@
-import {Grid as BaseGrid} from "../base/Grid";
-import {Tile} from "../base/Tile";
+import {Grid as BaseGrid} from "../../base/Grid";
+import {Tile} from "../../base/Tile";
 
 export class Grid extends BaseGrid {
     public neighbours(tile: Tile): Tile[] {

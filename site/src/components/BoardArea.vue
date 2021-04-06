@@ -15,14 +15,14 @@
 
 <script lang="ts">
 import { BoardData, solve } from '@/boards'
-import { DirectionUtil } from '../../../src/solver/base/DirectionUtil'
+import { DirectionUtil } from '../../../src/base/DirectionUtil'
 import HexGrid from '@/components/hex/Grid.vue'
 import SquareGrid from '@/components/square/Grid.vue'
 import { useBoard } from '@/use-board'
-import { Tile, TileConstructor } from '../../../src/solver/base/Tile'
+import { Tile, TileConstructor } from '../../../src/base/Tile'
 import * as hex from '../../../src/solver/hex/tiles'
 import * as sq from '../../../src/solver/square/tiles'
-import { None } from '../../../src/solver/base/None'
+import { None } from '../../../src/base/None'
 import { useSettings } from '@/use-settings'
 
 const order: Record<BoardData['type'], TileConstructor[]> = {

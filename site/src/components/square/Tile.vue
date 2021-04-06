@@ -30,7 +30,7 @@
 
 <script lang="ts">
 import { computed } from 'vue'
-import { Tile, TileConstructor } from '../../../../src/solver/base/Tile'
+import { Tile, TileConstructor } from '../../../../src/base/Tile'
 import { Cross } from '../../../../src/solver/square/tiles'
 
 type Point = {x: number; y: number}

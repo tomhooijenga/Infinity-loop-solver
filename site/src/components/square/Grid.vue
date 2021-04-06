@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { computed, PropType } from 'vue'
-import { Tile } from '../../../../src/solver/base/Tile'
+import { Tile } from '../../../../src/base/Tile'
 import TileComponent from '@/components/square/Tile.vue'
 
 export default {
