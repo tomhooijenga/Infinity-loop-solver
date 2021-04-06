@@ -69,9 +69,12 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/theme";
+
 .examples {
   grid-area: sidebar;
   overflow: auto;
+  background-color: $app-bg;
 
   @media (max-width: 768px) {
     position: fixed;
@@ -85,6 +88,7 @@ export default defineComponent({
 
     &.show {
       transform: translateX(0);
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.33);
     }
   }
 }
@@ -97,7 +101,7 @@ export default defineComponent({
   bottom: 0;
   right: 0;
   z-index: 1;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: $modal-backdrop-bg;
 
   @media (max-width: 768px) {
     &.show {

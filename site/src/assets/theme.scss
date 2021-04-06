@@ -12,3 +12,6 @@ $line-bg: #861e32;
 $line-shadow: $color-default;
 
 $tile-unsolved-bg: radial-gradient(rgba($line-bg, 0.3), $board-bg);
+
+$modal-bg: $color-default-darker;
+$modal-backdrop-bg: rgba(255, 255, 255, 0.2);

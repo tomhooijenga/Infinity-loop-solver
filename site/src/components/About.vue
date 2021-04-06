@@ -9,8 +9,6 @@
     <dd>Control the parameters of the board.</dd>
     <dt>Generate</dt>
     <dd>Fill your board with a random pattern.</dd>
-    <dt>Clear</dt>
-    <dd>Remove all tiles and reset to 3&times;3.</dd>
   </dl>
   <dl>
     <dt>Scramble</dt>
@@ -18,6 +16,9 @@
     <dt>Solve</dt>
     <dd>Try to solve the board.</dd>
   </dl>
+
+  <p>Made by <a href="https://tomhooijenga.nl/">Tom Hooijenga</a>. You can check the source on <a href="https://github.com/tomhooijenga/Infinity-loop-solver">Github.</a></p>
+
   <button type="button" @click="$emit('close')">Close</button>
 </template>
 
