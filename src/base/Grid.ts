@@ -9,7 +9,7 @@ export abstract class Grid {
     public grid: Tile[][] = [];
 
     constructor(tiles: Tile[] = []) {
-        this.setTiles(tiles)
+        this.setTiles(tiles);
     }
 
     /**
@@ -71,7 +71,7 @@ export abstract class Grid {
             if (!(x in grid)) {
                 grid[x] = [];
             }
-            grid[x][y] = tile
+            grid[x][y] = tile;
         });
         return grid;
     }

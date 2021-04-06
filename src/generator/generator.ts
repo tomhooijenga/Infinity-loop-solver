@@ -57,7 +57,7 @@ export class Generator {
                     break;
                 }
             } else {
-                this.addTile(tile, facing)
+                this.addTile(tile, facing);
             }
 
             if (next === NONE) {
@@ -97,7 +97,7 @@ export class Generator {
 
     protected tileFits(tile: Tile, facing: IsFacing[]): boolean {
         for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
-            tile.rotate(direction);
+            tile.direction = direction;
 
             const fits = facing.every((isFacing, side) => {
                 const isOpen = isFacing === IsFacing.Yes;

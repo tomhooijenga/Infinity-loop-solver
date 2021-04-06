@@ -16,8 +16,8 @@ export class Solver {
     }
 
     public* solveSteps(grid: Grid, steps: SolveStep[]): Generator<number> {
-        let lastSolved = -1
-        let solved = 0
+        let lastSolved = -1;
+        let solved = 0;
 
         while (solved > lastSolved) {
             lastSolved = solved;
@@ -28,7 +28,7 @@ export class Solver {
             }
         }
 
-        yield* this.runGridStep(grid, steps)
+        yield* this.runGridStep(grid, steps);
     }
 
     protected* runTileStep(grid: Grid, steps: SolveStep[], lastSolved: number): Generator<number, number> {

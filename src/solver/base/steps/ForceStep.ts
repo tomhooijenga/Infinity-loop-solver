@@ -19,7 +19,7 @@ export class ForceStep extends SolveStep {
         }
 
         unsolved.forEach((tile) => {
-            tile.rotate(0);
+            tile.direction = 0;
 
             this.neighbours.set(tile, grid.neighbours(tile));
         });

@@ -36,7 +36,7 @@ export class PatternStep extends SolveStep {
 
             const sidesFacing = this.type.SIDES.map((open) => open ? IsFacing.Yes : IsFacing.No);
             const direction = this.facingContainsPattern(sidesFacing, pattern);
-            tile.rotate(DirectionUtil.rotate(start, -direction));
+            tile.direction = DirectionUtil.rotate(start, -direction);
 
             return true;
         });
@@ -59,7 +59,7 @@ export class PatternStep extends SolveStep {
             /* Found first character, now look at the rest of v2 */
             if (i <= max) {
                 let j = i + 1;
-                let end = j + target.length - 1;
+                const end = j + target.length - 1;
                 for (let k = 1; j < end && source[j] == target[k]; j++, k++) ;
 
                 if (j == end) {

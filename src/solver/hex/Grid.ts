@@ -17,7 +17,7 @@ export class Grid extends BaseGrid {
                 [0, 1],     // 1,2
                 [-1, 1],    // 0,2
                 [-1, 0],    // 0,1
-            ]
+            ];
         } else {
             // start 2,1
             deltas = [
@@ -27,7 +27,7 @@ export class Grid extends BaseGrid {
                 [0, 1],     // 2,2
                 [-1, 0],    // 1,1
                 [-1, -1]    // 1,0
-            ]
+            ];
         }
 
         return deltas.map(([dx, dy]) => this.getOrNone(x + dx, y + dy));

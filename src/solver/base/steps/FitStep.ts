@@ -15,7 +15,7 @@ export class FitStep extends SolveStep {
 
     protected findFit(tile: Tile, neighbours: IsFacing[]): boolean {
         for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
-            tile.rotate(direction);
+            tile.direction = direction;
 
             if (this.fits(tile, neighbours)) {
                 return true;
@@ -48,6 +48,6 @@ export class FitStep extends SolveStep {
             return false;
         });
 
-        return couldFit && (checkedOpen === openSides || checkedClosed === DirectionUtil.NUM_SIDES - openSides)
+        return couldFit && (checkedOpen === openSides || checkedClosed === DirectionUtil.NUM_SIDES - openSides);
     }
 }

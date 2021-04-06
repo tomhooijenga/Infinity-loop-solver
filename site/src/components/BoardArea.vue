@@ -44,7 +44,7 @@ export default {
 
     function scrambleBoard (): void {
       board.tiles.forEach((tile) => {
-        tile.rotate(DirectionUtil.random())
+        tile.direction = DirectionUtil.random()
       })
 
       board.tiles = [...board.tiles]

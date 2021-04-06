@@ -36,13 +36,13 @@ export class Tile {
         return (this.constructor as TileConstructor).SIDES[DirectionUtil.rotate(direction, -this.direction)];
     }
 
-    public static fromSides(sides: boolean[], type: string = 'unknown') {
+    public static fromSides(sides: boolean[], type = "unknown"): TileConstructor {
         return class extends this {
             static SIDES = sides;
 
             public get type(): string {
                 return type;
             }
-        }
+        };
     }
 }
