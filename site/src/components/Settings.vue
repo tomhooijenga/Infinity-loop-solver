@@ -16,6 +16,14 @@
   </div>
 
   <div class="row">
+     <label class="input">
+       <span class="label">Delay</span>
+       <input type="number" min="0" max="500" step="50" v-model.number="settings.delay" />
+     </label>
+    <span class="input-times">ms</span>
+  </div>
+
+  <div class="row">
     <label class="input">
       <span class="label">Width</span>
       <input v-model.number="settings.width" min="0" type="number"/>
@@ -38,6 +46,7 @@ import { reactive, defineComponent } from 'vue'
 import { useBoard } from '@/use-board'
 import { None } from '../../../src/solver/base/None'
 import { constructTiles } from '@/boards'
+import { useSettings } from '@/use-settings'
 
 export default defineComponent({
   name: 'Settings',
@@ -46,25 +55,31 @@ export default defineComponent({
 
   setup (_: unknown, { emit }) {
     const { board } = useBoard()
+    const { settings } = useSettings()
 
     const { type, width, height } = board
 
-    const settings = reactive({
+    const newSettings = reactive({
       type,
       width,
-      height
+      height,
+      delay: settings.delay
     })
 
     function apply () {
-      const { type, width, height } = settings
-      const tiles = new Array(width * height).fill(None)
+      const { type, width, height, delay } = newSettings
+      if (type !== board.type || width !== board.width || height !== board.height) {
+        const tiles = new Array(width * height).fill(None)
+        Object.assign(board, constructTiles(type, width, tiles))
+      }
 
-      Object.assign(board, constructTiles(type, width, tiles))
+      settings.delay = delay
+
       emit('close')
     }
 
     return {
-      settings,
+      settings: newSettings,
       apply
     }
   }

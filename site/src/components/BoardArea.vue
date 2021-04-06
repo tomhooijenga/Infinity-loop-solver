@@ -23,6 +23,7 @@ import { Tile, TileConstructor } from '../../../src/solver/base/Tile'
 import * as hex from '../../../src/solver/hex/tiles'
 import * as sq from '../../../src/solver/square/tiles'
 import { None } from '../../../src/solver/base/None'
+import { useSettings } from '@/use-settings'
 
 const order: Record<BoardData['type'], TileConstructor[]> = {
   hex: [None, hex.End, hex.TurnS, hex.TurnL, hex.Line, hex.Junction, hex.CheckL, hex.CheckR, hex.Triangle, hex.Diamond, hex.Square, hex.Knuckles, hex.Star],
@@ -39,8 +40,9 @@ export default {
 
   setup () {
     const { board, setTile } = useBoard()
+    const { settings } = useSettings()
 
-    function scrambleBoard () {
+    function scrambleBoard (): void {
       board.tiles.forEach((tile) => {
         tile.rotate(DirectionUtil.random())
       })
@@ -48,13 +50,23 @@ export default {
       board.tiles = [...board.tiles]
     }
 
-    function solveBoard () {
-      solve(board)
-
-      board.tiles = [...board.tiles]
+    function sleep (): Promise<void> {
+      return new Promise(resolve => setTimeout(resolve, settings.delay))
     }
 
-    function nextTile (index: number, tile: Tile, direction: -1 | 1) {
+    async function solveBoard () {
+      const progress = solve(board)
+
+      while (!progress.next().done) {
+        board.tiles = [...board.tiles]
+
+        if (settings.delay > 0) {
+          await sleep()
+        }
+      }
+    }
+
+    function nextTile (index: number, tile: Tile, direction: -1 | 1): void {
       const typeOrder = order[board.type]
       let typeIndex = (typeOrder.indexOf(tile.constructor as TileConstructor) + direction) % typeOrder.length
       if (typeIndex < 0) {

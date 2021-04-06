@@ -1,4 +1,3 @@
-import {Tile} from "../Tile";
 import {Grid} from "../Grid";
 import {SolveStep} from "./SolveStep";
 
@@ -7,36 +6,62 @@ export class Solver {
      * Attempt to solve the grid with the given steps. Solvers are called with each tile until no progress is made.
      */
     public solve(grid: Grid, steps: SolveStep[]): boolean {
-        let lastSolved = -1;
-        let solved = 0;
-
-        while (solved > lastSolved) {
-            lastSolved = solved;
-            solved = this.runTileStep(grid, steps);
-
-            if (solved === grid.tiles.length) {
+        for (const progress of this.solveSteps(grid, steps)) {
+            console.log(progress)
+            if (progress === grid.tiles.length) {
                 return true;
             }
         }
 
-        return steps.some((step) => step.solveGrid(grid.tiles, grid));
+        return false;
     }
 
-    protected runTileStep(grid: Grid, solvers: SolveStep[]): number {
-        return grid.tiles.reduce((solved: number, tile: Tile) => {
-            if (tile.solved) {
-                return solved + 1;
+    public* solveSteps(grid: Grid, steps: SolveStep[]): Generator<number> {
+        let lastSolved = -1
+        let solved = 0
+
+        while (solved > lastSolved) {
+            lastSolved = solved;
+            solved = yield* this.runTileStep(grid, steps, lastSolved);
+
+            if (solved === grid.tiles.length) {
+                return;
+            }
+        }
+
+        yield* this.runGridStep(grid, steps)
+    }
+
+    protected* runTileStep(grid: Grid, steps: SolveStep[], lastSolved: number): Generator<number, number> {
+        let solved = lastSolved;
+
+        for (const step of steps) {
+            for (const tile of grid.tiles) {
+                if (tile.solved) {
+                    continue;
+                }
+
+                const wasSolved = step.solveTile(tile, grid);
+
+                if (wasSolved) {
+                    tile.solved = true;
+
+                    solved++;
+                }
             }
 
-            const wasSolved = solvers.some((solver) => solver.solveTile(tile, grid))
+            yield solved;
+        }
 
-            if (wasSolved) {
-                tile.solved = true;
+        return solved;
+    }
 
-                return solved + 1;
+    protected* runGridStep(grid: Grid, steps: SolveStep[]): Generator<number> {
+        for (const step of steps) {
+            if (step.solveGrid(grid.tiles, grid)) {
+                yield grid.tiles.length;
+                return;
             }
-
-            return solved;
-        }, 0);
+        }
     }
 }
