@@ -46,10 +46,14 @@ export class Solver {
                     tile.solved = true;
 
                     solved++;
+
+                    yield solved;
+                }
+
+                if (solved === grid.tiles.length) {
+                    return solved;
                 }
             }
-
-            yield solved;
         }
 
         return solved;
