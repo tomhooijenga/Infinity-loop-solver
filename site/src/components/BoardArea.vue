@@ -50,18 +50,24 @@ export default {
       board.tiles = [...board.tiles]
     }
 
-    function sleep (): Promise<void> {
-      return new Promise(resolve => setTimeout(resolve, settings.delay))
+    function sleep (ms: number): Promise<void> {
+      return new Promise(resolve => setTimeout(resolve, ms))
     }
 
     async function solveBoard () {
       const progress = solve(board)
 
-      while (!progress.next().done) {
+      while (true) {
         board.tiles = [...board.tiles]
 
-        if (settings.delay > 0) {
-          await sleep()
+        const start = Date.now()
+        if (progress.next().done) {
+          break
+        }
+
+        const delay = settings.delay - (Date.now() - start)
+        if (delay > 0) {
+          await sleep(delay)
         }
       }
     }
