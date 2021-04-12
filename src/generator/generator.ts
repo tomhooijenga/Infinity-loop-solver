@@ -2,7 +2,7 @@ import {Grid} from "../base/Grid";
 import {Tile, TileConstructor} from "../base/Tile";
 import {None, NONE} from "../base/None";
 import {DirectionUtil} from "../base/DirectionUtil";
-import {IsFacing} from "../base/IsFacing";
+import {FacingState} from "../base/FacingState";
 
 export class Generator {
 
@@ -47,12 +47,12 @@ export class Generator {
             const next = i < length - 1 ? neighbours[direction] : NONE;
 
             if (this.isNextOpen(next, direction)) {
-                facing[direction] = IsFacing.Yes;
+                facing[direction] = FacingState.Open;
 
                 const added = this.addTile(tile, facing);
 
                 if (!added) {
-                    facing[direction] = IsFacing.No;
+                    facing[direction] = FacingState.Closed;
                     this.addTile(tile, facing);
                     break;
                 }
@@ -68,7 +68,7 @@ export class Generator {
         }
     }
 
-    protected addTile(tile: Tile, facing: IsFacing[]): boolean {
+    protected addTile(tile: Tile, facing: FacingState[]): boolean {
         for (const [TileType, t] of this.tileInstances) {
             if (this.tileFits(t, facing)) {
                 this.grid.replaceTile(tile, new TileType({
@@ -90,18 +90,17 @@ export class Generator {
 
         const facing = this.grid.facing(next);
 
-        facing[DirectionUtil.opposite(direction)] = IsFacing.Yes;
+        facing[DirectionUtil.opposite(direction)] = FacingState.Open;
 
         return [...this.tileInstances.values()].some((tile) => this.tileFits(tile, facing));
     }
 
-    protected tileFits(tile: Tile, facing: IsFacing[]): boolean {
+    protected tileFits(tile: Tile, facing: FacingState[]): boolean {
         for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
             tile.direction = direction;
 
             const fits = facing.every((isFacing, side) => {
-                const isOpen = isFacing === IsFacing.Yes;
-                return isOpen === tile.getSide(side);
+                return isFacing === tile.getSide(side);
             });
 
             if (fits) {

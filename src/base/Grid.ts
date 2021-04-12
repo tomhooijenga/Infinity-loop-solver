@@ -1,5 +1,5 @@
 import {Tile} from "./Tile";
-import {IsFacing} from "./IsFacing";
+import {FacingState} from "./FacingState";
 import {DirectionUtil} from "./DirectionUtil";
 import {NONE} from "./None";
 
@@ -18,19 +18,19 @@ export abstract class Grid {
     public abstract neighbours(tile: Tile): Tile[];
 
     /**
-     * Get the IsFacing state for each side.
+     * Get the facing state for each side.
      */
-    public facing(tile: Tile): IsFacing[] {
+    public facing(tile: Tile): FacingState[] {
         return this
             .neighbours(tile)
             .map((neighbour, direction) => {
                 if (!neighbour.solved) {
-                    return IsFacing.Unsure;
+                    return FacingState.Unknown;
                 }
 
                 // Tile's up is neighbour's down.
                 const opposite = DirectionUtil.opposite(direction);
-                return neighbour.getSide(opposite) ? IsFacing.Yes : IsFacing.No;
+                return neighbour.getSide(opposite);
             });
     }
 

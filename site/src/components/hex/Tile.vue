@@ -42,6 +42,7 @@
 import { computed } from 'vue'
 import { Tile, TileConstructor } from '../../../../src/base/Tile'
 import { Diamond, Square, Star, Triangle } from '../../../../src/solver/hex/tiles'
+import { FacingState } from '../../../../src/base/FacingState'
 
 type Arc = { start: number; end: number; }
 type Point = { x: number; y: number }
@@ -81,8 +82,8 @@ export default {
       let end = 0
 
       while (end !== -1) {
-        start = sides.indexOf(true, end)
-        end = sides.indexOf(true, start + 1)
+        start = sides.indexOf(FacingState.Open, end)
+        end = sides.indexOf(FacingState.Open, start + 1)
 
         if (end !== -1) {
           arcs.push({ start, end })

@@ -1,13 +1,12 @@
 import {SolveStep} from "../SolveStep";
-import {IsFacing} from "../../../base/IsFacing";
+import {FacingState} from "../../../base/FacingState";
 import {Tile, TileConstructor} from "../../../base/Tile";
 import {Grid} from "../../../base/Grid";
 import {DirectionUtil} from "../../../base/DirectionUtil";
 
-
 export class PatternStep extends SolveStep {
 
-    protected patterns: IsFacing[][];
+    protected patterns: FacingState[][];
 
     /**
      * This solver is for tiles that can be solved with a pattern, instead of all sides of a type. For example, a line
@@ -17,7 +16,7 @@ export class PatternStep extends SolveStep {
         super();
 
         this.patterns = patterns.map((pattern) => {
-            return pattern.map((open) => open ? IsFacing.Yes : IsFacing.No);
+            return pattern.map((open) => open ? FacingState.Open : FacingState.Closed);
         });
     }
 
@@ -29,25 +28,24 @@ export class PatternStep extends SolveStep {
         const facing = grid.facing(tile);
 
         return this.patterns.some((pattern) => {
-            const start = this.facingContainsPattern(facing, pattern);
+            const start = this.patternIndex(facing, pattern);
             if (start === -1) {
                 return false;
             }
 
-            const sidesFacing = this.type.SIDES.map((open) => open ? IsFacing.Yes : IsFacing.No);
-            const direction = this.facingContainsPattern(sidesFacing, pattern);
+            const direction = this.patternIndex(this.type.SIDES, pattern);
             tile.direction = DirectionUtil.rotate(start, -direction);
 
             return true;
         });
     }
 
-    protected facingContainsPattern(source: IsFacing[], target: IsFacing[]): number {
+    protected patternIndex(source: ReadonlyArray<FacingState>, pattern: FacingState[]): number {
         // Double the facing to allow for patterns that go from last to first.
         source = source.concat(source);
 
-        const first = target[0];
-        const max = source.length - target.length;
+        const first = pattern[0];
+        const max = source.length - pattern.length;
 
         // Adapted from Java's String.indexOf
         for (let i = 0; i <= max; i++) {
@@ -59,8 +57,8 @@ export class PatternStep extends SolveStep {
             /* Found first character, now look at the rest of v2 */
             if (i <= max) {
                 let j = i + 1;
-                const end = j + target.length - 1;
-                for (let k = 1; j < end && source[j] == target[k]; j++, k++) ;
+                const end = j + pattern.length - 1;
+                for (let k = 1; j < end && source[j] == pattern[k]; j++, k++) ;
 
                 if (j == end) {
                     return i;

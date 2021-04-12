@@ -1,4 +1,5 @@
 import {DirectionUtil} from "./DirectionUtil";
+import {FacingState} from "./FacingState";
 
 export interface TileParams {
     x?: number;
@@ -19,7 +20,7 @@ export class Tile {
         return this.constructor.name;
     }
 
-    static SIDES: boolean[] = []
+    static SIDES: ReadonlyArray<FacingState> = []
 
     constructor(params: TileParams = {}) {
         this.x = params.x ?? 0;
@@ -28,17 +29,13 @@ export class Tile {
         this.solved = params.solved ?? false;
     }
 
-    public rotate(to: number) {
-        this.direction = to;
-    }
-
-    public getSide(direction: number): boolean {
+    public getSide(direction: number): FacingState {
         return (this.constructor as TileConstructor).SIDES[DirectionUtil.rotate(direction, -this.direction)];
     }
 
-    public static fromSides(sides: boolean[], type = "unknown"): TileConstructor {
+    public static fromSides(sides: boolean[], type: string): TileConstructor {
         return class extends this {
-            static SIDES = sides;
+            static SIDES = sides.map((side) => side ? FacingState.Open : FacingState.Closed);
 
             public get type(): string {
                 return type;
