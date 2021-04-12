@@ -14,6 +14,8 @@ export class FitStep extends SolveStep {
     }
 
     protected findFit(tile: Tile, neighbours: IsFacing[]): boolean {
+        const startDirection = tile.direction;
+
         for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
             tile.direction = direction;
 
@@ -21,6 +23,8 @@ export class FitStep extends SolveStep {
                 return true;
             }
         }
+
+        tile.direction = startDirection;
 
         return false;
     }
