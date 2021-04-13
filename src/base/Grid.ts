@@ -1,4 +1,4 @@
-import {Tile} from "./Tile";
+import {Tile, TileConstructor} from "./Tile";
 import {FacingState} from "./FacingState";
 import {DirectionUtil} from "./DirectionUtil";
 import {NONE} from "./None";
@@ -7,6 +7,8 @@ export abstract class Grid {
 
     public tiles: Tile[] = [];
     public grid: Tile[][] = [];
+
+    public abstract directionUtil: DirectionUtil;
 
     constructor(tiles: Tile[] = []) {
         this.setTiles(tiles);
@@ -29,8 +31,8 @@ export abstract class Grid {
                 }
 
                 // Tile's up is neighbour's down.
-                const opposite = DirectionUtil.opposite(direction);
-                return neighbour.getSide(opposite);
+                const opposite = this.directionUtil.opposite(direction);
+                return this.getTileSide(neighbour, opposite);
             });
     }
 
@@ -59,6 +61,11 @@ export abstract class Grid {
 
         this.grid[x][y] = tile;
         this.tiles[index] = tile;
+    }
+
+    public getTileSide(tile: Tile, direction: number): FacingState {
+        const translatedDirection = this.directionUtil.rotate(direction, -tile.direction);
+        return (tile.constructor as TileConstructor).SIDES[translatedDirection];
     }
 
     /**

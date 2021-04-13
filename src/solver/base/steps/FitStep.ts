@@ -2,24 +2,23 @@ import {SolveStep} from "../SolveStep";
 import {Tile, TileConstructor} from "../../../base/Tile";
 import {Grid} from "../../hex/Grid";
 import {FacingState} from "../../../base/FacingState";
-import {DirectionUtil} from "../../../base/DirectionUtil";
 
 export class FitStep extends SolveStep {
     public solveTile(tile: Tile, grid: Grid): boolean {
-        return this.findFit(tile, this.getFacing(tile, grid));
+        return this.findFit(grid, tile, this.getFacing(tile, grid));
     }
 
     protected getFacing(tile: Tile, grid: Grid): FacingState[] {
         return grid.facing(tile);
     }
 
-    protected findFit(tile: Tile, neighbours: FacingState[]): boolean {
+    protected findFit(grid:Grid, tile: Tile, neighbours: FacingState[]): boolean {
         const startDirection = tile.direction;
 
-        for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
+        for (const direction of grid.directionUtil) {
             tile.direction = direction;
 
-            if (this.fits(tile, neighbours)) {
+            if (this.fits(grid, tile, neighbours)) {
                 return true;
             }
         }
@@ -29,7 +28,7 @@ export class FitStep extends SolveStep {
         return false;
     }
 
-    protected fits(tile: Tile, neighbours: FacingState[]): boolean {
+    protected fits(grid: Grid, tile: Tile, neighbours: FacingState[]): boolean {
         let checkedOpen = 0;
         let checkedClosed = 0;
 
@@ -41,7 +40,7 @@ export class FitStep extends SolveStep {
             }
 
             // Match this tile's side to the neighbour's side
-            if (facing === tile.getSide(side)) {
+            if (facing === grid.getTileSide(tile, side)) {
                 facing ? checkedOpen++ : checkedClosed++;
 
                 return true;
@@ -50,6 +49,6 @@ export class FitStep extends SolveStep {
             return false;
         });
 
-        return couldFit && (checkedOpen === openSides || checkedClosed === DirectionUtil.NUM_SIDES - openSides);
+        return couldFit && (checkedOpen === openSides || checkedClosed === grid.directionUtil.numSides - openSides);
     }
 }

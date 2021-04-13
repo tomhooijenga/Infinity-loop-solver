@@ -1,4 +1,3 @@
-import {DirectionUtil} from "./DirectionUtil";
 import {FacingState} from "./FacingState";
 
 export interface TileParams {
@@ -27,10 +26,6 @@ export class Tile {
         this.y = params.y ?? 0;
         this.direction = params.direction ?? 0;
         this.solved = params.solved ?? false;
-    }
-
-    public getSide(direction: number): FacingState {
-        return (this.constructor as TileConstructor).SIDES[DirectionUtil.rotate(direction, -this.direction)];
     }
 
     public static fromSides(sides: boolean[], type: string): TileConstructor {

@@ -1,7 +1,6 @@
 import {Grid} from "../base/Grid";
 import {Tile, TileConstructor} from "../base/Tile";
 import {None, NONE} from "../base/None";
-import {DirectionUtil} from "../base/DirectionUtil";
 import {FacingState} from "../base/FacingState";
 
 export class Generator {
@@ -41,7 +40,7 @@ export class Generator {
         let tile = this.grid.grid[x][y];
 
         for (let i = 0; i < length; i++) {
-            const direction = this.random(0, DirectionUtil.NUM_SIDES - 1);
+            const direction = this.random(0, this.grid.directionUtil.numSides - 1);
             const neighbours = this.grid.neighbours(tile);
             const facing = this.grid.facing(tile);
             const next = i < length - 1 ? neighbours[direction] : NONE;
@@ -90,17 +89,17 @@ export class Generator {
 
         const facing = this.grid.facing(next);
 
-        facing[DirectionUtil.opposite(direction)] = FacingState.Open;
+        facing[this.grid.directionUtil.opposite(direction)] = FacingState.Open;
 
         return [...this.tileInstances.values()].some((tile) => this.tileFits(tile, facing));
     }
 
     protected tileFits(tile: Tile, facing: FacingState[]): boolean {
-        for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
+        for (const direction of this.grid.directionUtil) {
             tile.direction = direction;
 
             const fits = facing.every((isFacing, side) => {
-                return isFacing === tile.getSide(side);
+                return isFacing === this.grid.getTileSide(tile, side);
             });
 
             if (fits) {

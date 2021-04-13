@@ -1,7 +1,11 @@
 import {Grid as BaseGrid} from "../../base/Grid";
 import {Tile} from "../../base/Tile";
+import {DirectionUtil} from "../../base/DirectionUtil";
 
 export class Grid extends BaseGrid {
+
+    public directionUtil = new DirectionUtil(6);
+
     public neighbours(tile: Tile): Tile[] {
         const {x, y} = tile;
 

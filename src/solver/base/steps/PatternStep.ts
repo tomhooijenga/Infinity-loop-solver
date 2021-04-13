@@ -2,7 +2,6 @@ import {SolveStep} from "../SolveStep";
 import {FacingState} from "../../../base/FacingState";
 import {Tile, TileConstructor} from "../../../base/Tile";
 import {Grid} from "../../../base/Grid";
-import {DirectionUtil} from "../../../base/DirectionUtil";
 
 export class PatternStep extends SolveStep {
 
@@ -34,7 +33,7 @@ export class PatternStep extends SolveStep {
             }
 
             const direction = this.patternIndex(this.type.SIDES, pattern);
-            tile.direction = DirectionUtil.rotate(start, -direction);
+            tile.direction = grid.directionUtil.rotate(start, -direction);
 
             return true;
         });

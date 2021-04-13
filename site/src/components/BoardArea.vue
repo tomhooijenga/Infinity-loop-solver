@@ -39,16 +39,8 @@ export default {
   },
 
   setup () {
-    const { board, setTile } = useBoard()
+    const { board, setTile, scrambleBoard } = useBoard()
     const { settings } = useSettings()
-
-    function scrambleBoard (): void {
-      board.tiles.forEach((tile) => {
-        tile.direction = DirectionUtil.random()
-      })
-
-      board.tiles = [...board.tiles]
-    }
 
     function sleep (ms: number): Promise<void> {
       return new Promise(resolve => setTimeout(resolve, ms))

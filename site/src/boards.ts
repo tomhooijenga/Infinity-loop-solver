@@ -2,8 +2,8 @@ import { None } from '../../src/base/None'
 import * as sq from '../../src/solver/square/tiles'
 import * as hex from '../../src/solver/hex/tiles'
 import { Tile, TileConstructor } from '../../src/base/Tile'
-import { Grid as SquareBoard } from '../../src/solver/square/Grid'
-import { Grid as HexBoard } from '../../src/solver/hex/Grid'
+import { Grid as SquareGrid } from '../../src/solver/square/Grid'
+import { Grid as HexGrid } from '../../src/solver/hex/Grid'
 import { NoneStep } from '../../src/solver/base/steps/NoneStep'
 import { AllSideStep } from '../../src/solver/base/steps/AllSideStep'
 import { FitStep } from '../../src/solver/base/steps/FitStep'
@@ -81,35 +81,35 @@ export const boards = {
 }
 
 function * solveSquare (tiles: Tile[]): Generator {
-  const board = new SquareBoard(tiles)
+  const grid = new SquareGrid(tiles)
   const solver = new Solver()
 
-  solver.solve(board, [
+  solver.solve(grid, [
     new NoneStep(),
     new AllSideStep()
   ])
 
-  yield * solver.solveSteps(board, [
+  yield * solver.solveSteps(grid, [
     new PatternStep(sq.Line, [[true], [false]]),
     new PatternStep(sq.Turn, [[true, false], [false, true]]),
     new FitStep()
   ])
 
-  yield solver.solve(board, [
+  yield solver.solve(grid, [
     new ForceStep()
   ])
 }
 
 function * solveHex (tiles: Tile[]): Generator {
-  const board = new HexBoard(tiles)
+  const grid = new HexGrid(tiles)
   const solver = new Solver()
 
-  solver.solve(board, [
+  solver.solve(grid, [
     new NoneStep(),
     new AllSideStep()
   ])
 
-  yield * solver.solveSteps(board, [
+  yield * solver.solveSteps(grid, [
     new PatternStep(hex.Line, [[true], [false, false]]),
     new PatternStep(hex.TurnS, [[true, false], [false, true]]),
     new PatternStep(hex.TurnL, [

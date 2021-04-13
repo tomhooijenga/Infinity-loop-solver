@@ -1,7 +1,6 @@
 import {SolveStep} from "../SolveStep";
 import {Tile} from "../../../base/Tile";
 import {Grid} from "../../hex/Grid";
-import {DirectionUtil} from "../../../base/DirectionUtil";
 
 export class ForceStep extends SolveStep {
 
@@ -12,7 +11,7 @@ export class ForceStep extends SolveStep {
 
     public solveGrid(tiles: Tile[], grid: Grid): boolean {
         const unsolved = tiles.filter(({solved}) => !solved);
-        const combinations = Math.pow(DirectionUtil.NUM_SIDES, unsolved.length);
+        const combinations = Math.pow(grid.directionUtil.numSides, unsolved.length);
 
         if (combinations === 0) {
             return true;
@@ -25,7 +24,7 @@ export class ForceStep extends SolveStep {
         });
 
         for (let i = 0; i < combinations; i++) {
-            const done = unsolved.every(this.tileFits, this);
+            const done = unsolved.every((tile) => this.tileFits(grid, tile));
 
             if (done) {
                 unsolved.forEach((tile) => {
@@ -35,16 +34,16 @@ export class ForceStep extends SolveStep {
                 return true;
             }
 
-            this.rotate(unsolved);
+            this.rotate(grid, unsolved);
         }
 
         return false;
     }
 
-    protected rotate(unsolved: Tile[]): void {
+    protected rotate(grid: Grid, unsolved: Tile[]): void {
         for (let i = 0; i < unsolved.length; i++) {
             const last = unsolved[i].direction;
-            const next = DirectionUtil.rotate(last, 1);
+            const next = grid.directionUtil.rotate(last, 1);
 
             unsolved[i].direction = next;
 
@@ -55,14 +54,14 @@ export class ForceStep extends SolveStep {
         }
     }
 
-    protected tileFits(tile: Tile): boolean {
+    protected tileFits(grid: Grid, tile: Tile): boolean {
         const neighbours = this.neighbours.get(tile)!;
 
-        for (let direction = 0; direction < DirectionUtil.NUM_SIDES; direction++) {
+        for (const direction of grid.directionUtil) {
             const neighbour = neighbours[direction];
-            const opposite = DirectionUtil.opposite(direction);
+            const opposite = grid.directionUtil.opposite(direction);
 
-            if (tile.getSide(direction) !== neighbour.getSide(opposite)) {
+            if (grid.getTileSide(tile, direction) !== grid.getTileSide(neighbour, opposite)) {
                 return false;
             }
         }
