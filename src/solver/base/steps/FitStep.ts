@@ -1,6 +1,6 @@
 import {SolveStep} from "../SolveStep";
 import {Tile, TileConstructor} from "../../../base/Tile";
-import {Grid} from "../../hex/Grid";
+import {Grid} from "../../../base/Grid";
 import {FacingState} from "../../../base/FacingState";
 
 export class FitStep extends SolveStep {

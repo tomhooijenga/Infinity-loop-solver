@@ -15,7 +15,6 @@
 
 <script lang="ts">
 import { BoardData, solve } from '@/boards'
-import { DirectionUtil } from '../../../src/base/DirectionUtil'
 import HexGrid from '@/components/hex/Grid.vue'
 import SquareGrid from '@/components/square/Grid.vue'
 import { useBoard } from '@/use-board'

@@ -1,6 +1,6 @@
 import {SolveStep} from "../SolveStep";
 import {Tile, TileConstructor} from "../../../base/Tile";
-import {Grid} from "../../hex/Grid";
+import {Grid} from "../../../base/Grid";
 
 export class AllSideStep extends SolveStep {
     public solveTile(tile: Tile, grid: Grid): boolean {
