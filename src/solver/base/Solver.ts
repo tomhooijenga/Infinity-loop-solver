@@ -61,9 +61,21 @@ export class Solver {
 
     protected* runGridStep(grid: Grid, steps: SolveStep[]): Generator<number> {
         for (const step of steps) {
-            if (step.solveGrid(grid.tiles, grid)) {
-                yield grid.tiles.length;
+            const solveGrid = step.solveGrid(grid.tiles, grid);
+
+            if (typeof solveGrid === "boolean") {
+                if (solveGrid) {
+                    yield grid.tiles.length;
+                }
                 return;
+            }
+
+            for (const progress of solveGrid) {
+                yield progress;
+
+                if (progress === grid.tiles.length) {
+                    return;
+                }
             }
         }
     }

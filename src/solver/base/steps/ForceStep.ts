@@ -9,11 +9,16 @@ export class ForceStep extends SolveStep {
      */
     protected neighbours = new Map<Tile, Tile[]>()
 
-    public solveGrid(tiles: Tile[], grid: Grid): boolean {
-        const unsolved = tiles.filter(({solved}) => !solved);
-        const combinations = Math.pow(grid.directionUtil.numSides, unsolved.length);
+    protected invalidDirections = new Map<Tile, Set<number>>();
 
-        if (combinations === 0) {
+    constructor(protected maxClusterSize: number) {
+        super();
+    }
+
+    public * solveGrid(tiles: Tile[], grid: Grid): Generator<number, boolean> {
+        const unsolved = tiles.filter(({solved}) => !solved);
+
+        if (unsolved.length === 0) {
             return true;
         }
 
@@ -23,18 +28,70 @@ export class ForceStep extends SolveStep {
             this.neighbours.set(tile, grid.neighbours(tile));
         });
 
+        let solved = tiles.length - unsolved.length;
+        for (const cluster of this.cluster(unsolved, grid)) {
+
+            if (cluster.length > this.maxClusterSize) {
+                continue;
+            }
+
+            if (this.solveCluster(cluster, grid)) {
+                solved += cluster.length;
+                yield solved;
+            }
+        }
+
+        return solved === tiles.length;
+    }
+
+    protected cluster(unsolved: Tile[], grid: Grid): Tile[][] {
+        const seen = new Set<Tile>();
+        const clusters: Tile[][] = [];
+
+        for (const tile of unsolved) {
+            if (seen.has(tile)) {
+                continue;
+            }
+            clusters.push(
+                this.addToCluster(tile, grid, seen, [])
+            );
+        }
+
+        return clusters;
+    }
+
+    protected addToCluster(tile: Tile, grid: Grid, seen: Set<Tile>, cluster: Tile[]): Tile[] {
+        if (seen.has(tile)) {
+            return cluster;
+        }
+
+        seen.add(tile);
+        cluster.push(tile);
+
+        this.neighbours.get(tile)!.forEach((neighbour) => {
+            if (!neighbour.solved) {
+                this.addToCluster(neighbour, grid, seen, cluster);
+            }
+        });
+
+        return cluster;
+    }
+
+    protected solveCluster(cluster: Tile[], grid: Grid): boolean {
+        const combinations = Math.pow(grid.directionUtil.numSides, cluster.length);
+
         for (let i = 0; i < combinations; i++) {
-            const done = unsolved.every((tile) => this.tileFits(grid, tile));
+            const done = cluster.every((tile) => this.tileFits(grid, tile));
 
             if (done) {
-                unsolved.forEach((tile) => {
+                cluster.forEach((tile) => {
                     tile.solved = true;
                 });
 
                 return true;
             }
 
-            this.rotate(grid, unsolved);
+            this.rotate(grid, cluster);
         }
 
         return false;
@@ -42,12 +99,13 @@ export class ForceStep extends SolveStep {
 
     protected rotate(grid: Grid, unsolved: Tile[]): void {
         for (let i = 0; i < unsolved.length; i++) {
-            const last = unsolved[i].direction;
+            const tile = unsolved[i];
+            const last = tile.direction;
             const next = grid.directionUtil.rotate(last, 1);
 
-            unsolved[i].direction = next;
+            tile.direction = next;
 
-            // If it wrapped around we need to rotate the next tile as well.
+            // If it didn't wrap back to 0, we can stop.
             if (last < next) {
                 break;
             }
@@ -55,6 +113,10 @@ export class ForceStep extends SolveStep {
     }
 
     protected tileFits(grid: Grid, tile: Tile): boolean {
+        if (this.isDirectionInvalid(tile)) {
+            return false;
+        }
+
         const neighbours = this.neighbours.get(tile)!;
 
         for (const direction of grid.directionUtil) {
@@ -62,10 +124,24 @@ export class ForceStep extends SolveStep {
             const opposite = grid.directionUtil.opposite(direction);
 
             if (grid.getTileSide(tile, direction) !== grid.getTileSide(neighbour, opposite)) {
+                if (neighbour.solved) {
+                    this.markDirectionInvalid(tile);
+                }
+
                 return false;
             }
         }
 
         return true;
+    }
+
+    protected markDirectionInvalid(tile: Tile): void {
+        const directions = this.invalidDirections.get(tile) ?? new Set();
+        directions.add(tile.direction);
+        this.invalidDirections.set(tile, directions);
+    }
+
+    protected isDirectionInvalid(tile: Tile): boolean {
+        return this.invalidDirections.get(tile)?.has(tile.direction) ?? false;
     }
 }

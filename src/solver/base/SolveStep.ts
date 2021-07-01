@@ -6,7 +6,7 @@ export abstract class SolveStep {
         return false;
     }
 
-    public solveGrid(tiles: Tile[], grid: Grid): boolean {
+    public solveGrid(tiles: Tile[], grid: Grid): Generator<number> | boolean {
         return false;
     }
 }

@@ -95,8 +95,8 @@ function * solveSquare (tiles: Tile[]): Generator {
     new FitStep()
   ])
 
-  yield solver.solve(grid, [
-    new ForceStep()
+  yield * solver.solveSteps(grid, [
+    new ForceStep(10)
   ])
 }
 
@@ -135,6 +135,10 @@ function * solveHex (tiles: Tile[]): Generator {
     new PatternStep(hex.Diamond, [[true, true, true], [true, false, true, true], [true, true, false, true]]),
     new PatternStep(hex.Square, [[false], [true, true]]),
     new FitStep()
+  ])
+
+  yield * solver.solveSteps(grid, [
+    new ForceStep(10)
   ])
 }
 

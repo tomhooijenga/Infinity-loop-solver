@@ -24,29 +24,29 @@ function setTile (index: number, tile: Tile) {
   board.tiles = [...tiles]
 }
 
-function generateBoard () {
-  let generator: Generator
+function makeGrid () {
+  return new {
+    square: SquareGrid,
+    hex: HexGrid
+  }[board.type]()
+}
 
-  if (board.type === 'square') {
-    generator = new Generator(new SquareGrid([]), Object.values(sq))
-  } else {
-    generator = new Generator(new HexGrid([]), Object.values(hex))
-  }
+function generateBoard () {
+  const grid = makeGrid()
+  const tiles = {
+    square: sq,
+    hex: hex
+  }[board.type]
+  const generator = new Generator(grid, Object.values(tiles))
 
   board.tiles = generator.generate(board.width, board.height)
 }
 
 function scrambleBoard () {
-  let b: SquareGrid | HexGrid
-
-  if (board.type === 'square') {
-    b = new SquareGrid()
-  } else {
-    b = new HexGrid()
-  }
+  const grid = makeGrid()
 
   board.tiles.forEach((tile) => {
-    tile.direction = b.directionUtil.random()
+    tile.direction = grid.directionUtil.random()
   })
 
   board.tiles = [...board.tiles]
