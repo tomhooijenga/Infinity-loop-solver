@@ -5,15 +5,17 @@
                :x="board.width"
                :y="board.height"
                @change="nextTile"
-               class="board" />
+               class="board"/>
   </div>
   <section class="buttons">
-    <button type="button" class="button" @click="scrambleBoard">Scramble</button>
-    <button type="button" class="button" @click="solveBoard">Solve</button>
+    <button type="button" class="button" @click="scrambleBoard" :disabled="isRunning">Scramble</button>
+    <button type="button" class="button" @click="solveBoard" :disabled="isRunning">Solve</button>
+    <button type="button" class="button" @click="isRunning = false" :disabled="!isRunning">Stop</button>
   </section>
 </template>
 
 <script lang="ts">
+import { ref } from 'vue'
 import { BoardData, solve } from '@/boards'
 import HexGrid from '@/components/hex/Grid.vue'
 import SquareGrid from '@/components/square/Grid.vue'
@@ -45,13 +47,17 @@ export default {
       return new Promise(resolve => setTimeout(resolve, ms))
     }
 
+    const isRunning = ref(false)
+
     async function solveBoard () {
       const progress = solve(board)
 
-      while (true) {
-        board.tiles = [...board.tiles]
+      isRunning.value = true
 
+      while (isRunning.value) {
+        board.tiles = [...board.tiles]
         const start = Date.now()
+        console.log(start)
         if (progress.next().done) {
           break
         }
@@ -61,6 +67,8 @@ export default {
           await sleep(delay)
         }
       }
+
+      isRunning.value = false
     }
 
     function nextTile (index: number, tile: Tile, direction: -1 | 1): void {
@@ -82,7 +90,8 @@ export default {
       board,
       scrambleBoard,
       solveBoard,
-      nextTile
+      nextTile,
+      isRunning
     }
   }
 }

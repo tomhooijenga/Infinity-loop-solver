@@ -47,6 +47,11 @@ button {
     background-color: $button-hover-bg;
   }
 
+  &[disabled] {
+    background-color: transparent;
+    cursor: not-allowed;
+  }
+
   + button {
     margin-left: 0.5rem;
   }
