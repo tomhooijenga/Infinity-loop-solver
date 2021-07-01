@@ -89,6 +89,7 @@ export default {
   height: 0;
   padding-bottom: 86.60%;
   clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
+  will-change: transform, background-color;
 
   &.unsolved {
     background: $tile-unsolved-bg;

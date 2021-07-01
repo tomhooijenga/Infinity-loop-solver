@@ -55,6 +55,7 @@ export default {
 
 .tile {
   transition: transform .2s ease-in-out, background-color .2s ease-in-out;
+  will-change: transform, background-color;
 
   &.unsolved {
     background: $tile-unsolved-bg;
