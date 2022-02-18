@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue'
+import {computed, defineComponent} from 'vue'
 import { Tile, TileConstructor } from '../../../../src/base/Tile'
 import { Diamond, Square, Star, Triangle } from '../../../../src/solver/hex/tiles'
 import { FacingState } from '../../../../src/base/FacingState'
@@ -65,14 +65,17 @@ const corners = [300, 0, 60, 120, 180, 240, 300].map((degree) => {
   return point(rad(degree))
 })
 
-export default {
+export default defineComponent({
   name: 'Tile',
 
   props: {
-    tile: Tile
+    tile: {
+      type: Tile,
+      required: true
+    }
   },
 
-  setup (props: { tile: Tile }) {
+  setup (props) {
     const arcs = computed(() => {
       const arcs = []
 
@@ -109,7 +112,7 @@ export default {
       path
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

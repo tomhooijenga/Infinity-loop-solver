@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts">
-import { computed } from 'vue'
+import {computed, defineComponent, PropType} from 'vue'
 import { Tile, TileConstructor } from '../../../../src/base/Tile'
 import { Cross } from '../../../../src/solver/square/tiles'
 import { FacingState } from '../../../../src/base/FacingState'
@@ -52,11 +52,14 @@ function point (rad: number): Point {
 
 const corners = [315, 45, 135, 225].map((degree) => point(rad(degree)))
 
-export default {
+export default defineComponent({
   name: 'Tile',
 
   props: {
-    tile: Tile
+    tile: {
+      type: Tile,
+      required: true
+    }
   },
 
   setup (props: { tile: Tile }) {
@@ -89,7 +92,7 @@ export default {
       corners
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

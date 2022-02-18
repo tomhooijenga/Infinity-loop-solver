@@ -10,12 +10,13 @@
              @click="$emit('change', name)"/>
 </template>
 
-<script>
+<script lang="ts">
 import { boards } from '@/boards'
-import SquareBoard from '@/components/square/Grid'
-import HexBoard from '@/components/hex/Grid'
+import SquareBoard from '@/components/square/Grid.vue'
+import HexBoard from '@/components/hex/Grid.vue'
+import {defineComponent} from "vue";
 
-export default {
+export default defineComponent({
   name: 'Examples',
 
   components: {
@@ -30,7 +31,7 @@ export default {
       boards: Object.entries(boards).map(([name, board]) => [name, board()])
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

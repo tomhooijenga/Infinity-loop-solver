@@ -12,11 +12,11 @@
 </template>
 
 <script lang="ts">
-import { computed, PropType } from 'vue'
+import {computed, defineComponent, PropType} from 'vue'
 import { Tile } from '../../../../src/base/Tile'
 import TileComponent from '@/components/square/Tile.vue'
 
-export default {
+export default defineComponent({
   name: 'Grid',
 
   components: {
@@ -24,12 +24,21 @@ export default {
   },
 
   props: {
-    tiles: Array as PropType<Tile[]>,
-    x: Number,
-    y: Number
+    tiles: {
+      type:  Array as PropType<Tile[]>,
+      required: true,
+    },
+    x: {
+      type: Number,
+      required: true,
+    },
+    y: {
+      type: Number,
+      required: true,
+    }
   },
 
-  setup (props: { tiles: Tile[], x: number, y: number }) {
+  setup (props) {
     const tilesStyle = computed(() => {
       return {
         'grid-template-columns': `repeat(${props.x}, 1fr)`,
@@ -42,7 +51,7 @@ export default {
       tilesStyle
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

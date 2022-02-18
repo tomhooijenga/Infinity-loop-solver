@@ -10,10 +10,12 @@
   </transition>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import {defineComponent} from "vue";
+
+export default defineComponent({
   name: 'Modal'
-}
+})
 </script>
 
 <style lang="scss" scoped>

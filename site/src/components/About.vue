@@ -23,11 +23,13 @@
 </template>
 
 <script>
-export default {
+import {defineComponent} from "vue";
+
+export default defineComponent({
   name: 'About',
 
   emits: ['close']
-}
+})
 </script>
 
 <style scoped>

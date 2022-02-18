@@ -13,17 +13,11 @@
 </template>
 
 <script lang="ts">
-import { computed, PropType } from 'vue'
+import {computed, defineComponent, PropType} from 'vue'
 import { Tile } from '../../../../src/base/Tile'
 import TileComponent from './Tile.vue'
 
-type Props = {
-  tiles: Tile[];
-  x: number;
-  y: number;
-}
-
-export default {
+export default defineComponent({
   name: 'Grid',
 
   components: {
@@ -31,12 +25,21 @@ export default {
   },
 
   props: {
-    tiles: Array as PropType<Tile[]>,
-    x: Number,
-    y: Number
+    tiles: {
+      type:  Array as PropType<Tile[]>,
+      required: true,
+    },
+    x: {
+      type: Number,
+      required: true,
+    },
+    y: {
+      type: Number,
+      required: true,
+    }
   },
 
-  setup (props: Props) {
+  setup (props) {
     const tilesStyle = computed(() => {
       const width = 1.1547
       const height = 1
@@ -71,7 +74,7 @@ export default {
       tileStyle
     }
   }
-}
+})
 </script>
 
 <style lang="scss" scoped>

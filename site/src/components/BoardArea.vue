@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { ref } from 'vue'
+import {defineComponent, ref} from 'vue'
 import { BoardData, solve } from '@/boards'
 import HexGrid from '@/components/hex/Grid.vue'
 import SquareGrid from '@/components/square/Grid.vue'
@@ -31,7 +31,7 @@ const order: Record<BoardData['type'], TileConstructor[]> = {
   square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross]
 }
 
-export default {
+export default defineComponent({
   name: 'BoardArea',
 
   components: {
@@ -94,7 +94,7 @@ export default {
       isRunning
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">
