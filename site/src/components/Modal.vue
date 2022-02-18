@@ -2,20 +2,18 @@
   <transition appear name="modal">
     <div class="modal-backdrop" @click.self="$emit('close')">
       <div class="modal-body">
-        <slot>
-          default body
-        </slot>
+        <slot> default body </slot>
       </div>
     </div>
   </transition>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'Modal'
-})
+  name: "Modal",
+});
 </script>
 
 <style lang="scss" scoped>

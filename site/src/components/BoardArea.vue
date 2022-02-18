@@ -1,89 +1,131 @@
 <template>
   <div class="board-area">
-    <component :is="`${board.type}-grid`"
-               :tiles="board.tiles"
-               :x="board.width"
-               :y="board.height"
-               @change="nextTile"
-               class="board"/>
+    <component
+      :is="`${board.type}-grid`"
+      :tiles="board.tiles"
+      :x="board.width"
+      :y="board.height"
+      @change="nextTile"
+      class="board"
+    />
   </div>
   <section class="buttons">
-    <button type="button" class="button" @click="scrambleBoard" :disabled="isRunning">Scramble</button>
-    <button type="button" class="button" @click="solveBoard" :disabled="isRunning">Solve</button>
-    <button type="button" class="button" @click="isRunning = false" :disabled="!isRunning">Stop</button>
+    <button
+      type="button"
+      class="button"
+      @click="scrambleBoard"
+      :disabled="isRunning"
+    >
+      Scramble
+    </button>
+    <button
+      type="button"
+      class="button"
+      @click="solveBoard"
+      :disabled="isRunning"
+    >
+      Solve
+    </button>
+    <button
+      type="button"
+      class="button"
+      @click="isRunning = false"
+      :disabled="!isRunning"
+    >
+      Stop
+    </button>
   </section>
 </template>
 
 <script lang="ts">
-import {defineComponent, ref} from 'vue'
-import { BoardData, solve } from '@/boards'
-import HexGrid from '@/components/hex/Grid.vue'
-import SquareGrid from '@/components/square/Grid.vue'
-import { useBoard } from '@/use-board'
-import { Tile, TileConstructor } from '../../../src/base/Tile'
-import * as hex from '../../../src/solver/hex/tiles'
-import * as sq from '../../../src/solver/square/tiles'
-import { None } from '../../../src/base/None'
-import { useSettings } from '@/use-settings'
+import { defineComponent, ref } from "vue";
+import { BoardData, solve } from "@/boards";
+import HexGrid from "@/components/hex/Grid.vue";
+import SquareGrid from "@/components/square/Grid.vue";
+import { useBoard } from "@/use-board";
+import { Tile, TileConstructor } from "../../../src/base/Tile";
+import * as hex from "../../../src/solver/hex/tiles";
+import * as sq from "../../../src/solver/square/tiles";
+import { None } from "../../../src/base/None";
+import { useSettings } from "@/use-settings";
 
-const order: Record<BoardData['type'], TileConstructor[]> = {
-  hex: [None, hex.End, hex.TurnS, hex.TurnL, hex.Line, hex.Junction, hex.CheckL, hex.CheckR, hex.Triangle, hex.Diamond, hex.Square, hex.Knuckles, hex.Star],
-  square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross]
-}
+const order: Record<BoardData["type"], TileConstructor[]> = {
+  hex: [
+    None,
+    hex.End,
+    hex.TurnS,
+    hex.TurnL,
+    hex.Line,
+    hex.Junction,
+    hex.CheckL,
+    hex.CheckR,
+    hex.Triangle,
+    hex.Diamond,
+    hex.Square,
+    hex.Knuckles,
+    hex.Star,
+  ],
+  square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross],
+};
 
 export default defineComponent({
-  name: 'BoardArea',
+  name: "BoardArea",
 
   components: {
     HexGrid,
-    SquareGrid
+    SquareGrid,
   },
 
-  setup () {
-    const { board, setTile, scrambleBoard } = useBoard()
-    const { settings } = useSettings()
+  setup() {
+    const { board, setTile, scrambleBoard } = useBoard();
+    const { settings } = useSettings();
 
-    function sleep (ms: number): Promise<void> {
-      return new Promise(resolve => setTimeout(resolve, ms))
+    function sleep(ms: number): Promise<void> {
+      return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
-    const isRunning = ref(false)
+    const isRunning = ref(false);
 
-    async function solveBoard () {
-      const progress = solve(board)
+    async function solveBoard() {
+      const progress = solve(board);
 
-      isRunning.value = true
+      isRunning.value = true;
 
       while (isRunning.value) {
-        board.tiles = [...board.tiles]
-        const start = Date.now()
-        console.log(start)
+        board.tiles = [...board.tiles];
+        const start = Date.now();
+        console.log(start);
         if (progress.next().done) {
-          break
+          break;
         }
 
-        const delay = settings.delay - (Date.now() - start)
+        const delay = settings.delay - (Date.now() - start);
         if (delay > 0) {
-          await sleep(delay)
+          await sleep(delay);
         }
       }
 
-      isRunning.value = false
+      isRunning.value = false;
     }
 
-    function nextTile (index: number, tile: Tile, direction: -1 | 1): void {
-      const typeOrder = order[board.type]
-      let typeIndex = (typeOrder.indexOf(tile.constructor as TileConstructor) + direction) % typeOrder.length
+    function nextTile(index: number, tile: Tile, direction: -1 | 1): void {
+      const typeOrder = order[board.type];
+      let typeIndex =
+        (typeOrder.indexOf(tile.constructor as TileConstructor) + direction) %
+        typeOrder.length;
       if (typeIndex < 0) {
-        typeIndex += typeOrder.length
+        typeIndex += typeOrder.length;
       }
-      const TileType = typeOrder[typeIndex]
+      const TileType = typeOrder[typeIndex];
 
-      setTile(index, new TileType({
-        solved: true,
-        x: tile.x,
-        y: tile.y
-      }))
+      setTile(
+        index,
+        new TileType({
+          solved: true,
+          x: tile.x,
+          y: tile.y,
+        })
+      );
     }
 
     return {
@@ -91,10 +133,10 @@ export default defineComponent({
       scrambleBoard,
       solveBoard,
       nextTile,
-      isRunning
-    }
-  }
-})
+      isRunning,
+    };
+  },
+});
 </script>
 
 <style scoped lang="scss">

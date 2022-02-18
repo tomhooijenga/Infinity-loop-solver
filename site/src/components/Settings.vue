@@ -5,33 +5,44 @@
 
       <label>
         Square
-        <input v-model="settings.type" type="radio" name="type" value="square"/>
+        <input
+          v-model="settings.type"
+          type="radio"
+          name="type"
+          value="square"
+        />
       </label>
 
       <label>
         Hexagon
-        <input v-model="settings.type" type="radio" name="type" value="hex"/>
+        <input v-model="settings.type" type="radio" name="type" value="hex" />
       </label>
     </span>
   </div>
 
   <div class="row">
-     <label class="input">
-       <span class="label">Delay</span>
-       <input type="number" min="0" max="500" step="50" v-model.number="settings.delay" />
-     </label>
+    <label class="input">
+      <span class="label">Delay</span>
+      <input
+        type="number"
+        min="0"
+        max="500"
+        step="50"
+        v-model.number="settings.delay"
+      />
+    </label>
     <span class="input-times">ms</span>
   </div>
 
   <div class="row">
     <label class="input">
       <span class="label">Width</span>
-      <input v-model.number="settings.width" min="0" type="number"/>
+      <input v-model.number="settings.width" min="0" type="number" />
     </label>
     <span class="input-times">&times;</span>
     <label class="input">
       <span class="label">Height</span>
-      <input v-model.number="settings.height" min="0" type="number"/>
+      <input v-model.number="settings.height" min="0" type="number" />
     </label>
   </div>
 
@@ -42,48 +53,52 @@
 </template>
 
 <script lang="ts">
-import { reactive, defineComponent } from 'vue'
-import { useBoard } from '@/use-board'
-import { None } from '../../../src/base/None'
-import { constructTiles } from '@/boards'
-import { useSettings } from '@/use-settings'
+import { reactive, defineComponent } from "vue";
+import { useBoard } from "@/use-board";
+import { None } from "../../../src/base/None";
+import { constructTiles } from "@/boards";
+import { useSettings } from "@/use-settings";
 
 export default defineComponent({
-  name: 'Settings',
+  name: "Settings",
 
-  emits: ['close'],
+  emits: ["close"],
 
-  setup (_: unknown, { emit }) {
-    const { board } = useBoard()
-    const { settings } = useSettings()
+  setup(_: unknown, { emit }) {
+    const { board } = useBoard();
+    const { settings } = useSettings();
 
-    const { type, width, height } = board
+    const { type, width, height } = board;
 
     const newSettings = reactive({
       type,
       width,
       height,
-      delay: settings.delay
-    })
+      delay: settings.delay,
+    });
 
-    function apply () {
-      const { type, width, height, delay } = newSettings
-      if (type !== board.type || width !== board.width || height !== board.height) {
-        const tiles = new Array(width * height).fill(None)
-        Object.assign(board, constructTiles(type, width, tiles))
+    function apply() {
+      const { type, width, height, delay } = newSettings;
+      if (
+        type !== board.type ||
+        width !== board.width ||
+        height !== board.height
+      ) {
+        const tiles = new Array(width * height).fill(None);
+        Object.assign(board, constructTiles(type, width, tiles));
       }
 
-      settings.delay = delay
+      settings.delay = delay;
 
-      emit('close')
+      emit("close");
     }
 
     return {
       settings: newSettings,
-      apply
-    }
-  }
-})
+      apply,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>

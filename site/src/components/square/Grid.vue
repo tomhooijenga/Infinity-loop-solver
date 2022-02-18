@@ -1,31 +1,33 @@
 <template>
   <section :style="tilesStyle" class="tiles">
-    <Tile v-for="(tile, index) of tiles"
-          :key="tile.type + index"
-          :style="`transform: rotate(${tile.direction * 90}deg)`"
-          :tile="tile"
-          class="tile"
-          :class="{unsolved: !tile.solved}"
-          @click="$emit('change', index, tile, 1)"
-          @contextmenu.prevent="$emit('change', index, tile, -1)"/>
+    <Tile
+      v-for="(tile, index) of tiles"
+      :key="tile.type + index"
+      :style="`transform: rotate(${tile.direction * 90}deg)`"
+      :tile="tile"
+      class="tile"
+      :class="{ unsolved: !tile.solved }"
+      @click="$emit('change', index, tile, 1)"
+      @contextmenu.prevent="$emit('change', index, tile, -1)"
+    />
   </section>
 </template>
 
 <script lang="ts">
-import {computed, defineComponent, PropType} from 'vue'
-import { Tile } from '../../../../src/base/Tile'
-import TileComponent from '@/components/square/Tile.vue'
+import { computed, defineComponent, PropType } from "vue";
+import { Tile } from "../../../../src/base/Tile";
+import TileComponent from "@/components/square/Tile.vue";
 
 export default defineComponent({
-  name: 'Grid',
+  name: "Grid",
 
   components: {
-    Tile: TileComponent
+    Tile: TileComponent,
   },
 
   props: {
     tiles: {
-      type:  Array as PropType<Tile[]>,
+      type: Array as PropType<Tile[]>,
       required: true,
     },
     x: {
@@ -35,23 +37,23 @@ export default defineComponent({
     y: {
       type: Number,
       required: true,
-    }
+    },
   },
 
-  setup (props) {
+  setup(props) {
     const tilesStyle = computed(() => {
       return {
-        'grid-template-columns': `repeat(${props.x}, 1fr)`,
-        'grid-template-rows': `repeat(${props.y}, 1fr)`,
-        'aspect-ratio': `${props.x}/${props.y}`
-      }
-    })
+        "grid-template-columns": `repeat(${props.x}, 1fr)`,
+        "grid-template-rows": `repeat(${props.y}, 1fr)`,
+        "aspect-ratio": `${props.x}/${props.y}`,
+      };
+    });
 
     return {
-      tilesStyle
-    }
-  }
-})
+      tilesStyle,
+    };
+  },
+});
 </script>
 
 <style lang="scss" scoped>
@@ -63,7 +65,7 @@ export default defineComponent({
 }
 
 .tile {
-  transition: transform .2s ease-in-out, background-color .2s ease-in-out;
+  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
   will-change: transform, background-color;
 
   &.unsolved {

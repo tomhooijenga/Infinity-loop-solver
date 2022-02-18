@@ -1,37 +1,39 @@
 <template>
-  <component :is="`${boardData.type}-board`"
-             v-for="[name, boardData] of boards"
-             v-once
-             :key="name"
-             :tiles="boardData.tiles"
-             :x="boardData.width"
-             :y="boardData.height"
-             class="board"
-             @click="$emit('change', name)"/>
+  <component
+    :is="`${boardData.type}-board`"
+    v-for="[name, boardData] of boards"
+    v-once
+    :key="name"
+    :tiles="boardData.tiles"
+    :x="boardData.width"
+    :y="boardData.height"
+    class="board"
+    @click="$emit('change', name)"
+  />
 </template>
 
 <script lang="ts">
-import { boards } from '@/boards'
-import SquareBoard from '@/components/square/Grid.vue'
-import HexBoard from '@/components/hex/Grid.vue'
-import {defineComponent} from "vue";
+import { boards } from "@/boards";
+import SquareBoard from "@/components/square/Grid.vue";
+import HexBoard from "@/components/hex/Grid.vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'Examples',
+  name: "Examples",
 
   components: {
     SquareBoard,
-    HexBoard
+    HexBoard,
   },
 
-  emits: ['change'],
+  emits: ["change"],
 
-  setup () {
+  setup() {
     return {
-      boards: Object.entries(boards).map(([name, board]) => [name, board()])
-    }
-  }
-})
+      boards: Object.entries(boards).map(([name, board]) => [name, board()]),
+    };
+  },
+});
 </script>
 
 <style scoped lang="scss">

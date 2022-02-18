@@ -3,24 +3,18 @@
     <button type="button" class="examples" @click="$emit('open', 'examples')">
       Examples
     </button>
-    <button type="button" @click="$emit('open', 'about')">
-      About
-    </button>
-    <button type="button" @click="$emit('open', 'settings')">
-      Settings
-    </button>
-    <button type="button" @click="$emit('generate')">
-      Generate
-    </button>
+    <button type="button" @click="$emit('open', 'about')">About</button>
+    <button type="button" @click="$emit('open', 'settings')">Settings</button>
+    <button type="button" @click="$emit('generate')">Generate</button>
   </nav>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 
 export default defineComponent({
-  name: 'Nav'
-})
+  name: "Nav",
+});
 </script>
 
 <style scoped lang="scss">

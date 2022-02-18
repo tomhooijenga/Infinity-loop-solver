@@ -1,11 +1,11 @@
-import { reactive } from 'vue'
+import { reactive } from "vue";
 
 const settings = reactive({
-  delay: 200
-})
+  delay: 200,
+});
 
-export function useSettings () {
+export function useSettings() {
   return {
-    settings
-  }
+    settings,
+  };
 }
