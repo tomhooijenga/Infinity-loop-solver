@@ -32,9 +32,9 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { Tile, TileConstructor } from "../../../../src/base/Tile";
-import { Cross } from "../../../../src/solver/square/tiles";
-import { FacingState } from "../../../../src/base/FacingState";
+import { Tile, TileConstructor } from "@lib/base/Tile";
+import { Cross } from "@lib/solver/square/tiles";
+import { FacingState } from "@lib/base/FacingState";
 
 type Point = { x: number; y: number };
 

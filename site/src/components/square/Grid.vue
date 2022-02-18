@@ -15,7 +15,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from "vue";
-import { Tile } from "../../../../src/base/Tile";
+import { Tile } from "@lib/base/Tile";
 import TileComponent from "@/components/square/Tile.vue";
 
 export default defineComponent({

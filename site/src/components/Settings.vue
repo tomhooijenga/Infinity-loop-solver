@@ -55,7 +55,7 @@
 <script lang="ts">
 import { reactive, defineComponent } from "vue";
 import { useBoard } from "@/use-board";
-import { None } from "../../../src/base/None";
+import { None } from "@lib/base/None";
 import { constructTiles } from "@/boards";
 import { useSettings } from "@/use-settings";
 

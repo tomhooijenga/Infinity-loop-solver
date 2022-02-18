@@ -43,10 +43,10 @@ import { BoardData, solve } from "@/boards";
 import HexGrid from "@/components/hex/Grid.vue";
 import SquareGrid from "@/components/square/Grid.vue";
 import { useBoard } from "@/use-board";
-import { Tile, TileConstructor } from "../../../src/base/Tile";
-import * as hex from "../../../src/solver/hex/tiles";
-import * as sq from "../../../src/solver/square/tiles";
-import { None } from "../../../src/base/None";
+import { Tile, TileConstructor } from "@lib/base/Tile";
+import * as hex from "@lib/solver/hex/tiles";
+import * as sq from "@lib/solver/square/tiles";
+import { None } from "@lib/base/None";
 import { useSettings } from "@/use-settings";
 
 const order: Record<BoardData["type"], TileConstructor[]> = {
@@ -94,7 +94,6 @@ export default defineComponent({
       while (isRunning.value) {
         board.tiles = [...board.tiles];
         const start = Date.now();
-        console.log(start);
         if (progress.next().done) {
           break;
         }

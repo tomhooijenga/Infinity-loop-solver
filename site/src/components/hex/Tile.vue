@@ -47,14 +47,14 @@
 
 <script lang="ts">
 import { computed, defineComponent } from "vue";
-import { Tile, TileConstructor } from "../../../../src/base/Tile";
+import { Tile, TileConstructor } from "@lib/base/Tile";
 import {
   Diamond,
   Square,
   Star,
   Triangle,
-} from "../../../../src/solver/hex/tiles";
-import { FacingState } from "../../../../src/base/FacingState";
+} from "@lib/solver/hex/tiles";
+import { FacingState } from "@lib/base/FacingState";
 
 type Arc = { start: number; end: number };
 type Point = { x: number; y: number };

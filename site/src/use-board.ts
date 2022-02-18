@@ -1,11 +1,11 @@
 import { shallowReactive } from "vue";
 import { BoardData, boards } from "@/boards";
-import { Tile } from "../../src/base/Tile";
-import { Generator } from "../../src/generator/generator";
-import { Grid as SquareGrid } from "../../src/solver/square/Grid";
-import { Grid as HexGrid } from "../../src/solver/hex/Grid";
-import * as sq from "../../src/solver/square/tiles";
-import * as hex from "../../src/solver/hex/tiles";
+import { Tile } from "@lib/base/Tile";
+import { Generator } from "@lib/generator/generator";
+import { Grid as SquareGrid } from "@lib/solver/square/Grid";
+import { Grid as HexGrid } from "@lib/solver/hex/Grid";
+import * as sq from "@lib/solver/square/tiles";
+import * as hex from "@lib/solver/hex/tiles";
 
 const board = shallowReactive<BoardData>({
   type: "square",

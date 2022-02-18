@@ -15,6 +15,9 @@
       "webpack-env"
     ],
     "paths": {
+      "@lib/*": [
+        "../lib/*"
+      ],
       "@/*": [
         "src/*"
       ]
@@ -30,8 +33,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "tests/**/*.ts",
-    "tests/**/*.tsx"
+    "../lib/**/*.ts"
   ],
   "exclude": [
     "node_modules"
