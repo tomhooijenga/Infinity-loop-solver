@@ -21,6 +21,8 @@
     <dd>Rotate each tile in a random direction.</dd>
     <dt>Solve</dt>
     <dd>Try to solve the board.</dd>
+    <dt>Stop</dt>
+    <dd>Stop a running solve</dd>
   </dl>
 
   <p>
