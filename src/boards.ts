@@ -220,7 +220,7 @@ function* solveSquare(tiles: Tile[]): Generator {
     new FitStep(),
   ]);
 
-  yield* solver.solveSteps(grid, [new ForceStep(10)]);
+  yield* solver.solveSteps(grid, [new ForceStep(13)]);
 }
 
 function* solveHex(tiles: Tile[]): Generator {

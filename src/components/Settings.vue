@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <span class="radio">
-      <div class="label">Type</div>
+      <div class="label">Tile shape</div>
 
       <label>
         Square
@@ -22,7 +22,7 @@
 
   <div class="row">
     <label class="input">
-      <span class="label">Delay</span>
+      <span class="label">Animation delay</span>
       <input
         type="number"
         min="0"

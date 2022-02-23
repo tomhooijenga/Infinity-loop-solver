@@ -2,6 +2,8 @@ import { SolveStep } from "../SolveStep";
 import { Tile } from "@/lib/base/Tile";
 import { Grid } from "@/lib/base/Grid";
 
+type TileKey = `${number}-${number}-${number}`;
+
 export class ForceStep extends SolveStep {
   /**
    * The neighbours are computed once, reducing calls from (sides^length) to (length).
@@ -27,10 +29,6 @@ export class ForceStep extends SolveStep {
 
     let solved = tiles.length - unsolved.length;
     for (const cluster of this.cluster(unsolved, grid)) {
-      if (cluster.length > this.maxClusterSize) {
-        continue;
-      }
-
       if (this.solveCluster(cluster, grid)) {
         solved += cluster.length;
         yield solved;
@@ -83,8 +81,14 @@ export class ForceStep extends SolveStep {
   }
 
   protected solveCluster(cluster: Tile[], grid: Grid): boolean {
-    const combinations = Math.pow(grid.directionUtil.numSides, cluster.length);
     const invalid = this.invalid(cluster, grid);
+    const combinations = this.combinations(cluster, grid, invalid);
+
+    if (
+      combinations > Math.pow(grid.directionUtil.numSides, this.maxClusterSize)
+    ) {
+      return false;
+    }
 
     for (let i = 0; i < combinations; i++) {
       const done = cluster.every((tile) => this.tileFits(grid, tile));
@@ -141,8 +145,8 @@ export class ForceStep extends SolveStep {
     return true;
   }
 
-  protected invalid(cluster: Tile[], grid: Grid): Set<string> {
-    const set = new Set<string>();
+  protected invalid(cluster: Tile[], grid: Grid): Set<TileKey> {
+    const set = new Set<TileKey>();
 
     for (const tile of cluster) {
       const neighbours = this.neighbours.get(tile);
@@ -177,7 +181,28 @@ export class ForceStep extends SolveStep {
     return set;
   }
 
-  protected makeTileKey(tile: Tile): string {
+  protected combinations(
+    cluster: Tile[],
+    grid: Grid,
+    invalid: Set<TileKey>
+  ): number {
+    const map = new Map<string, number>();
+
+    for (const key of invalid) {
+      const xy = key.replace(/-\d+$/, "");
+      const count = map.get(xy) ?? 0;
+
+      map.set(xy, count + 1);
+    }
+
+    const numSides = grid.directionUtil.numSides;
+    return [...map.values()]
+      .map((invalid) => numSides - invalid)
+      .concat(new Array(cluster.length - map.size).fill(numSides))
+      .reduce((total, valid) => total * valid);
+  }
+
+  protected makeTileKey(tile: Tile): TileKey {
     const { x, y, direction } = tile;
     return `${x}-${y}-${direction}`;
   }
