@@ -7,8 +7,8 @@
 
   <h1>What can I do?</h1>
   <p>
-    Tap on a tile to change it's type. Create and solve your own, or check it
-    out with one of the examples!
+    Tap on a tile to change its type. Create and solve your own, or check it out
+    with one of the examples!
   </p>
   <dl>
     <dt>Settings</dt>
