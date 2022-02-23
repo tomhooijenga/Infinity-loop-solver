@@ -8,8 +8,6 @@ export class ForceStep extends SolveStep {
    */
   protected neighbours = new Map<Tile, Tile[]>();
 
-  protected invalidDirections = new Map<Tile, Set<number>>();
-
   constructor(protected maxClusterSize: number) {
     super();
   }
@@ -86,6 +84,7 @@ export class ForceStep extends SolveStep {
 
   protected solveCluster(cluster: Tile[], grid: Grid): boolean {
     const combinations = Math.pow(grid.directionUtil.numSides, cluster.length);
+    const invalid = this.invalid(cluster, grid);
 
     for (let i = 0; i < combinations; i++) {
       const done = cluster.every((tile) => this.tileFits(grid, tile));
@@ -98,32 +97,29 @@ export class ForceStep extends SolveStep {
         return true;
       }
 
-      this.rotate(grid, cluster);
+      this.rotate(grid, cluster, invalid);
     }
 
     return false;
   }
 
-  protected rotate(grid: Grid, unsolved: Tile[]): void {
+  protected rotate(grid: Grid, unsolved: Tile[], invalid: Set<string>): void {
     for (let i = 0; i < unsolved.length; i++) {
       const tile = unsolved[i];
       const last = tile.direction;
-      const next = grid.directionUtil.rotate(last, 1);
 
-      tile.direction = next;
+      do {
+        tile.direction = grid.directionUtil.rotate(tile.direction, 1);
+      } while (invalid.has(this.makeTileKey(tile)));
 
       // If it didn't wrap back to 0, we can stop.
-      if (last < next) {
+      if (last < tile.direction) {
         break;
       }
     }
   }
 
   protected tileFits(grid: Grid, tile: Tile): boolean {
-    if (this.isDirectionInvalid(tile)) {
-      return false;
-    }
-
     const neighbours = this.neighbours.get(tile);
 
     if (!neighbours) {
@@ -138,10 +134,6 @@ export class ForceStep extends SolveStep {
         grid.getTileSide(tile, direction) !==
         grid.getTileSide(neighbour, opposite)
       ) {
-        if (neighbour.solved) {
-          this.markDirectionInvalid(tile);
-        }
-
         return false;
       }
     }
@@ -149,13 +141,44 @@ export class ForceStep extends SolveStep {
     return true;
   }
 
-  protected markDirectionInvalid(tile: Tile): void {
-    const directions = this.invalidDirections.get(tile) ?? new Set();
-    directions.add(tile.direction);
-    this.invalidDirections.set(tile, directions);
+  protected invalid(cluster: Tile[], grid: Grid): Set<string> {
+    const set = new Set<string>();
+
+    for (const tile of cluster) {
+      const neighbours = this.neighbours.get(tile);
+
+      if (!neighbours) {
+        throw new Error("Invalid tile");
+      }
+
+      for (const direction of grid.directionUtil) {
+        tile.direction = direction;
+
+        for (const direction of grid.directionUtil) {
+          const neighbour = neighbours[direction];
+
+          if (!neighbour.solved) {
+            continue;
+          }
+
+          const opposite = grid.directionUtil.opposite(direction);
+
+          if (
+            grid.getTileSide(tile, direction) !==
+            grid.getTileSide(neighbour, opposite)
+          ) {
+            set.add(this.makeTileKey(tile));
+            break;
+          }
+        }
+      }
+    }
+
+    return set;
   }
 
-  protected isDirectionInvalid(tile: Tile): boolean {
-    return this.invalidDirections.get(tile)?.has(tile.direction) ?? false;
+  protected makeTileKey(tile: Tile): string {
+    const { x, y, direction } = tile;
+    return `${x}-${y}-${direction}`;
   }
 }
