@@ -3,7 +3,7 @@ import { Tile, TileConstructor } from "@/lib/base/Tile";
 import { Grid } from "@/lib/base/Grid";
 import { FacingState } from "@/lib/base/FacingState";
 
-export class FitStep extends SolveStep {
+export class FitStep implements SolveStep {
   public solveTile(tile: Tile, grid: Grid): boolean {
     return this.findFit(grid, tile, this.getFacing(tile, grid));
   }

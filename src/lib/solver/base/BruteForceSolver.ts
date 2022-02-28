@@ -1,20 +1,16 @@
-import { SolveStep } from "../SolveStep";
-import { Tile } from "@/lib/base/Tile";
+import { Solver } from "@/lib/solver/base/Solver";
 import { Grid } from "@/lib/base/Grid";
+import { Tile } from "@/lib/base/Tile";
 
 type TileKey = `${number}-${number}-${number}`;
 
-export class ForceStep extends SolveStep {
-  /**
-   * The neighbours are computed once, reducing calls from (sides^length) to (length).
-   */
+export class BruteForceSolver implements Solver {
   protected neighbours = new Map<Tile, Tile[]>();
 
-  constructor(protected maxClusterSize: number) {
-    super();
-  }
+  constructor(protected grid: Grid, protected maxClusterSize: number) {}
 
-  public *solveGrid(tiles: Tile[], grid: Grid): Generator<number, boolean> {
+  *solve(): Generator<number, boolean> {
+    const tiles = this.grid.tiles;
     const unsolved = tiles.filter(({ solved }) => !solved);
 
     if (unsolved.length === 0) {
@@ -24,12 +20,12 @@ export class ForceStep extends SolveStep {
     unsolved.forEach((tile) => {
       tile.direction = 0;
 
-      this.neighbours.set(tile, grid.neighbours(tile));
+      this.neighbours.set(tile, this.grid.neighbours(tile));
     });
 
     let solved = tiles.length - unsolved.length;
-    for (const cluster of this.cluster(unsolved, grid)) {
-      if (this.solveCluster(cluster, grid)) {
+    for (const cluster of this.cluster(unsolved)) {
+      if (this.solveCluster(cluster)) {
         solved += cluster.length;
         yield solved;
       }
@@ -38,7 +34,7 @@ export class ForceStep extends SolveStep {
     return solved === tiles.length;
   }
 
-  protected cluster(unsolved: Tile[], grid: Grid): Tile[][] {
+  protected cluster(unsolved: Tile[]): Tile[][] {
     const seen = new Set<Tile>();
     const clusters: Tile[][] = [];
 
@@ -46,18 +42,13 @@ export class ForceStep extends SolveStep {
       if (seen.has(tile)) {
         continue;
       }
-      clusters.push(this.addToCluster(tile, grid, seen, []));
+      clusters.push(this.addToCluster(tile, seen, []));
     }
 
     return clusters;
   }
 
-  protected addToCluster(
-    tile: Tile,
-    grid: Grid,
-    seen: Set<Tile>,
-    cluster: Tile[]
-  ): Tile[] {
+  protected addToCluster(tile: Tile, seen: Set<Tile>, cluster: Tile[]): Tile[] {
     if (seen.has(tile)) {
       return cluster;
     }
@@ -73,25 +64,26 @@ export class ForceStep extends SolveStep {
 
     neighbours.forEach((neighbour) => {
       if (!neighbour.solved) {
-        this.addToCluster(neighbour, grid, seen, cluster);
+        this.addToCluster(neighbour, seen, cluster);
       }
     });
 
     return cluster;
   }
 
-  protected solveCluster(cluster: Tile[], grid: Grid): boolean {
-    const invalid = this.invalid(cluster, grid);
-    const combinations = this.combinations(cluster, grid, invalid);
+  protected solveCluster(cluster: Tile[]): boolean {
+    const invalid = this.invalid(cluster);
+    const combinations = this.combinations(cluster, invalid);
 
     if (
-      combinations > Math.pow(grid.directionUtil.numSides, this.maxClusterSize)
+      combinations >
+      Math.pow(this.grid.directionUtil.numSides, this.maxClusterSize)
     ) {
       return false;
     }
 
     for (let i = 0; i < combinations; i++) {
-      const done = cluster.every((tile) => this.tileFits(grid, tile));
+      const done = cluster.every((tile) => this.tileFits(tile));
 
       if (done) {
         cluster.forEach((tile) => {
@@ -101,19 +93,19 @@ export class ForceStep extends SolveStep {
         return true;
       }
 
-      this.rotate(grid, cluster, invalid);
+      this.rotate(cluster, invalid);
     }
 
     return false;
   }
 
-  protected rotate(grid: Grid, unsolved: Tile[], invalid: Set<string>): void {
+  protected rotate(unsolved: Tile[], invalid: Set<string>): void {
     for (let i = 0; i < unsolved.length; i++) {
       const tile = unsolved[i];
       const last = tile.direction;
 
       do {
-        tile.direction = grid.directionUtil.rotate(tile.direction, 1);
+        tile.direction = this.grid.directionUtil.rotate(tile.direction, 1);
       } while (invalid.has(this.makeTileKey(tile)));
 
       // If it didn't wrap back to 0, we can stop.
@@ -123,8 +115,9 @@ export class ForceStep extends SolveStep {
     }
   }
 
-  protected tileFits(grid: Grid, tile: Tile): boolean {
+  protected tileFits(tile: Tile): boolean {
     const neighbours = this.neighbours.get(tile);
+    const grid = this.grid;
 
     if (!neighbours) {
       throw new Error("Invalid tile");
@@ -145,8 +138,9 @@ export class ForceStep extends SolveStep {
     return true;
   }
 
-  protected invalid(cluster: Tile[], grid: Grid): Set<TileKey> {
+  protected invalid(cluster: Tile[]): Set<TileKey> {
     const set = new Set<TileKey>();
+    const grid = this.grid;
 
     for (const tile of cluster) {
       const neighbours = this.neighbours.get(tile);
@@ -181,11 +175,7 @@ export class ForceStep extends SolveStep {
     return set;
   }
 
-  protected combinations(
-    cluster: Tile[],
-    grid: Grid,
-    invalid: Set<TileKey>
-  ): number {
+  protected combinations(cluster: Tile[], invalid: Set<TileKey>): number {
     const map = new Map<string, number>();
 
     for (const key of invalid) {
@@ -195,7 +185,7 @@ export class ForceStep extends SolveStep {
       map.set(xy, count + 1);
     }
 
-    const numSides = grid.directionUtil.numSides;
+    const numSides = this.grid.directionUtil.numSides;
     return [...map.values()]
       .map((invalid) => numSides - invalid)
       .concat(new Array(cluster.length - map.size).fill(numSides))

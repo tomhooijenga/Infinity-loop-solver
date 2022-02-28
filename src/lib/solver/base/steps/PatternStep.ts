@@ -3,7 +3,7 @@ import { FacingState } from "@/lib/base/FacingState";
 import { Tile, TileConstructor } from "@/lib/base/Tile";
 import { Grid } from "@/lib/base/Grid";
 
-export class PatternStep extends SolveStep {
+export class PatternStep implements SolveStep {
   protected patterns: FacingState[][];
 
   /**
@@ -11,8 +11,6 @@ export class PatternStep extends SolveStep {
    * on a square grid can be solved while knowing only one open or closed side.
    */
   constructor(protected type: TileConstructor, patterns: boolean[][]) {
-    super();
-
     this.patterns = patterns.map((pattern) => {
       return pattern.map((open) =>
         open ? FacingState.Open : FacingState.Closed

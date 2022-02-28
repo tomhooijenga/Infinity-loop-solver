@@ -8,8 +8,9 @@ import { NoneStep } from "@/lib/solver/base/steps/NoneStep";
 import { AllSideStep } from "@/lib/solver/base/steps/AllSideStep";
 import { FitStep } from "@/lib/solver/base/steps/FitStep";
 import { PatternStep } from "@/lib/solver/base/steps/PatternStep";
-import { Solver } from "@/lib/solver/base/Solver";
-import { ForceStep } from "@/lib/solver/base/steps/ForceStep";
+import { StepSolver } from "@/lib/solver/base/StepSolver";
+import { BruteForceSolver } from "@/lib/solver/base/BruteForceSolver";
+import { SolverRun } from "@/lib/solver/base/SolverRun";
 
 export interface BoardData {
   type: "square" | "hex";
@@ -205,72 +206,74 @@ export const boards = {
   hard,
 };
 
-function* solveSquare(tiles: Tile[]): Generator {
+function solveSquare(tiles: Tile[]) {
   const grid = new SquareGrid(tiles);
-  const solver = new Solver();
 
-  solver.solve(grid, [new NoneStep(), new AllSideStep()]);
-
-  yield* solver.solveSteps(grid, [
-    new PatternStep(sq.Line, [[true], [false]]),
-    new PatternStep(sq.Turn, [
-      [true, false],
-      [false, true],
-    ]),
-    new FitStep(),
-  ]);
-
-  yield* solver.solveSteps(grid, [new ForceStep(13)]);
+  return new SolverRun()
+    .addSilent(new StepSolver(grid, [new NoneStep(), new AllSideStep()]))
+    .add(
+      new StepSolver(grid, [
+        new PatternStep(sq.Line, [[true], [false]]),
+        new PatternStep(sq.Turn, [
+          [true, false],
+          [false, true],
+        ]),
+        new FitStep(),
+      ]),
+      new BruteForceSolver(grid, 13)
+    )
+    .run();
 }
 
-function* solveHex(tiles: Tile[]): Generator {
+function solveHex(tiles: Tile[]) {
   const grid = new HexGrid(tiles);
-  const solver = new Solver();
 
-  solver.solve(grid, [new NoneStep(), new AllSideStep()]);
-
-  yield* solver.solveSteps(grid, [
-    new PatternStep(hex.Line, [[true], [false, false]]),
-    new PatternStep(hex.TurnS, [
-      [true, false],
-      [false, true],
-    ]),
-    new PatternStep(hex.TurnL, [
-      [false, false, false],
-      [true, false, false],
-      [false, false, true],
-    ]),
-    new PatternStep(hex.CheckL, [
-      [true, true],
-      [false, false],
-      [true, false, true],
-      [false, true, false],
-    ]),
-    new PatternStep(hex.CheckR, [
-      [true, true],
-      [false, false],
-      [true, false, true],
-      [false, true, false],
-    ]),
-    new PatternStep(hex.Junction, [
-      [true, false],
-      [false, true],
-    ]),
-    new PatternStep(hex.Knuckles, [
-      [true, false],
-      [false, true],
-    ]),
-    new PatternStep(hex.Triangle, [[true], [false]]),
-    new PatternStep(hex.Diamond, [
-      [true, true, true],
-      [true, false, true, true],
-      [true, true, false, true],
-    ]),
-    new PatternStep(hex.Square, [[false], [true, true]]),
-    new FitStep(),
-  ]);
-
-  yield* solver.solveSteps(grid, [new ForceStep(10)]);
+  return new SolverRun()
+    .addSilent(new StepSolver(grid, [new NoneStep(), new AllSideStep()]))
+    .add(
+      new StepSolver(grid, [
+        new PatternStep(hex.Line, [[true], [false, false]]),
+        new PatternStep(hex.TurnS, [
+          [true, false],
+          [false, true],
+        ]),
+        new PatternStep(hex.TurnL, [
+          [false, false, false],
+          [true, false, false],
+          [false, false, true],
+        ]),
+        new PatternStep(hex.CheckL, [
+          [true, true],
+          [false, false],
+          [true, false, true],
+          [false, true, false],
+        ]),
+        new PatternStep(hex.CheckR, [
+          [true, true],
+          [false, false],
+          [true, false, true],
+          [false, true, false],
+        ]),
+        new PatternStep(hex.Junction, [
+          [true, false],
+          [false, true],
+        ]),
+        new PatternStep(hex.Knuckles, [
+          [true, false],
+          [false, true],
+        ]),
+        new PatternStep(hex.Triangle, [[true], [false]]),
+        new PatternStep(hex.Diamond, [
+          [true, true, true],
+          [true, false, true, true],
+          [true, true, false, true],
+        ]),
+        new PatternStep(hex.Square, [[false], [true, true]]),
+        new FitStep(),
+      ]),
+      new BruteForceSolver(grid, 10)
+    )
+    .run();
 }
 
 export function solve(boardData: BoardData): Generator {
