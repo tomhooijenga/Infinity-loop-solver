@@ -7,20 +7,14 @@ type TileKey = `${number}-${number}-${number}`;
 export class BruteForceSolver extends ClusteredSolver {
   protected neighbours = new Map<Tile, Tile[]>();
 
-  constructor(protected grid: Grid, protected maxClusterSize: number) {
+  constructor(protected grid: Grid) {
     super(grid);
   }
 
-  protected solveCluster(cluster: Tile[]): boolean {
+  // eslint-disable-next-line require-yield
+  protected *solveCluster(cluster: Tile[]): Generator<void, boolean> {
     const invalid = this.invalid(cluster);
     const combinations = this.combinations(cluster, invalid);
-
-    if (
-      combinations >
-      Math.pow(this.grid.directionUtil.numSides, this.maxClusterSize)
-    ) {
-      return false;
-    }
 
     for (let i = 0; i < combinations; i++) {
       const done = cluster.every((tile) => this.tileFits(tile));

@@ -23,16 +23,29 @@ export abstract class ClusteredSolver implements Solver {
 
     let solved = tiles.length - unsolved.length;
     for (const cluster of this.cluster(unsolved)) {
-      if (this.solveCluster(cluster)) {
-        solved += cluster.length;
+      const clusterGen = this.solveCluster(cluster);
+
+      while (true) {
+        const { value: solvedCluster, done } = clusterGen.next();
+
+        if (done) {
+          if (solvedCluster) {
+            solved += cluster.length;
+          } else {
+            cluster.forEach((tile) => (tile.solved = false));
+          }
+
+          break;
+        }
+
+        yield solved;
       }
-      yield solved;
     }
 
     return solved === tiles.length;
   }
 
-  protected abstract solveCluster(cluster: Tile[]): boolean;
+  protected abstract solveCluster(cluster: Tile[]): Generator<void, boolean>;
 
   protected cluster(unsolved: Tile[]): Tile[][] {
     const seen = new Set<Tile>();

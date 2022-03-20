@@ -2,7 +2,7 @@ import { Tile } from "@/lib/base/Tile";
 import { ClusteredSolver } from "@/lib/solver/base/ClusteredSolver";
 
 export class BacktrackingSolver extends ClusteredSolver {
-  protected solveCluster(cluster: Tile[]): boolean {
+  protected *solveCluster(cluster: Tile[]): Generator<void, boolean> {
     const tile = cluster.find((tile) => !tile.solved);
 
     if (!tile) {
@@ -15,7 +15,9 @@ export class BacktrackingSolver extends ClusteredSolver {
       if (this.tileFits(tile)) {
         tile.solved = true;
 
-        if (this.solveCluster(cluster)) {
+        yield;
+
+        if (yield* this.solveCluster(cluster)) {
           return true;
         }
 

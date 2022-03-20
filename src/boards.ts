@@ -222,7 +222,7 @@ function solveSquare(tiles: Tile[]) {
         new FitStep(),
       ]),
       new BacktrackingSolver(grid),
-      new BruteForceSolver(grid, 13)
+      new BruteForceSolver(grid)
     )
     .run();
 }
@@ -274,7 +274,7 @@ function solveHex(tiles: Tile[]) {
         new FitStep(),
       ]),
       new BacktrackingSolver(grid),
-      new BruteForceSolver(grid, 10)
+      new BruteForceSolver(grid)
     )
     .run();
 }

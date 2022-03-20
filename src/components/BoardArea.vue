@@ -99,9 +99,7 @@ export default defineComponent({
         }
 
         const delay = settings.delay - (Date.now() - start);
-        if (delay > 0) {
-          await sleep(delay);
-        }
+        await sleep(delay);
       }
 
       isRunning.value = false;
