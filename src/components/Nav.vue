@@ -1,19 +1,25 @@
 <template>
   <nav>
-    <button type="button" class="examples" @click="$emit('open', 'examples')">
-      Examples
-    </button>
-    <button type="button" @click="$emit('open', 'about')">About</button>
-    <button type="button" @click="$emit('open', 'settings')">Settings</button>
+    <button type="button" @click="about = true">About</button>
     <button type="button" @click="$emit('generate')">Generate</button>
   </nav>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import Modal from "@/components/Modal.vue";
+import About from "@/components/About.vue";
 
 export default defineComponent({
   name: "Nav",
+
+  setup() {
+    const about = ref(false);
+
+    return {
+      about,
+    };
+  },
 });
 </script>
 

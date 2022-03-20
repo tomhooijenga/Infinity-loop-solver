@@ -1,59 +1,63 @@
 <template>
-  <div class="row">
-    <span class="radio">
-      <div class="label">Tile shape</div>
+  <h1 id="settings">Settings</h1>
 
-      <label>
-        Square
+  <section>
+    <div class="row">
+      <span class="radio">
+        <div class="label">Tile shape</div>
+
+        <label>
+          Square
+          <input
+            v-model="settings.type"
+            type="radio"
+            name="type"
+            value="square"
+          />
+        </label>
+
+        <label>
+          Hexagon
+          <input v-model="settings.type" type="radio" name="type" value="hex" />
+        </label>
+      </span>
+    </div>
+
+    <div class="row">
+      <label class="input">
+        <span class="label">Animation delay</span>
         <input
-          v-model="settings.type"
-          type="radio"
-          name="type"
-          value="square"
+          type="number"
+          min="0"
+          max="500"
+          step="50"
+          v-model.number="settings.delay"
         />
       </label>
+      <span class="input-times">ms</span>
+    </div>
 
-      <label>
-        Hexagon
-        <input v-model="settings.type" type="radio" name="type" value="hex" />
+    <div class="row">
+      <label class="input">
+        <span class="label">Width</span>
+        <input v-model.number="settings.width" min="0" type="number" />
       </label>
-    </span>
-  </div>
-
-  <div class="row">
-    <label class="input">
-      <span class="label">Animation delay</span>
-      <input
-        type="number"
-        min="0"
-        max="500"
-        step="50"
-        v-model.number="settings.delay"
-      />
-    </label>
-    <span class="input-times">ms</span>
-  </div>
-
-  <div class="row">
-    <label class="input">
-      <span class="label">Width</span>
-      <input v-model.number="settings.width" min="0" type="number" />
-    </label>
-    <span class="input-times">&times;</span>
-    <label class="input">
-      <span class="label">Height</span>
-      <input v-model.number="settings.height" min="0" type="number" />
-    </label>
-  </div>
+      <span class="input-times">&times;</span>
+      <label class="input">
+        <span class="label">Height</span>
+        <input v-model.number="settings.height" min="0" type="number" />
+      </label>
+    </div>
+  </section>
 
   <div class="buttons">
-    <button type="button" @click="$emit('close')">Cancel</button>
+    <button type="button" @click="reset">Reset</button>
     <button type="button" @click="apply">Apply</button>
   </div>
 </template>
 
 <script lang="ts">
-import { reactive, defineComponent } from "vue";
+import { reactive, defineComponent, watch } from "vue";
 import { useBoard } from "@/use-board";
 import { None } from "@/lib/base/None";
 import { constructTiles } from "@/boards";
@@ -64,9 +68,9 @@ export default defineComponent({
 
   emits: ["close"],
 
-  setup(_: unknown, { emit }) {
-    const { board } = useBoard();
-    const { settings } = useSettings();
+  setup() {
+    const { board, loadBoard, generateBoard } = useBoard();
+    const { settings, reset: settingsReset } = useSettings();
 
     const { type, width, height } = board;
 
@@ -76,6 +80,16 @@ export default defineComponent({
       height,
       delay: settings.delay,
     });
+
+    watch(board, () => {
+      Object.assign(newSettings, board);
+    });
+
+    function reset() {
+      loadBoard("heart");
+      settingsReset();
+      newSettings.delay = settings.delay;
+    }
 
     function apply() {
       const { type, width, height, delay } = newSettings;
@@ -90,11 +104,12 @@ export default defineComponent({
 
       settings.delay = delay;
 
-      emit("close");
+      generateBoard();
     }
 
     return {
       settings: newSettings,
+      reset,
       apply,
     };
   },
@@ -102,9 +117,19 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/theme";
+
+section {
+  background: $color-default;
+  padding: 1rem;
+}
+
 .row {
   display: flex;
-  margin-bottom: 2rem;
+
+  + .row {
+    margin-top: 2rem;
+  }
 }
 
 .label {
@@ -119,7 +144,7 @@ export default defineComponent({
     font-size: 2rem;
     padding: 0.5rem;
     color: whitesmoke;
-    border: solid #1d314b;
+    border: solid $color-default-darker;
     border-width: 0 0 2px 0;
     background: none;
     display: block;
@@ -135,7 +160,7 @@ export default defineComponent({
 
 .radio {
   > label {
-    background: #1d314b;
+    background: $color-default-darker;
     color: #f5f5f5;
     font-size: 1rem;
     padding: 0.5rem 1rem;
@@ -150,6 +175,7 @@ export default defineComponent({
 }
 
 .buttons {
+  margin-top: 1rem;
   text-align: center;
 }
 </style>

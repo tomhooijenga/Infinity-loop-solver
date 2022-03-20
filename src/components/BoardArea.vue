@@ -12,23 +12,34 @@
   <section class="buttons">
     <button
       type="button"
-      class="button"
+      class="button buttons-left"
       @click="scrambleBoard"
       :disabled="isRunning"
     >
-      Scramble
+      Generate
     </button>
+    <div class="buttons-middle">
+      <button
+        type="button"
+        class="button"
+        @click="scrambleBoard"
+        :disabled="isRunning"
+      >
+        Scramble
+      </button>
+      <button
+        type="button"
+        class="button"
+        @click="solveBoard"
+        :disabled="isRunning"
+      >
+        Solve
+      </button>
+    </div>
+
     <button
       type="button"
-      class="button"
-      @click="solveBoard"
-      :disabled="isRunning"
-    >
-      Solve
-    </button>
-    <button
-      type="button"
-      class="button"
+      class="button buttons-right"
       @click="isRunning = false"
       :disabled="!isRunning"
     >
@@ -155,5 +166,18 @@ export default defineComponent({
   grid-area: controls;
   padding: 1rem;
   text-align: center;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: flex-start;
+}
+
+.buttons-left {
+  grid-column: 1;
+}
+.buttons-middle {
+  grid-column: 2;
+}
+.buttons-right {
+  grid-column: 3;
 }
 </style>

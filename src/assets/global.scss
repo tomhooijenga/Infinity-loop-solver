@@ -11,14 +11,14 @@ body {
 #app {
   height: 100vh;
   display: grid;
-  grid-template-areas: "sidebar nav" "sidebar board" "sidebar controls";
+  grid-template-areas: "sidebar board" "sidebar controls";
   grid-template-columns: min(30vw, 400px) 1fr;
   grid-template-rows: auto 1fr auto;
 }
 
 @media (max-width: 768px) {
   #app {
-    grid-template-areas: "nav" "board" "controls";
+    grid-template-areas: "board" "controls";
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
   }
