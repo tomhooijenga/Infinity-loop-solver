@@ -9,6 +9,7 @@ import { AllSideStep } from "@/lib/solver/base/steps/AllSideStep";
 import { FitStep } from "@/lib/solver/base/steps/FitStep";
 import { PatternStep } from "@/lib/solver/base/steps/PatternStep";
 import { StepSolver } from "@/lib/solver/base/StepSolver";
+import { BacktrackingSolver } from "@/lib/solver/base/BacktrackingSolver";
 import { BruteForceSolver } from "@/lib/solver/base/BruteForceSolver";
 import { SolverRun } from "@/lib/solver/base/SolverRun";
 
@@ -220,6 +221,7 @@ function solveSquare(tiles: Tile[]) {
         ]),
         new FitStep(),
       ]),
+      new BacktrackingSolver(grid),
       new BruteForceSolver(grid, 13)
     )
     .run();
@@ -271,6 +273,7 @@ function solveHex(tiles: Tile[]) {
         new PatternStep(hex.Square, [[false], [true, true]]),
         new FitStep(),
       ]),
+      new BacktrackingSolver(grid),
       new BruteForceSolver(grid, 10)
     )
     .run();
