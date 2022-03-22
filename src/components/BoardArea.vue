@@ -13,7 +13,7 @@
     <button
       type="button"
       class="button buttons-left"
-      @click="scrambleBoard"
+      @click="generateBoard"
       :disabled="isRunning"
     >
       Generate
@@ -88,7 +88,7 @@ export default defineComponent({
   },
 
   setup() {
-    const { board, setTile, scrambleBoard } = useBoard();
+    const { board, setTile, generateBoard, scrambleBoard } = useBoard();
     const { settings } = useSettings();
 
     function sleep(ms: number): Promise<void> {
@@ -138,6 +138,7 @@ export default defineComponent({
 
     return {
       board,
+      generateBoard,
       scrambleBoard,
       solveBoard,
       nextTile,

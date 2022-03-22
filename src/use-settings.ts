@@ -1,11 +1,77 @@
 import { reactive } from "vue";
 
-const settings = reactive({
+export type HexSolverType =
+  | "none"
+  | "all"
+  | "line"
+  | "turnS"
+  | "turnL"
+  | "checkL"
+  | "checkR"
+  | "junction"
+  | "knuckles"
+  | "triangle"
+  | "diamond"
+  | "square"
+  | "generic"
+  | "backtracking"
+  | "bruteforce";
+
+export type SquareSolverType =
+  | "none"
+  | "all"
+  | "line"
+  | "turn"
+  | "generic"
+  | "backtracking"
+  | "bruteforce";
+
+type Settings = {
+  delay: number;
+
+  solvers: {
+    hex: Record<HexSolverType, boolean>;
+    square: Record<SquareSolverType, boolean>;
+  };
+};
+
+const state = (): Settings => ({
   delay: 200,
+
+  solvers: {
+    hex: {
+      none: true,
+      all: true,
+      line: true,
+      turnS: true,
+      turnL: true,
+      checkL: true,
+      checkR: true,
+      junction: true,
+      knuckles: true,
+      triangle: true,
+      diamond: true,
+      square: true,
+      generic: true,
+      backtracking: true,
+      bruteforce: false,
+    },
+    square: {
+      none: true,
+      all: true,
+      line: true,
+      turn: true,
+      generic: true,
+      backtracking: true,
+      bruteforce: false,
+    },
+  },
 });
 
+const settings = reactive<Settings>(state());
+
 function reset() {
-  settings.delay = 200;
+  Object.assign(settings, state());
 }
 
 export function useSettings() {

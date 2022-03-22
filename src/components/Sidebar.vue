@@ -9,6 +9,7 @@
     <div class="examples">
       <Examples />
       <Settings />
+      <Solvers />
     </div>
   </div>
 
@@ -23,10 +24,12 @@ import Settings from "@/components/Settings.vue";
 import Examples from "@/components/Examples.vue";
 import Modal from "@/components/Modal.vue";
 import About from "@/components/About.vue";
+import Solvers from "@/components/Solvers.vue";
 
 export default defineComponent({
   name: "Sidebar",
   components: {
+    Solvers,
     Examples,
     Settings,
     Modal,
