@@ -1,56 +1,28 @@
 <template>
-  <div class="board-area">
+  <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
     <component
       :is="`${board.type}-grid`"
       :tiles="board.tiles"
       :x="board.width"
       :y="board.height"
-      class="board"
+      class="w-full max-h-full m-auto"
       @change="nextTile"
     />
+    <section class="flex bg-dark p-2">
+      <Button :disabled="isRunning" @click="generateBoard"> Generate </Button>
+      <span class="mx-auto space-x-2">
+        <Button :disabled="isRunning" @click="scrambleBoard"> Scramble </Button>
+        <Button :disabled="isRunning" @click="solveBoard"> Solve </Button>
+      </span>
+      <Button :disabled="!isRunning" @click="isRunning = false"> Stop </Button>
+    </section>
   </div>
-  <section class="buttons">
-    <button
-      type="button"
-      class="button buttons-left"
-      :disabled="isRunning"
-      @click="generateBoard"
-    >
-      Generate
-    </button>
-    <div class="buttons-middle">
-      <button
-        type="button"
-        class="button"
-        :disabled="isRunning"
-        @click="scrambleBoard"
-      >
-        Scramble
-      </button>
-      <button
-        type="button"
-        class="button"
-        :disabled="isRunning"
-        @click="solveBoard"
-      >
-        Solve
-      </button>
-    </div>
-
-    <button
-      type="button"
-      class="button buttons-right"
-      :disabled="!isRunning"
-      @click="isRunning = false"
-    >
-      Stop
-    </button>
-  </section>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { BoardData, solve } from "@/boards";
+import Button from "@/components/Button.vue";
 import HexGrid from "@/components/hex/Grid.vue";
 import SquareGrid from "@/components/square/Grid.vue";
 import { useBoard } from "@/use-board";
@@ -83,6 +55,7 @@ export default defineComponent({
   name: "BoardArea",
 
   components: {
+    Button,
     HexGrid,
     SquareGrid,
   },
@@ -147,38 +120,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped lang="scss">
-@import "@/assets/theme";
-
-.board-area {
-  background: $board-bg;
-  grid-area: board;
-  min-height: 0;
-}
-
-.board {
-  max-width: 100%;
-  max-height: 100%;
-  margin: 0 auto;
-}
-
-.buttons {
-  grid-area: controls;
-  padding: 1rem;
-  text-align: center;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: flex-start;
-}
-
-.buttons-left {
-  grid-column: 1;
-}
-.buttons-middle {
-  grid-column: 2;
-}
-.buttons-right {
-  grid-column: 3;
-}
-</style>

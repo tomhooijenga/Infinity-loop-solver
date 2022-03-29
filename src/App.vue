@@ -1,7 +1,7 @@
 <template>
   <sidebar />
-  <logs />
   <board-area />
+  <logs />
 </template>
 
 <script lang="ts">
@@ -35,23 +35,6 @@ export default defineComponent({
 @tailwind components;
 @tailwind utilities;
 
-//
-//#app {
-//  height: 100vh;
-//  display: grid;
-//  grid-template-areas: "sidebar board" "sidebar controls";
-//  grid-template-columns: min(30vw, 400px) 1fr;
-//  grid-template-rows: auto 1fr auto;
-//}
-//
-//@media (max-width: 768px) {
-//  #app {
-//    grid-template-areas: "board" "controls";
-//    grid-template-columns: 1fr;
-//    grid-template-rows: auto 1fr auto;
-//  }
-//}
-//
 //h1,
 //h2,
 //h3 {
@@ -60,31 +43,5 @@ export default defineComponent({
 //
 //a {
 //  color: whitesmoke;
-//}
-//
-//button {
-//  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-//  Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-//  flex: 1;
-//  background-color: $button-bg;
-//  color: $button-color;
-//  font-size: 1rem;
-//  border: none;
-//  padding: 0.5rem 1rem;
-//  font-weight: lighter;
-//  border-radius: 20rem;
-//
-//  &:hover {
-//    background-color: $button-hover-bg;
-//  }
-//
-//  &[disabled] {
-//    background-color: transparent;
-//    cursor: not-allowed;
-//  }
-//
-//  + button {
-//    margin-left: 0.5rem;
-//  }
 //}
 </style>
