@@ -1,5 +1,5 @@
 <template>
-  <h1 id="settings">Settings</h1>
+  <h1 id="settings" class="pt-14 -mt-8">Settings</h1>
 
   <section>
     <div class="row">

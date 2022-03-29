@@ -35,13 +35,15 @@ export default defineComponent({
 @tailwind components;
 @tailwind utilities;
 
-//h1,
-//h2,
-//h3 {
-//  font-weight: 100;
-//}
-//
-//a {
-//  color: whitesmoke;
-//}
+h1 {
+  @apply text-2xl mt-6 mb-4;
+}
+
+p {
+  @apply mb-4;
+}
+
+a {
+  @apply underline;
+}
 </style>

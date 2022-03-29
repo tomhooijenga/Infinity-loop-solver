@@ -1,5 +1,5 @@
 <template>
-  <h1 id="examples">Examples</h1>
+  <h1 id="examples" class="pt-14 -mt-14">Examples</h1>
   <component
     :is="`${boardData.type}-board`"
     v-for="[name, boardData] of boards"
@@ -8,7 +8,7 @@
     :tiles="boardData.tiles"
     :x="boardData.width"
     :y="boardData.height"
-    class="board"
+    class="bg-light first-of-type:mt-0 mt-4"
     @click="loadBoard(name)"
   />
 </template>
@@ -42,15 +42,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped lang="scss">
-@import "@/assets/theme";
-
-.board {
-  background: $board-bg;
-
-  + .board {
-    margin-top: 1em;
-  }
-}
-</style>
