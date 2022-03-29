@@ -1,4 +1,17 @@
-export default {
+import { HexSolverType, SquareSolverType } from "@/use-settings";
+
+type SolverDescription = {
+  hex: SolverDescriptionGroup<HexSolverType>[]
+  square: SolverDescriptionGroup<SquareSolverType>[]
+}
+
+type SolverDescriptionGroup<T extends string> = {
+  name: string;
+  description: string;
+  solvers: Partial<Record<T, string>>
+}
+
+const descriptions: SolverDescription = {
   hex: [
     {
       name: "Instant solvers",
@@ -78,3 +91,5 @@ export default {
     },
   ],
 };
+
+export default descriptions;

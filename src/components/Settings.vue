@@ -27,11 +27,11 @@
       <label class="input">
         <span class="label">Animation delay</span>
         <input
+          v-model.number="settings.delay"
           type="number"
           min="0"
           max="500"
           step="50"
-          v-model.number="settings.delay"
         />
       </label>
       <span class="input-times">ms</span>

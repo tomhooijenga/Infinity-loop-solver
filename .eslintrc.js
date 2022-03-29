@@ -6,10 +6,10 @@ module.exports = {
   },
 
   extends: [
-    "plugin:vue/vue3-essential",
-    "@vue/typescript/recommended",
     "eslint:recommended",
-    "plugin:prettier/recommended",
+    "@vue/typescript/recommended",
+    "plugin:vue/vue3-recommended",
+    "prettier",
   ],
 
   parserOptions: {

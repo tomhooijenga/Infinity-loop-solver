@@ -1,11 +1,11 @@
 <template>
   <h1>Solvers</h1>
   <section>
-    <template v-for="group of solvers" :key="group.title">
+    <template v-for="group of typeDescriptions" :key="group.name">
       <h2>{{ group.name }}</h2>
       <p>{{ group.description }}</p>
       <label v-for="(label, name) of group.solvers" :key="name">
-        <input type="checkbox" v-model="settings.solvers[board.type][name]" />
+        <input v-model="solverSettings[name]" type="checkbox" />
         {{ label }}
       </label>
     </template>
@@ -21,12 +21,14 @@ import { useSettings } from "@/use-settings";
 export default defineComponent({
   setup() {
     const { board } = useBoard();
-    const solvers = computed(() => descriptions[board.type]);
+    const typeDescriptions = computed(() => descriptions[board.type]);
+
     const { settings } = useSettings();
+    const solverSettings = computed<Record<string, boolean>>(() => settings.solvers[board.type]);
 
     return {
-      solvers,
-      settings,
+      typeDescriptions,
+      solverSettings,
       board,
     };
   },

@@ -5,16 +5,16 @@
       :tiles="board.tiles"
       :x="board.width"
       :y="board.height"
-      @change="nextTile"
       class="board"
+      @change="nextTile"
     />
   </div>
   <section class="buttons">
     <button
       type="button"
       class="button buttons-left"
-      @click="generateBoard"
       :disabled="isRunning"
+      @click="generateBoard"
     >
       Generate
     </button>
@@ -22,16 +22,16 @@
       <button
         type="button"
         class="button"
-        @click="scrambleBoard"
         :disabled="isRunning"
+        @click="scrambleBoard"
       >
         Scramble
       </button>
       <button
         type="button"
         class="button"
-        @click="solveBoard"
         :disabled="isRunning"
+        @click="solveBoard"
       >
         Solve
       </button>
@@ -40,8 +40,8 @@
     <button
       type="button"
       class="button buttons-right"
-      @click="isRunning = false"
       :disabled="!isRunning"
+      @click="isRunning = false"
     >
       Stop
     </button>

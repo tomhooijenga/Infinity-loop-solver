@@ -13,7 +13,7 @@
       <path d="M 0 -50 L 0 50" class="line" />
     </template>
 
-    <template v-else v-for="arc of arcs" :key="arc">
+    <template v-for="arc of arcs" v-else :key="arc">
       <circle
         r="50"
         :cx="corners[arc.start].x"
