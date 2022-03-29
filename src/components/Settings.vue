@@ -1,29 +1,38 @@
 <template>
   <h1 id="settings" class="pt-14 -mt-8">Settings</h1>
 
-  <section>
-    <div class="row">
+  <section class="bg-light p-4 space-y-8">
+    <div class="flex">
       <span class="radio">
         <div class="label">Tile shape</div>
 
         <label>
-          Square
           <input
-            v-model="settings.type"
+            v-model="board.type"
             type="radio"
             name="type"
             value="square"
+            class="mr-1"
+            @change="update"
           />
+          Square
         </label>
 
         <label>
+          <input
+            v-model="board.type"
+            type="radio"
+            name="type"
+            value="hex"
+            class="mr-1"
+            @change="update"
+          />
           Hexagon
-          <input v-model="settings.type" type="radio" name="type" value="hex" />
         </label>
       </span>
     </div>
 
-    <div class="row">
+    <div class="flex">
       <label class="input">
         <span class="label">Animation delay</span>
         <input
@@ -34,30 +43,35 @@
           step="50"
         />
       </label>
-      <span class="input-times">ms</span>
+      <span class="mt-auto mb-2 ml-4 text-neutral/70">ms</span>
     </div>
 
-    <div class="row">
+    <div class="flex">
       <label class="input">
         <span class="label">Width</span>
-        <input v-model.number="settings.width" min="0" type="number" />
+        <input
+          v-model.number="board.width"
+          min="1"
+          type="number"
+          @change="update"
+        />
       </label>
-      <span class="input-times">&times;</span>
+      <span class="mt-auto mb-2 mx-4 text-neutral/70">&times;</span>
       <label class="input">
         <span class="label">Height</span>
-        <input v-model.number="settings.height" min="0" type="number" />
+        <input
+          v-model.number="board.height"
+          min="1"
+          type="number"
+          @change="update"
+        />
       </label>
     </div>
   </section>
-
-  <div class="buttons">
-    <button type="button" @click="reset">Reset</button>
-    <button type="button" @click="apply">Apply</button>
-  </div>
 </template>
 
 <script lang="ts">
-import { reactive, defineComponent, watch } from "vue";
+import { defineComponent } from "vue";
 import { useBoard } from "@/use-board";
 import { None } from "@/lib/base/None";
 import { constructTiles } from "@/boards";
@@ -69,113 +83,44 @@ export default defineComponent({
   emits: ["close"],
 
   setup() {
-    const { board, loadBoard, generateBoard } = useBoard();
-    const { settings, reset: settingsReset } = useSettings();
+    const { board, generateBoard } = useBoard();
+    const { settings } = useSettings();
 
-    const { type, width, height } = board;
-
-    const newSettings = reactive({
-      type,
-      width,
-      height,
-      delay: settings.delay,
-    });
-
-    watch(board, () => {
-      Object.assign(newSettings, board);
-    });
-
-    function reset() {
-      loadBoard("heart");
-      settingsReset();
-      newSettings.delay = settings.delay;
-    }
-
-    function apply() {
-      const { type, width, height, delay } = newSettings;
-      if (
-        type !== board.type ||
-        width !== board.width ||
-        height !== board.height
-      ) {
-        const tiles = new Array(width * height).fill(None);
-        Object.assign(board, constructTiles(type, width, tiles));
-      }
-
-      settings.delay = delay;
+    function update() {
+      const { type, width, height } = board;
+      const tiles = new Array(width * height).fill(None);
+      Object.assign(board, constructTiles(type, width, tiles));
 
       generateBoard();
     }
 
     return {
-      settings: newSettings,
-      reset,
-      apply,
+      board,
+      settings,
+      update,
     };
   },
 });
 </script>
 
-<style lang="scss" scoped>
-@import "@/assets/theme";
-
-section {
-  background: $color-default;
-  padding: 1rem;
-}
-
-.row {
-  display: flex;
-
-  + .row {
-    margin-top: 2rem;
-  }
-}
-
+<style scoped>
 .label {
-  font-size: 0.8rem;
-  color: #cccccc;
-  text-align: left;
-  padding: 0.5rem;
+  @apply text-sm text-neutral/70;
 }
 
-.input {
-  > input {
-    font-size: 2rem;
-    padding: 0.5rem;
-    color: whitesmoke;
-    border: solid $color-default-darker;
-    border-width: 0 0 2px 0;
-    background: none;
-    display: block;
-    width: 100%;
-    margin-bottom: 0.5rem;
-    box-sizing: border-box;
-  }
+.input > input {
+  @apply text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full;
 }
 
-.input-times {
-  margin: auto 1rem;
+.radio > .label {
+  @apply mb-2;
 }
 
-.radio {
-  > label {
-    background: $color-default-darker;
-    color: #f5f5f5;
-    font-size: 1rem;
-    padding: 0.5rem 1rem;
-    margin-top: 0.5rem;
-    border-radius: 20rem;
-    display: inline-block;
-  }
-
-  > label + label {
-    margin-left: 1rem;
-  }
+.radio > label {
+  @apply inline-flex bg-dark py-2 px-4 rounded-full items-center;
 }
 
-.buttons {
-  margin-top: 1rem;
-  text-align: center;
+.radio > label + label {
+  @apply ml-4;
 }
 </style>

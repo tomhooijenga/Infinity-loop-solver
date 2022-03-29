@@ -36,11 +36,15 @@ export default defineComponent({
 @tailwind utilities;
 
 h1 {
-  @apply text-2xl mt-6 mb-4;
+  @apply text-3xl mt-6 mb-4;
+}
+
+h2 {
+  @apply text-2xl mt-6 mb-2;
 }
 
 p {
-  @apply mb-4;
+  @apply mb-2;
 }
 
 a {
