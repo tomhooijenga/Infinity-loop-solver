@@ -43,6 +43,8 @@ export default defineComponent({
     },
   },
 
+  emits: ["change"],
+
   setup(props) {
     const tilesStyle = computed(() => {
       const width = 1.1547;

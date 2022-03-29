@@ -40,6 +40,8 @@ export default defineComponent({
     },
   },
 
+  emits: ["change"],
+
   setup(props) {
     const tilesStyle = computed(() => {
       return {

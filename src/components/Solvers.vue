@@ -24,7 +24,9 @@ export default defineComponent({
     const typeDescriptions = computed(() => descriptions[board.type]);
 
     const { settings } = useSettings();
-    const solverSettings = computed<Record<string, boolean>>(() => settings.solvers[board.type]);
+    const solverSettings = computed<Record<string, boolean>>(
+      () => settings.solvers[board.type]
+    );
 
     return {
       typeDescriptions,
