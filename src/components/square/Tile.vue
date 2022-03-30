@@ -1,16 +1,16 @@
 <template>
-  <svg viewBox="-50 -50 100 100">
+  <svg viewBox="-50 -50 100 100" class="w-full h-full">
     <template v-if="tile.type === 'None'">
-      <circle r="2" class="none" />
+      <circle r="2" class="fill-red" />
     </template>
 
     <template v-else-if="tile.type === 'End'">
-      <circle r="25" class="line" />
-      <path d="M 0 -25 L 0 -50" class="line" />
+      <circle r="25" class="fill-transparent stroke-red stroke-[6px]" />
+      <path d="M 0 -25 L 0 -50" class="fill-transparent stroke-red stroke-[6px]" />
     </template>
 
     <template v-else-if="tile.type === 'Line'">
-      <path d="M 0 -50 L 0 50" class="line" />
+      <path d="M 0 -50 L 0 50" class="fill-transparent stroke-red stroke-[6px]" />
     </template>
 
     <template v-for="arc of arcs" v-else :key="arc">
@@ -18,13 +18,13 @@
         r="50"
         :cx="corners[arc.start].x"
         :cy="corners[arc.start].y"
-        class="line-background"
+        class="fill-transparent stroke-light stroke-[10px]"
       />
       <circle
         r="50"
         :cx="corners[arc.start].x"
         :cy="corners[arc.start].y"
-        class="line"
+        class="fill-transparent stroke-red stroke-[6px]"
       />
     </template>
   </svg>
@@ -96,28 +96,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped lang="scss">
-@import "@/assets/theme";
-
-svg {
-  height: 100%;
-  width: 100%;
-}
-
-.none {
-  fill: $line-bg;
-}
-
-.line-background {
-  fill: none;
-  stroke: $line-shadow;
-  stroke-width: 10;
-}
-
-.line {
-  fill: none;
-  stroke: $line-bg;
-  stroke-width: 6;
-}
-</style>

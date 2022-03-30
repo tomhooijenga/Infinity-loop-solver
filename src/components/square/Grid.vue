@@ -1,12 +1,15 @@
 <template>
-  <section :style="tilesStyle" class="tiles">
+  <section :style="tilesStyle" class="grid overflow-hidden">
     <Tile
       v-for="(tile, index) of tiles"
       :key="tile.type + index"
       :style="`transform: rotate(${tile.direction * 90}deg)`"
       :tile="tile"
-      class="tile"
-      :class="{ unsolved: !tile.solved }"
+      class="transition hover:bg-dark/50"
+      :class="{
+        'bg-[radial-gradient(var(--tw-gradient-stops))] from-red/30 to-light':
+          !tile.solved,
+      }"
       @click="$emit('change', index, tile, 1)"
       @contextmenu.prevent="$emit('change', index, tile, -1)"
     />
@@ -57,25 +60,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style lang="scss" scoped>
-@import "@/assets/theme";
-
-.tiles {
-  display: grid;
-  overflow: hidden;
-}
-
-.tile {
-  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  will-change: transform, background-color;
-
-  &.unsolved {
-    background: $tile-unsolved-bg;
-  }
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.2);
-  }
-}
-</style>

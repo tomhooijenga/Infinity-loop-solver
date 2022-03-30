@@ -1,14 +1,18 @@
 <template>
-  <section :style="tilesStyle" class="tiles">
+  <section :style="tilesStyle" class="grid overflow-hidden">
     <div
       v-for="(tile, index) of tiles"
       :key="tile.type + index"
-      :class="{ unsolved: !tile.solved }"
+      :class="{
+        'bg-[radial-gradient(var(--tw-gradient-stops))] from-red/30 to-light':
+          !tile.solved,
+      }"
       :style="tileStyle(tile)"
       class="tile"
     >
       <Tile
         :tile="tile"
+        class="absolute w-full h-full"
         @click="$emit('change', index, tile, 1)"
         @contextmenu.prevent="$emit('change', index, tile, -1)"
       />
@@ -83,35 +87,10 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" scoped>
-@import "@/assets/theme";
-
-.tiles {
-  display: grid;
-  overflow: hidden;
-}
-
+<style scoped>
 .tile {
-  position: relative;
-  transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out;
-  //aspect-ratio: 1.1547 / 1;
-  height: 0;
-  padding-bottom: 86.6%;
+  @apply relative h-0 pb-[86.6%] transition hover:bg-dark/50;
   clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
   will-change: transform, background-color;
-
-  &.unsolved {
-    background: $tile-unsolved-bg;
-  }
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.2);
-  }
-
-  > * {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-  }
 }
 </style>

@@ -1,12 +1,12 @@
 <template>
   <svg viewBox="-60 -52 120 104">
     <template v-if="tile.type === 'None'">
-      <circle r="2" class="none" />
+      <circle r="2" class="fill-red" />
     </template>
 
     <template v-else-if="tile.type === 'End'">
-      <circle r="15" class="line" />
-      <path d="M 0 -15 L 0 -52" class="line" />
+      <circle r="15" class="fill-transparent stroke-red stroke-[6px]" />
+      <path d="M 0 -15 L 0 -52" class="fill-transparent stroke-red stroke-[6px]" />
     </template>
 
     <template v-else-if="tile.type === 'Star'">
@@ -16,7 +16,7 @@
         :cx="corners[arcs[(i - 1) * 2].start].x"
         :cy="corners[arcs[(i - 1) * 2].start].y"
         r="30.02"
-        class="line"
+        class="fill-transparent stroke-red stroke-[6px]"
       />
     </template>
 
@@ -28,18 +28,18 @@
           :cx="corners[arc.start].x"
           :cy="corners[arc.start].y"
           r="30.02"
-          class="line-background"
+          class="fill-transparent stroke-light stroke-[10px]"
         />
         <circle
           :cx="corners[arc.start].x"
           :cy="corners[arc.start].y"
           r="30.02"
-          class="line"
+          class="fill-transparent stroke-red stroke-[6px]"
         />
       </template>
       <template v-else>
-        <path :d="path(arc)" class="line-background" />
-        <path :d="path(arc)" class="line" />
+        <path :d="path(arc)" class="fill-transparent stroke-light stroke-[10px]" />
+        <path :d="path(arc)" class="fill-transparent stroke-red stroke-[6px]" />
       </template>
     </template>
   </svg>
@@ -121,28 +121,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped lang="scss">
-@import "@/assets/theme";
-
-svg {
-  height: 100%;
-  width: 100%;
-}
-
-.none {
-  fill: $line-bg;
-}
-
-.line-background {
-  fill: none;
-  stroke: $line-shadow;
-  stroke-width: 10;
-}
-
-.line {
-  fill: none;
-  stroke: $line-bg;
-  stroke-width: 6;
-}
-</style>
