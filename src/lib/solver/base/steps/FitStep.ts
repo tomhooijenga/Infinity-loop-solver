@@ -4,6 +4,9 @@ import { Grid } from "@/lib/base/Grid";
 import { FacingState } from "@/lib/base/FacingState";
 
 export class FitStep implements SolveStep {
+
+  public name = "Fit (Generic)";
+
   public solveTile(tile: Tile, grid: Grid): boolean {
     return this.findFit(grid, tile, this.getFacing(tile, grid));
   }

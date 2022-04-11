@@ -31,6 +31,7 @@ import * as hex from "@/lib/solver/hex/tiles";
 import * as sq from "@/lib/solver/square/tiles";
 import { None } from "@/lib/base/None";
 import { useSettings } from "@/use-settings";
+import { useLogs } from "@/use-logs";
 
 const order: Record<BoardData["type"], TileConstructor[]> = {
   hex: [
@@ -63,6 +64,7 @@ export default defineComponent({
   setup() {
     const { board, setTile, generateBoard, scrambleBoard } = useBoard();
     const { settings } = useSettings();
+    const { startGroup, log } = useLogs();
 
     function sleep(ms: number): Promise<void> {
       return new Promise((resolve) => setTimeout(resolve, ms));
@@ -71,16 +73,20 @@ export default defineComponent({
     const isRunning = ref(false);
 
     async function solveBoard() {
+      startGroup();
       const progress = solve(board);
 
       isRunning.value = true;
 
       while (isRunning.value) {
-        board.tiles = [...board.tiles];
         const start = Date.now();
-        if (progress.next().done) {
+        const { done, value } = progress.next();
+
+        if (done) {
           break;
         }
+
+        log(value);
 
         const delay = settings.delay - (Date.now() - start);
         await sleep(delay);

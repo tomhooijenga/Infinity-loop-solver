@@ -1,3 +1,7 @@
+import { SolveProgress } from "@/lib/solver/base/SolveProgress";
+
 export interface Solver {
-  solve(): Generator<number, boolean>;
+  name: string;
+
+  solve(): Generator<SolveProgress, boolean>;
 }

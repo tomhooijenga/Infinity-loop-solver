@@ -3,8 +3,8 @@ import { Grid as SquareGrid } from "@/lib/solver/square/Grid";
 import { HexSolverType, SquareSolverType, useSettings } from "@/use-settings";
 import { SolverRun } from "@/lib/solver/base/SolverRun";
 import { StepSolver } from "@/lib/solver/base/StepSolver";
-import { NoneStep } from "@/lib/solver/base/steps/NoneStep";
-import { AllSideStep } from "@/lib/solver/base/steps/AllSideStep";
+import { NoneSolver } from "@/lib/solver/base/NoneSolver";
+import { AllSideSolver } from "@/lib/solver/base/AllSideSolver";
 import { SolveStep } from "@/lib/solver/base/SolveStep";
 import { PatternStep } from "@/lib/solver/base/steps/PatternStep";
 import * as hex from "@/lib/solver/hex/tiles";
@@ -63,13 +63,12 @@ export function hexSolver(grid: HexGrid): SolverRun {
 
   const run = new SolverRun();
 
-  const silentSteps: SolveStep[] = [
-    solvers.none && new NoneStep(),
-    solvers.all && new AllSideStep(),
-  ].filter((step): step is SolveStep => !!step);
+  if (solvers.none) {
+    run.add(new NoneSolver(grid));
+  }
 
-  if (silentSteps.length) {
-    run.addSilent(new StepSolver(grid, silentSteps));
+  if (solvers.all) {
+    run.add(new AllSideSolver(grid));
   }
 
   const stepSolver: SolveStep[] = Object.entries(hexSteps)
@@ -109,13 +108,12 @@ export function squareSolver(grid: SquareGrid): SolverRun {
 
   const run = new SolverRun();
 
-  const silentSteps: SolveStep[] = [
-    solvers.none && new NoneStep(),
-    solvers.all && new AllSideStep(),
-  ].filter((step): step is SolveStep => !!step);
+  if (solvers.none) {
+    run.add(new NoneSolver(grid));
+  }
 
-  if (silentSteps.length) {
-    run.addSilent(new StepSolver(grid, silentSteps));
+  if (solvers.all) {
+    run.add(new AllSideSolver(grid));
   }
 
   const stepSolver: SolveStep[] = Object.entries(squareSteps)

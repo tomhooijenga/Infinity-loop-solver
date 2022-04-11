@@ -1,13 +1,16 @@
 import { Solver } from "@/lib/solver/base/Solver";
 import { Tile } from "@/lib/base/Tile";
 import { Grid } from "@/lib/base/Grid";
+import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 
 export abstract class ClusteredSolver implements Solver {
+  abstract name: string;
+
   protected neighbours = new Map<Tile, Tile[]>();
 
   constructor(protected grid: Grid) {}
 
-  *solve(): Generator<number, boolean> {
+  *solve(): Generator<SolveProgress, boolean> {
     const tiles = this.grid.tiles;
     const unsolved = tiles.filter(({ solved }) => !solved);
 
@@ -31,14 +34,17 @@ export abstract class ClusteredSolver implements Solver {
         if (done) {
           if (solvedCluster) {
             solved += cluster.length;
+
+            yield {
+              solver: this.name,
+              tiles: cluster,
+            };
           } else {
             cluster.forEach((tile) => (tile.solved = false));
           }
 
           break;
         }
-
-        yield solved;
       }
     }
 

@@ -1,4 +1,4 @@
-import { shallowReactive } from "vue";
+import { reactive, ref, shallowReactive } from "vue";
 import { BoardData, boards } from "@/boards";
 import { Tile } from "@/lib/base/Tile";
 import { Generator } from "@/lib/generator/generator";
@@ -7,21 +7,21 @@ import { Grid as HexGrid } from "@/lib/solver/hex/Grid";
 import * as sq from "@/lib/solver/square/tiles";
 import * as hex from "@/lib/solver/hex/tiles";
 
-const board = shallowReactive<BoardData>({
+const board = reactive<BoardData>({
   type: "square",
   tiles: [],
   width: 0,
   height: 0,
 });
 
+const highlighted = reactive(new Set<Tile>());
+
 const loadBoard = (name: keyof typeof boards) => {
   Object.assign(board, boards[name]());
 };
 
 function setTile(index: number, tile: Tile) {
-  const { tiles } = board;
-  tiles[index] = tile;
-  board.tiles = [...tiles];
+  board.tiles[index] = tile;
 }
 
 function makeGrid() {
@@ -48,8 +48,15 @@ function scrambleBoard() {
   board.tiles.forEach((tile) => {
     tile.direction = grid.directionUtil.random();
   });
+}
 
-  board.tiles = [...board.tiles];
+function highlight(tiles: Tile[]) {
+  highlighted.clear();
+  tiles.forEach((tile) => highlighted.add(tile));
+}
+
+function isHighlighted(tile: Tile): boolean {
+  return highlighted.has(tile);
 }
 
 export function useBoard() {
@@ -59,5 +66,7 @@ export function useBoard() {
     generateBoard,
     scrambleBoard,
     setTile,
+    highlight,
+    isHighlighted,
   };
 }

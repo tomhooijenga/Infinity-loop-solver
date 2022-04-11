@@ -5,6 +5,7 @@ import { Tile, TileConstructor } from "@/lib/base/Tile";
 import { Grid as SquareGrid } from "@/lib/solver/square/Grid";
 import { Grid as HexGrid } from "@/lib/solver/hex/Grid";
 import { hexSolver, squareSolver } from "@/solvers";
+import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 
 export interface BoardData {
   type: "square" | "hex";
@@ -212,7 +213,7 @@ function solveHex(tiles: Tile[]) {
   return hexSolver(grid).run();
 }
 
-export function solve(boardData: BoardData): Generator {
+export function solve(boardData: BoardData): Generator<SolveProgress, boolean> {
   boardData.tiles.forEach((tile) => {
     tile.solved = false;
   });

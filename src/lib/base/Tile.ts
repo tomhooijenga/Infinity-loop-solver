@@ -19,6 +19,8 @@ export class Tile {
     return this.constructor.name;
   }
 
+  static TYPE = this.name;
+
   static SIDES: ReadonlyArray<FacingState> = [];
 
   constructor(params: TileParams = {}) {
@@ -33,6 +35,8 @@ export class Tile {
       static SIDES = sides.map((side) =>
         side ? FacingState.Open : FacingState.Closed
       );
+
+      static TYPE = type;
 
       public get type(): string {
         return type;

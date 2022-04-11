@@ -9,6 +9,7 @@
       :class="{
         'bg-[radial-gradient(var(--tw-gradient-stops))] from-red/30 to-light':
           !tile.solved,
+        'bg-dark/50': isHighlighted(tile)
       }"
       @click="$emit('change', index, tile, 1)"
       @contextmenu.prevent="$emit('change', index, tile, -1)"
@@ -20,6 +21,7 @@
 import { computed, defineComponent, PropType } from "vue";
 import { Tile } from "@/lib/base/Tile";
 import TileComponent from "@/components/square/Tile.vue";
+import { useBoard } from "@/use-board";
 
 export default defineComponent({
   name: "Grid",
@@ -54,8 +56,11 @@ export default defineComponent({
       };
     });
 
+    const { isHighlighted } = useBoard();
+
     return {
       tilesStyle,
+      isHighlighted
     };
   },
 });

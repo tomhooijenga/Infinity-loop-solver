@@ -1,14 +1,18 @@
 import { SolveStep } from "./SolveStep";
 import { Grid } from "@/lib/base/Grid";
 import { Solver } from "@/lib/solver/base/Solver";
+import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 
 export class StepSolver implements Solver {
+
+  public name = '';
+
   constructor(protected grid: Grid, protected steps: SolveStep[]) {}
 
   /**
    * Attempt to solve the grid with the given steps. Solvers are called with each tile until no progress is made.
    */
-  public *solve(): Generator<number, boolean> {
+  public *solve(): Generator<SolveProgress, boolean> {
     let lastSolved = -1;
     let solved = 0;
 
@@ -24,7 +28,7 @@ export class StepSolver implements Solver {
     return false;
   }
 
-  protected *runTileStep(lastSolved: number): Generator<number, number> {
+  protected *runTileStep(lastSolved: number): Generator<SolveProgress, number> {
     let solved = lastSolved;
 
     for (const step of this.steps) {
@@ -33,14 +37,15 @@ export class StepSolver implements Solver {
           continue;
         }
 
-        const wasSolved = step.solveTile(tile, this.grid);
-
-        if (wasSolved) {
+        if (step.solveTile(tile, this.grid)) {
           tile.solved = true;
 
           solved++;
 
-          yield solved;
+          yield {
+            solver: step.name,
+            tiles: [tile],
+          };
         }
 
         if (solved === this.grid.tiles.length) {

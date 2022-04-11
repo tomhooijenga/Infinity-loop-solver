@@ -5,6 +5,8 @@ import { ClusteredSolver } from "@/lib/solver/base/ClusteredSolver";
 type TileKey = `${number}-${number}-${number}`;
 
 export class BruteForceSolver extends ClusteredSolver {
+  public name = 'Brute force';
+
   protected neighbours = new Map<Tile, Tile[]>();
 
   constructor(protected grid: Grid) {
