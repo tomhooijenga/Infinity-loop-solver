@@ -5,7 +5,7 @@
       :tiles="board.tiles"
       :x="board.width"
       :y="board.height"
-      class="w-full max-h-full m-auto"
+      class="max-h-full m-auto"
       @change="nextTile"
     />
     <section class="flex bg-dark p-2">

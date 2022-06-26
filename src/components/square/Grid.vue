@@ -1,5 +1,5 @@
 <template>
-  <section :style="tilesStyle" class="grid overflow-hidden">
+  <section :style="gridStyle" class="grid overflow-hidden">
     <Tile
       v-for="(tile, index) of tiles"
       :key="tile.type + index"
@@ -9,7 +9,7 @@
       :class="{
         'bg-[radial-gradient(var(--tw-gradient-stops))] from-red/30 to-light':
           !tile.solved,
-        'bg-dark/50': isHighlighted(tile)
+        'bg-dark/50': isHighlighted(tile),
       }"
       @click="$emit('change', index, tile, 1)"
       @contextmenu.prevent="$emit('change', index, tile, -1)"
@@ -48,7 +48,7 @@ export default defineComponent({
   emits: ["change"],
 
   setup(props) {
-    const tilesStyle = computed(() => {
+    const gridStyle = computed(() => {
       return {
         "grid-template-columns": `repeat(${props.x}, 1fr)`,
         "grid-template-rows": `repeat(${props.y}, 1fr)`,
@@ -59,8 +59,8 @@ export default defineComponent({
     const { isHighlighted } = useBoard();
 
     return {
-      tilesStyle,
-      isHighlighted
+      gridStyle,
+      isHighlighted,
     };
   },
 });

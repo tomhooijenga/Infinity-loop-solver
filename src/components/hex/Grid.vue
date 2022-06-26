@@ -1,23 +1,19 @@
 <template>
-  <section :style="tilesStyle" class="grid overflow-hidden">
-    <div
+  <section :style="gridStyle" class="grid overflow-hidden">
+    <Tile
       v-for="(tile, index) of tiles"
       :key="tile.type + index"
       :class="{
         'bg-[radial-gradient(var(--tw-gradient-stops))] from-red/30 to-light':
           !tile.solved,
-        'bg-dark/50': isHighlighted(tile)
+        'bg-dark/50': isHighlighted(tile),
       }"
+      :tile="tile"
       :style="tileStyle(tile)"
-      class="tile"
-    >
-      <Tile
-        :tile="tile"
-        class="absolute w-full h-full"
-        @click="$emit('change', index, tile, 1)"
-        @contextmenu.prevent="$emit('change', index, tile, -1)"
-      />
-    </div>
+      class="tile transition hover:bg-dark/50 w-full h-full"
+      @click="$emit('change', index, tile, 1)"
+      @contextmenu.prevent="$emit('change', index, tile, -1)"
+    />
   </section>
 </template>
 
@@ -52,7 +48,7 @@ export default defineComponent({
   emits: ["change"],
 
   setup(props) {
-    const tilesStyle = computed(() => {
+    const gridStyle = computed(() => {
       const width = 1.1547;
       const height = 1;
 
@@ -67,8 +63,9 @@ export default defineComponent({
       }
 
       return {
-        gridTemplateColumns: `repeat(${props.x}, 1fr 2fr) 1fr`,
-        aspectRatio: `${x}/${y}`,
+        "grid-template-columns": `repeat(${props.x}, 1fr 2fr) 1fr`,
+        "grid-template-rows": `repeat(${props.y}, 1fr)`,
+        "aspect-ratio": `${x}/${y}`,
       };
     });
 
@@ -84,9 +81,9 @@ export default defineComponent({
     const { isHighlighted } = useBoard();
 
     return {
-      tilesStyle,
+      gridStyle,
       tileStyle,
-      isHighlighted
+      isHighlighted,
     };
   },
 });
@@ -94,7 +91,6 @@ export default defineComponent({
 
 <style scoped>
 .tile {
-  @apply relative h-0 pb-[86.6%] transition hover:bg-dark/50;
   clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
   will-change: transform, background-color;
 }
