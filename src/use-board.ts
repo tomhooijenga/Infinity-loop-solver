@@ -1,4 +1,4 @@
-import { reactive, ref, shallowReactive } from "vue";
+import { reactive } from "vue";
 import { BoardData, boards } from "@/boards";
 import { Tile } from "@/lib/base/Tile";
 import { Generator } from "@/lib/generator/generator";
