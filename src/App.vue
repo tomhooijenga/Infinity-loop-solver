@@ -44,7 +44,7 @@ h2 {
 }
 
 p {
-  @apply mb-2;
+  @apply text-neutral/70 mb-2;
 }
 
 a {

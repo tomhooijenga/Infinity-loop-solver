@@ -8,7 +8,7 @@
       class="max-h-full m-auto"
       @change="nextTile"
     />
-    <section class="flex bg-dark p-2">
+    <section class="flex flex-wrap bg-dark p-2">
       <Button :disabled="isRunning" @click="generateBoard"> Generate </Button>
       <span class="mx-auto space-x-2">
         <Button :disabled="isRunning" @click="scrambleBoard"> Scramble </Button>

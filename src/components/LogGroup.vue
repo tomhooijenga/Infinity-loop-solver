@@ -3,9 +3,9 @@
     <div
       class="p-2"
       :class="{
-        'hover:bg-light': isLast,
+        'hover:bg-light': isFirst,
       }"
-      @mouseenter="isLast && highlight(log.tiles)"
+      @mouseenter="isFirst && highlight(log.tiles)"
       @mouseleave="highlight([])"
     >
       {{ log.solver }}<br />
@@ -24,7 +24,7 @@ const props = defineProps({
     type: Array as PropType<SolveProgress[]>,
     default: () => [],
   },
-  isLast: {
+  isFirst: {
     type: Boolean,
     default: false,
   }
