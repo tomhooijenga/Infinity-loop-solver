@@ -4,7 +4,7 @@ import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 import { None } from "@/lib/base/None";
 
 export class NoneSolver implements Solver {
-  public name = 'None'
+  public name = 'Empty'
 
   constructor(protected grid: Grid) {}
 
