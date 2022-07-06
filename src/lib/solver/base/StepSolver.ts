@@ -4,8 +4,7 @@ import { Solver } from "@/lib/solver/base/Solver";
 import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 
 export class StepSolver implements Solver {
-
-  public name = '';
+  public name = "";
 
   constructor(protected grid: Grid, protected steps: SolveStep[]) {}
 

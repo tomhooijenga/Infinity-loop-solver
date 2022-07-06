@@ -27,7 +27,7 @@ const props = defineProps({
   isFirst: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 const condensed = computed(() => {

@@ -3,17 +3,17 @@ module.exports = {
 
   theme: {
     colors: {
-      light: '#1d314b',
-      dark: '#162539',
-      red: '#861e32',
+      light: "#1d314b",
+      dark: "#162539",
+      red: "#861e32",
 
-      transparent: 'transparent',
-      black: 'black',
-      white: 'white',
-      neutral: '#f5f5f5'
+      transparent: "transparent",
+      black: "black",
+      white: "white",
+      neutral: "#f5f5f5",
     },
 
     extend: {},
   },
   plugins: [],
-}
+};

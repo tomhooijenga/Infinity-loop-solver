@@ -4,9 +4,8 @@ import { Tile, TileConstructor } from "@/lib/base/Tile";
 import { Grid } from "@/lib/base/Grid";
 
 export class PatternStep implements SolveStep {
-
   public get name() {
-    return `Fit (${this.type.TYPE})`
+    return `Fit (${this.type.TYPE})`;
   }
 
   protected patterns: FacingState[][];

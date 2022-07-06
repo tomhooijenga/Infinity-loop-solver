@@ -6,7 +6,10 @@
 
     <template v-else-if="tile.type === 'End'">
       <circle r="15" class="fill-transparent stroke-red stroke-[6px]" />
-      <path d="M 0 -15 L 0 -52" class="fill-transparent stroke-red stroke-[6px]" />
+      <path
+        d="M 0 -15 L 0 -52"
+        class="fill-transparent stroke-red stroke-[6px]"
+      />
     </template>
 
     <template v-else-if="tile.type === 'Star'">
@@ -38,7 +41,10 @@
         />
       </template>
       <template v-else>
-        <path :d="path(arc)" class="fill-transparent stroke-light stroke-[10px]" />
+        <path
+          :d="path(arc)"
+          class="fill-transparent stroke-light stroke-[10px]"
+        />
         <path :d="path(arc)" class="fill-transparent stroke-red stroke-[6px]" />
       </template>
     </template>

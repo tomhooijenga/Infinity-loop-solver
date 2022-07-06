@@ -4,7 +4,7 @@ import { Solver } from "@/lib/solver/base/Solver";
 import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 
 export class AllSideSolver implements Solver {
-  public name = 'Filled'
+  public name = "Filled";
 
   constructor(protected grid: Grid) {}
 

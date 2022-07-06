@@ -13,7 +13,13 @@
     ></div>
   </transition>
 
-  <Button class="fixed left-4 top-4 lg:hidden" variant="dark" @click="flyout = true">Settings</Button>
+  <Button
+    class="fixed left-4 top-4 lg:hidden"
+    variant="dark"
+    @click="flyout = true"
+    >
+    Settings
+  </Button>
 
   <div
     class="fixed left-0 inset-y-0 z-10 lg:translate-x-0 transition bg-dark lg:relative w-min overflow-y-auto"

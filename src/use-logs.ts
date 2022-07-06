@@ -16,5 +16,5 @@ export function useLogs() {
     logs,
     startGroup,
     log,
-  }
+  };
 }

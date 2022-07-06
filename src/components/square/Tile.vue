@@ -6,11 +6,17 @@
 
     <template v-else-if="tile.type === 'End'">
       <circle r="25" class="fill-transparent stroke-red stroke-[6px]" />
-      <path d="M 0 -25 L 0 -50" class="fill-transparent stroke-red stroke-[6px]" />
+      <path
+        d="M 0 -25 L 0 -50"
+        class="fill-transparent stroke-red stroke-[6px]"
+      />
     </template>
 
     <template v-else-if="tile.type === 'Line'">
-      <path d="M 0 -50 L 0 50" class="fill-transparent stroke-red stroke-[6px]" />
+      <path
+        d="M 0 -50 L 0 50"
+        class="fill-transparent stroke-red stroke-[6px]"
+      />
     </template>
 
     <template v-for="arc of arcs" v-else :key="arc">

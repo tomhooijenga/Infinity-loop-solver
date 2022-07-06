@@ -4,7 +4,11 @@
     <template v-for="group of typeDescriptions" :key="group.name">
       <h2>{{ group.name }}</h2>
       <p>{{ group.description }}</p>
-      <label v-for="(label, name) of group.solvers" :key="name" class="flex items-center py-1">
+      <label
+        v-for="(label, name) of group.solvers"
+        :key="name"
+        class="flex items-center py-1"
+      >
         <input v-model="solverSettings[name]" type="checkbox" class="mr-2" />
         {{ label }}
       </label>
