@@ -30,6 +30,8 @@ export class BruteForceSolver extends ClusteredSolver {
       }
 
       this.rotate(cluster, invalid);
+
+      yield;
     }
 
     return false;

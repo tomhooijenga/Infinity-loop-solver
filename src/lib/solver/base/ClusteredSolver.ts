@@ -44,6 +44,11 @@ export abstract class ClusteredSolver implements Solver {
           }
 
           break;
+        } else {
+          yield {
+            solver: this.name,
+            tiles: [],
+          };
         }
       }
     }
