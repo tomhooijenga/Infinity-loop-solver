@@ -23,8 +23,9 @@
 import { defineComponent, ref } from "vue";
 import { BoardData, solve } from "@/boards";
 import Button from "@/components/Button.vue";
-import HexGrid from "@/components/hex/Grid.vue";
+import TriangleGrid from "@/components/triangle/Grid.vue";
 import SquareGrid from "@/components/square/Grid.vue";
+import HexGrid from "@/components/hex/Grid.vue";
 import { useBoard } from "@/use-board";
 import { Tile, TileConstructor } from "@/lib/base/Tile";
 import * as hex from "@/lib/solver/hex/tiles";
@@ -57,8 +58,9 @@ export default defineComponent({
 
   components: {
     Button,
-    HexGrid,
+    TriangleGrid,
     SquareGrid,
+    HexGrid,
   },
 
   setup() {

@@ -2,8 +2,10 @@ import { reactive } from "vue";
 import { BoardData, boards } from "@/boards";
 import { Tile } from "@/lib/base/Tile";
 import { Generator } from "@/lib/generator/generator";
+import { Grid as TriangleGrid } from "@/lib/solver/triangle/Grid";
 import { Grid as SquareGrid } from "@/lib/solver/square/Grid";
 import { Grid as HexGrid } from "@/lib/solver/hex/Grid";
+import * as tri from "@/lib/solver/triangle/tiles";
 import * as sq from "@/lib/solver/square/tiles";
 import * as hex from "@/lib/solver/hex/tiles";
 
@@ -26,6 +28,7 @@ function setTile(index: number, tile: Tile) {
 
 function makeGrid() {
   return new {
+    triangle: TriangleGrid,
     square: SquareGrid,
     hex: HexGrid,
   }[board.type]();
@@ -34,6 +37,7 @@ function makeGrid() {
 function generateBoard() {
   const grid = makeGrid();
   const tiles = {
+    triangle: tri,
     square: sq,
     hex: hex,
   }[board.type];

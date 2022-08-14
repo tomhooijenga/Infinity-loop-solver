@@ -1,4 +1,5 @@
 import { None } from "@/lib/base/None";
+import * as tri from "@/lib/solver/triangle/tiles";
 import * as sq from "@/lib/solver/square/tiles";
 import * as hex from "@/lib/solver/hex/tiles";
 import { Tile, TileConstructor } from "@/lib/base/Tile";
@@ -8,7 +9,7 @@ import { hexSolver, squareSolver } from "@/solvers";
 import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 
 export interface BoardData {
-  type: "square" | "hex";
+  type: "triangle" | "square" | "hex";
   tiles: Tile[];
   width: number;
   height: number;
@@ -33,6 +34,15 @@ export function constructTiles(
     ),
   };
 }
+
+const yeet = (): BoardData => constructTiles("triangle", 3, [
+  tri.End,
+  tri.Turn,
+  tri.End,
+  tri.End,
+  tri.Turn,
+  tri.End,
+])
 
 const robot = (): BoardData =>
   constructTiles("square", 4, [
@@ -194,11 +204,12 @@ const clover = (): BoardData =>
   ]);
 
 export const boards = {
-  heart,
-  robot,
-  clover,
-  turns,
-  hard,
+  yeet,
+  // heart,
+  // robot,
+  // clover,
+  // turns,
+  // hard,
 };
 
 function solveSquare(tiles: Tile[]) {
