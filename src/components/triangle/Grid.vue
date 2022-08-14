@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, PropType } from "vue";
+import { computed, CSSProperties, PropType } from "vue";
 import { Tile as TileType } from "@/lib/base/Tile";
 import Tile from "@/components/triangle/Tile.vue";
 import { useBoard } from "@/use-board";
@@ -40,29 +40,26 @@ const props = defineProps({
 
 defineEmits(["change"]);
 
-const gridStyle = computed(() => {
+const gridStyle = computed((): CSSProperties => {
   return {
-    "grid-template-columns": `repeat(20, 1fr)`,
-    "grid-template-rows": `repeat(1, 1fr)`,
-    // "aspect-ratio": `${props.x * 2}/${props.y}`,
+    "grid-template-columns": `repeat(${props.x + 1}, 1fr)`,
+    "grid-template-rows": `repeat(${props.y}, 1fr)`,
   };
 });
 
-function tileStyle(tile: TileType, index: number) {
-  // One tile is 2x3 grid spaces. Grids are 1-indexed.
+function tileStyle(tile: TileType): CSSProperties {
+  let rotate = tile.direction * 120;
 
-  const col = {
-    0: 1,
-    1: 2,
-    2: 3
-  }[tile.x];
+  if (tile.y % 2 === 0) {
+    rotate += tile.x % 2 === 0 ? 0 : 180;
+  } else {
+    rotate += tile.x % 2 === 0 ? 180 : 0;
+  }
 
   return {
-    // gridRow: `${tile.y * 2 + 1 + (tile.x % 2)}`,
-    gridRow: 1,
-    gridColumn: `${col} / span 2`,
-    // transform: `rotate(${tile.direction * 60}deg)`,
-    transform: `rotate(${index % 2 ? 180 : 0}deg)`
+    gridRow: `${tile.y + 1} / span 1`,
+    gridColumn: `${tile.x + 1} / span 2`,
+    transform: `rotate(${rotate}deg)`,
   };
 }
 
