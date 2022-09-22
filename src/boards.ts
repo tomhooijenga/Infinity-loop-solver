@@ -3,9 +3,10 @@ import * as tri from "@/lib/solver/triangle/tiles";
 import * as sq from "@/lib/solver/square/tiles";
 import * as hex from "@/lib/solver/hex/tiles";
 import { Tile, TileConstructor } from "@/lib/base/Tile";
+import { Grid as TriangleGrid } from "@/lib/solver/triangle/Grid";
 import { Grid as SquareGrid } from "@/lib/solver/square/Grid";
 import { Grid as HexGrid } from "@/lib/solver/hex/Grid";
-import { hexSolver, squareSolver } from "@/solvers";
+import { hexSolver, squareSolver, triangleSolver } from "@/solvers";
 import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 
 export interface BoardData {
@@ -212,6 +213,12 @@ export const boards = {
   // hard,
 };
 
+function solveTriangle(tiles: Tile[]) {
+  const grid = new TriangleGrid(tiles);
+
+  return triangleSolver(grid).run();
+}
+
 function solveSquare(tiles: Tile[]) {
   const grid = new SquareGrid(tiles);
 
@@ -229,9 +236,11 @@ export function solve(boardData: BoardData): Generator<SolveProgress, boolean> {
     tile.solved = false;
   });
 
-  if (boardData.type === "square") {
-    return solveSquare(boardData.tiles);
-  } else {
-    return solveHex(boardData.tiles);
-  }
+  const solver = {
+    triangle: solveTriangle,
+    square: solveSquare,
+    hex: solveHex,
+  }[boardData.type];
+
+  return solver(boardData.tiles);
 }

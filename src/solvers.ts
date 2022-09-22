@@ -1,5 +1,6 @@
 import { Grid as HexGrid } from "@/lib/solver/hex/Grid";
 import { Grid as SquareGrid } from "@/lib/solver/square/Grid";
+import { Grid as TriangleGrid } from "@/lib/solver/triangle/Grid";
 import { HexSolverType, SquareSolverType, useSettings } from "@/use-settings";
 import { SolverRun } from "@/lib/solver/base/SolverRun";
 import { StepSolver } from "@/lib/solver/base/StepSolver";
@@ -122,6 +123,38 @@ export function squareSolver(grid: SquareGrid): SolverRun {
 
   if (stepSolver.length) {
     run.add(new StepSolver(grid, stepSolver));
+  }
+
+  if (solvers.backtracking) {
+    run.add(new BacktrackingSolver(grid));
+  }
+
+  if (solvers.bruteforce) {
+    run.add(new BruteForceSolver(grid));
+  }
+
+  return run;
+}
+
+export function triangleSolver(grid: TriangleGrid): SolverRun {
+  const {
+    settings: {
+      solvers: { triangle: solvers },
+    },
+  } = useSettings();
+
+  const run = new SolverRun();
+
+  if (solvers.none) {
+    run.add(new NoneSolver(grid));
+  }
+
+  if (solvers.all) {
+    run.add(new AllSideSolver(grid));
+  }
+
+  if (solvers.generic) {
+    run.add(new StepSolver(grid, [new FitStep()]));
   }
 
   if (solvers.backtracking) {

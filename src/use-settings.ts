@@ -26,12 +26,20 @@ export type SquareSolverType =
   | "backtracking"
   | "bruteforce";
 
+export type TriangleSolverType =
+  | "none"
+  | "all"
+  | "generic"
+  | "backtracking"
+  | "bruteforce";
+
 type Settings = {
   delay: number;
 
   solvers: {
     hex: Record<HexSolverType, boolean>;
     square: Record<SquareSolverType, boolean>;
+    triangle: Record<TriangleSolverType, boolean>
   };
 };
 
@@ -61,6 +69,13 @@ const state = (): Settings => ({
       all: true,
       line: true,
       turn: true,
+      generic: true,
+      backtracking: true,
+      bruteforce: false,
+    },
+    triangle: {
+      none: true,
+      all: true,
       generic: true,
       backtracking: true,
       bruteforce: false,

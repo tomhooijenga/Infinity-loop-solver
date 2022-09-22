@@ -2,9 +2,20 @@
   <h1 id="settings" class="pt-14 -mt-8">Settings</h1>
 
   <section class="bg-light p-4 space-y-8">
-    <div class="flex">
-      <span class="radio">
-        <div class="label">Tile shape</div>
+      <div class="radio flex gap-2 flex-wrap">
+        <div class="w-full">Tile shape</div>
+
+        <label>
+          <input
+            v-model="board.type"
+            type="radio"
+            name="type"
+            value="triangle"
+            class="mr-1"
+            @change="update"
+          />
+          Triangle
+        </label>
 
         <label>
           <input
@@ -29,8 +40,7 @@
           />
           Hexagon
         </label>
-      </span>
-    </div>
+      </div>
 
     <div class="flex">
       <label class="input">
@@ -112,15 +122,7 @@ export default defineComponent({
   @apply text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full;
 }
 
-.radio > .label {
-  @apply mb-2;
-}
-
 .radio > label {
-  @apply inline-flex bg-dark py-2 px-4 rounded-full items-center;
-}
-
-.radio > label + label {
-  @apply ml-4;
+  @apply inline-block bg-dark py-2 px-4 rounded-full items-center;
 }
 </style>

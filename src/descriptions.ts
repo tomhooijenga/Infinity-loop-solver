@@ -1,8 +1,13 @@
-import { HexSolverType, SquareSolverType } from "@/use-settings";
+import {
+  HexSolverType,
+  SquareSolverType,
+  TriangleSolverType,
+} from "@/use-settings";
 
 type SolverDescription = {
   hex: SolverDescriptionGroup<HexSolverType>[];
   square: SolverDescriptionGroup<SquareSolverType>[];
+  triangle: SolverDescriptionGroup<TriangleSolverType>[];
 };
 
 type SolverDescriptionGroup<T extends string> = {
@@ -11,16 +16,34 @@ type SolverDescriptionGroup<T extends string> = {
   solvers: Partial<Record<T, string>>;
 };
 
+const instant = {
+  name: "Instant solvers",
+  description: "",
+  solvers: {
+    none: "Empty tiles",
+    all: "Filled tiles",
+  },
+};
+const generic = {
+  name: "Generic fit solver",
+  description:
+    "Solvers that finds a fit by trying each side. It can only find a fit if all open or closed sides are known.",
+  solvers: {
+    generic: "Generic fit",
+  },
+};
+const expensive = {
+  name: "Expensive solvers",
+  description:
+    "Brute force checks each and every possible position until there is a solution. Backtracking does this as well, but more intelligent.",
+  solvers: {
+    backtracking: "Backtracking",
+    bruteforce: "Brute force",
+  },
+};
 const descriptions: SolverDescription = {
   hex: [
-    {
-      name: "Instant solvers",
-      description: "",
-      solvers: {
-        none: "Empty tiles",
-        all: "Filled tiles",
-      },
-    },
+    instant,
     {
       name: "Shortcut fit solvers",
       description: "Solvers that need less known sides to solve a tile.",
@@ -37,33 +60,11 @@ const descriptions: SolverDescription = {
         square: "Square",
       },
     },
-    {
-      name: "Generic fit solver",
-      description:
-        "Solvers that finds a fit by trying each side. It can only find a fit if all open or closed sides are known.",
-      solvers: {
-        generic: "Generic fit",
-      },
-    },
-    {
-      name: "Expensive solvers",
-      description:
-        "Brute force checks each and every possible position until there is a solution. Backtracking does this as well, but more intelligent.",
-      solvers: {
-        backtracking: "Backtracking",
-        bruteforce: "Brute force",
-      },
-    },
+    generic,
+    expensive,
   ],
   square: [
-    {
-      name: "Instant solvers",
-      description: "",
-      solvers: {
-        none: "Empty tiles",
-        all: "Filled tiles",
-      },
-    },
+    instant,
     {
       name: "Shortcut fit solvers",
       description: "Solvers that need less known sides to solve a tile.",
@@ -72,24 +73,10 @@ const descriptions: SolverDescription = {
         turn: "Turn",
       },
     },
-    {
-      name: "Generic fit solver",
-      description:
-        "Solvers that finds a fit by trying each side. It can only find a fit if all open or closed sides are known.",
-      solvers: {
-        generic: "Generic fit",
-      },
-    },
-    {
-      name: "Expensive solvers",
-      description:
-        "Brute force checks each and every possible position until there is a solution. Backtracking does this as well, but more intelligent.",
-      solvers: {
-        backtracking: "Backtracking",
-        bruteforce: "Brute force",
-      },
-    },
+    generic,
+    expensive,
   ],
+  triangle: [instant, generic, expensive],
 };
 
 export default descriptions;
