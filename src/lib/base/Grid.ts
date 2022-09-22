@@ -28,7 +28,7 @@ export abstract class Grid {
       }
 
       // Tile's up is neighbour's down.
-      const opposite = this.directionUtil.opposite(direction);
+      const opposite = this.directionUtil.opposite(tile, direction);
       return this.getTileSide(neighbour, opposite);
     });
   }

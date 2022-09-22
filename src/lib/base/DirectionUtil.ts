@@ -1,18 +1,14 @@
+import { Tile } from "@/lib/base/Tile";
+
 export class DirectionUtil {
   constructor(public numSides: number) {}
 
-  public opposite(dir: number): number {
+  public opposite(tile: Tile, dir: number): number {
     return this.rotate(dir, this.numSides / 2);
   }
 
   public rotate(dir: number, steps: number): number {
-    const newDir = (dir + steps) % this.numSides;
-
-    if (newDir < 0) {
-      return newDir + this.numSides;
-    }
-
-    return newDir;
+    return (((dir + steps) % this.numSides) + this.numSides) % this.numSides;
   }
 
   public random(): number {

@@ -63,7 +63,7 @@ export class BruteForceSolver extends ClusteredSolver {
 
     for (const direction of grid.directionUtil) {
       const neighbour = neighbours[direction];
-      const opposite = grid.directionUtil.opposite(direction);
+      const opposite = grid.directionUtil.opposite(tile, direction);
 
       if (
         grid.getTileSide(tile, direction) !==
@@ -97,7 +97,7 @@ export class BruteForceSolver extends ClusteredSolver {
             continue;
           }
 
-          const opposite = grid.directionUtil.opposite(direction);
+          const opposite = grid.directionUtil.opposite(tile, direction);
 
           if (
             grid.getTileSide(tile, direction) !==

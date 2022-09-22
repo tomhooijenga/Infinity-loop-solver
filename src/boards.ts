@@ -36,14 +36,12 @@ export function constructTiles(
   };
 }
 
-const yeet = (): BoardData => constructTiles("triangle", 3, [
-  tri.End,
-  tri.Turn,
-  tri.End,
-  tri.End,
-  tri.Turn,
-  tri.End,
-])
+const yeet = (): BoardData =>
+  constructTiles("triangle", 3, [
+    tri.End,
+    tri.Turn,
+    tri.End,
+  ]);
 
 const robot = (): BoardData =>
   constructTiles("square", 4, [
@@ -206,8 +204,8 @@ const clover = (): BoardData =>
 
 export const boards = {
   yeet,
-  // heart,
-  // robot,
+  heart,
+  robot,
   // clover,
   // turns,
   // hard,
@@ -230,7 +228,6 @@ function solveHex(tiles: Tile[]) {
 
   return hexSolver(grid).run();
 }
-
 export function solve(boardData: BoardData): Generator<SolveProgress, boolean> {
   boardData.tiles.forEach((tile) => {
     tile.solved = false;

@@ -40,7 +40,7 @@ export class Generator {
     let tile = this.grid.grid[x][y];
 
     for (let i = 0; i < length; i++) {
-      const direction = this.random(0, this.grid.directionUtil.numSides - 1);
+      const direction = this.grid.directionUtil.random();
       const neighbours = this.grid.neighbours(tile);
       const facing = this.grid.facing(tile);
       const next = i < length - 1 ? neighbours[direction] : NONE;
@@ -92,7 +92,7 @@ export class Generator {
 
     const facing = this.grid.facing(next);
 
-    facing[this.grid.directionUtil.opposite(direction)] = FacingState.Open;
+    facing[this.grid.directionUtil.opposite(next, direction)] = FacingState.Open;
 
     return [...this.tileInstances.values()].some((tile) =>
       this.tileFits(tile, facing)
