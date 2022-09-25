@@ -3,7 +3,7 @@
     <Tile
       v-for="(tile, index) of tiles"
       :key="tile.type + index"
-      :style="tileStyle(tile, index)"
+      :style="tileStyle(tile)"
       :tile="tile"
       class="tile transition hover:bg-dark/50"
       :class="{
@@ -47,19 +47,29 @@ const gridStyle = computed((): CSSProperties => {
   };
 });
 
+function pointyUp(tile: TileType): boolean {
+  // (0,0) points up.
+  const { x, y } = tile;
+
+  if (y % 2 === 0) {
+    return x % 2 === 0;
+  }
+
+  return x % 2 === 1;
+}
+
 function tileStyle(tile: TileType): CSSProperties {
   let rotate = tile.direction * 120;
 
-  if (tile.y % 2 === 0) {
-    rotate += tile.x % 2 === 0 ? 0 : 180;
-  } else {
-    rotate += tile.x % 2 === 0 ? 180 : 0;
+  if (!pointyUp(tile)) {
+    rotate += 180;
   }
 
   return {
     gridRow: `${tile.y + 1} / span 1`,
     gridColumn: `${tile.x + 1} / span 2`,
     transform: `rotate(${rotate}deg)`,
+    transformOrigin: '50% 66.66666%'
   };
 }
 
@@ -70,6 +80,5 @@ const { isHighlighted } = useBoard();
 .tile {
   clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
   will-change: transform, background-color;
-  background: red;
 }
 </style>
