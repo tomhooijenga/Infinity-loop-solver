@@ -41,9 +41,13 @@ const props = defineProps({
 defineEmits(["change"]);
 
 const gridStyle = computed((): CSSProperties => {
+  const x = (props.x + 1) / 2;
+  const y = props.y * 0.8660254037844386;
+
   return {
     "grid-template-columns": `repeat(${props.x + 1}, 1fr)`,
     "grid-template-rows": `repeat(${props.y}, 1fr)`,
+    "aspect-ratio": `${x}/${y}`,
   };
 });
 
