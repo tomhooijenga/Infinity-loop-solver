@@ -62,14 +62,17 @@ function tileStyle(tile: TileType): CSSProperties {
   let rotate = tile.direction * 120;
 
   if (!pointyUp(tile)) {
-    rotate += 180;
+    // 180 to flip it, 120 to make down actually down again.
+    rotate += 300;
   }
 
   return {
     gridRow: `${tile.y + 1} / span 1`,
     gridColumn: `${tile.x + 1} / span 2`,
     transform: `rotate(${rotate}deg)`,
-    transformOrigin: '50% 66.66666%'
+    transformOrigin: '50% 66.66666%',
+    position: 'relative',
+    top: pointyUp(tile) ? 0 : '-33%'
   };
 }
 
