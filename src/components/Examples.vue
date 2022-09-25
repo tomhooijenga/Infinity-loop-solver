@@ -15,6 +15,7 @@
 
 <script lang="ts">
 import { BoardData, boards } from "@/boards";
+import TriangleBoard from "@/components/triangle/Grid.vue";
 import SquareBoard from "@/components/square/Grid.vue";
 import HexBoard from "@/components/hex/Grid.vue";
 import { defineComponent } from "vue";
@@ -26,6 +27,7 @@ export default defineComponent({
   components: {
     SquareBoard,
     HexBoard,
+    TriangleBoard,
   },
 
   setup() {

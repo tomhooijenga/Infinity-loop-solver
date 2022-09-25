@@ -36,13 +36,6 @@ export function constructTiles(
   };
 }
 
-const yeet = (): BoardData =>
-  constructTiles("triangle", 3, [
-    tri.End,
-    tri.Turn,
-    tri.End,
-  ]);
-
 const robot = (): BoardData =>
   constructTiles("square", 4, [
     None,
@@ -61,6 +54,25 @@ const robot = (): BoardData =>
     sq.End,
     sq.End,
     None,
+  ]);
+
+const triangle = (): BoardData =>
+  constructTiles("triangle", 5, [
+    None,
+    tri.End,
+    tri.Triangle,
+    tri.Turn,
+    tri.End,
+    None,
+    tri.End,
+    tri.Triangle,
+    tri.Triangle,
+    tri.End,
+    None,
+    None,
+    None,
+    tri.Turn,
+    tri.End,
   ]);
 
 const turns = (): BoardData =>
@@ -203,12 +215,12 @@ const clover = (): BoardData =>
   ]);
 
 export const boards = {
-  yeet,
   heart,
   robot,
-  // clover,
-  // turns,
-  // hard,
+  triangle,
+  clover,
+  turns,
+  hard,
 };
 
 function solveTriangle(tiles: Tile[]) {

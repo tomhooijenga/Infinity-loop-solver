@@ -28,13 +28,16 @@ import SquareGrid from "@/components/square/Grid.vue";
 import HexGrid from "@/components/hex/Grid.vue";
 import { useBoard } from "@/use-board";
 import { Tile, TileConstructor } from "@/lib/base/Tile";
-import * as hex from "@/lib/solver/hex/tiles";
+import * as tri from "@/lib/solver/triangle/tiles";
 import * as sq from "@/lib/solver/square/tiles";
+import * as hex from "@/lib/solver/hex/tiles";
 import { None } from "@/lib/base/None";
 import { useSettings } from "@/use-settings";
 import { useLogs } from "@/use-logs";
 
 const order: Record<BoardData["type"], TileConstructor[]> = {
+  triangle: [None, tri.End, tri.Turn, tri.Triangle],
+  square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross],
   hex: [
     None,
     hex.End,
@@ -50,7 +53,6 @@ const order: Record<BoardData["type"], TileConstructor[]> = {
     hex.Knuckles,
     hex.Star,
   ],
-  square: [None, sq.End, sq.Line, sq.Turn, sq.Junction, sq.Cross],
 };
 
 export default defineComponent({
@@ -116,6 +118,8 @@ export default defineComponent({
         })
       );
     }
+
+    window.xp = () => JSON.stringify(board.tiles.map((t) => (t.type === 'None' ? '' : 'tri.') + t.type)).replaceAll('"', '')
 
     return {
       board,

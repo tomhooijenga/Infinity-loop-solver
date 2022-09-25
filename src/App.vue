@@ -21,7 +21,7 @@ export default defineComponent({
   setup() {
     const { loadBoard, generateBoard } = useBoard();
 
-    loadBoard("yeet");
+    loadBoard("heart");
 
     return {
       generateBoard,
