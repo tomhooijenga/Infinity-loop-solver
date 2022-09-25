@@ -1,13 +1,32 @@
 <template>
   <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
-    <component
-      :is="`${board.type}-grid`"
+    <TriangleGrid
+      v-if="board.type === 'triangle'"
       :tiles="board.tiles"
       :x="board.width"
       :y="board.height"
       class="max-h-full m-auto"
       @change="nextTile"
     />
+
+    <SquareGrid
+      v-if="board.type === 'square'"
+      :tiles="board.tiles"
+      :x="board.width"
+      :y="board.height"
+      class="max-h-full m-auto"
+      @change="nextTile"
+    />
+
+    <HexGrid
+      v-if="board.type === 'hex'"
+      :tiles="board.tiles"
+      :x="board.width"
+      :y="board.height"
+      class="max-h-full m-auto"
+      @change="nextTile"
+    />
+
     <section class="flex flex-wrap bg-dark p-2">
       <Button :disabled="isRunning" @click="generateBoard"> Generate </Button>
       <span class="mx-auto space-x-2">
@@ -118,8 +137,6 @@ export default defineComponent({
         })
       );
     }
-
-    window.xp = () => JSON.stringify(board.tiles.map((t) => (t.type === 'None' ? '' : 'tri.') + t.type)).replaceAll('"', '')
 
     return {
       board,

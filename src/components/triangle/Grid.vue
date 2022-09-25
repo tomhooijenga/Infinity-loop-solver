@@ -38,7 +38,9 @@ const props = defineProps({
   },
 });
 
-defineEmits(["change"]);
+defineEmits<{
+  (e: "change", index: number, tile: TileType, direction: -1 | 1): void;
+}>();
 
 const gridStyle = computed((): CSSProperties => {
   const x = (props.x + 1) / 2;
@@ -74,9 +76,9 @@ function tileStyle(tile: TileType): CSSProperties {
     gridRow: `${tile.y + 1} / span 1`,
     gridColumn: `${tile.x + 1} / span 2`,
     transform: `rotate(${rotate}deg)`,
-    transformOrigin: '50% 66.66666%',
-    position: 'relative',
-    top: pointyUp(tile) ? 0 : '-33%'
+    transformOrigin: "50% 66.66666%",
+    position: "relative",
+    top: pointyUp(tile) ? 0 : "-33%",
   };
 }
 
