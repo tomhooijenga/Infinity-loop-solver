@@ -5,10 +5,9 @@
       :key="tile.type + index"
       :style="tileStyle(tile)"
       :tile="tile"
-      class="tile transition hover:bg-dark/50"
+      class="transition-transform hover:bg-dark/50 w-full h-full clip-triangle"
       :class="{
-        'bg-[radial-gradient(var(--tw-gradient-stops))] from-red/30 to-light':
-          !tile.solved,
+        'bg-gradient-radial from-red/30 to-light': !tile.solved,
         'bg-dark/50': isHighlighted(tile),
       }"
       @click="$emit('change', index, tile, 1)"
@@ -84,10 +83,3 @@ function tileStyle(tile: TileType): CSSProperties {
 
 const { isHighlighted } = useBoard();
 </script>
-
-<style scoped>
-.tile {
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-  will-change: transform, background-color;
-}
-</style>

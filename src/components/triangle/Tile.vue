@@ -1,5 +1,5 @@
 <template>
-  <svg viewBox="-50 -43.30127018922193 100 86.60254037844386" class="w-full h-full">
+  <svg viewBox="-50 -43.30127018922193 100 86.60254037844386">
     <template v-if="tile.type === 'None'">
       <circle r="2" class="fill-red" cy="14.433756729740644" />
     </template>

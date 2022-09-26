@@ -3,14 +3,13 @@
     <Tile
       v-for="(tile, index) of tiles"
       :key="tile.type + index"
-      :class="{
-        'bg-[radial-gradient(var(--tw-gradient-stops))] from-red/30 to-light':
-          !tile.solved,
-        'bg-dark/50': isHighlighted(tile),
-      }"
       :tile="tile"
       :style="tileStyle(tile)"
-      class="tile transition hover:bg-dark/50 w-full h-full"
+      class="transition-transform hover:bg-dark/50 w-full h-full clip-hexagon"
+      :class="{
+        'bg-gradient-radial from-red/30 to-light': !tile.solved,
+        'bg-dark/50': isHighlighted(tile),
+      }"
       @click="$emit('change', index, tile, 1)"
       @contextmenu.prevent="$emit('change', index, tile, -1)"
     />
@@ -88,10 +87,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.tile {
-  clip-path: polygon(75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%, 25% 0);
-  will-change: transform, background-color;
-}
-</style>

@@ -5,10 +5,9 @@
       :key="tile.type + index"
       :style="`transform: rotate(${tile.direction * 90}deg)`"
       :tile="tile"
-      class="transition hover:bg-dark/50"
+      class="transition-transform hover:bg-dark/50 w-full h-full"
       :class="{
-        'bg-[radial-gradient(var(--tw-gradient-stops))] from-red/30 to-light':
-          !tile.solved,
+        'bg-gradient-radial from-red/30 to-light': !tile.solved,
         'bg-dark/50': isHighlighted(tile),
       }"
       @click="$emit('change', index, tile, 1)"
