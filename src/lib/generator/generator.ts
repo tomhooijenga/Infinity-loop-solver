@@ -92,7 +92,8 @@ export class Generator {
 
     const facing = this.grid.facing(next);
 
-    facing[this.grid.directionUtil.opposite(next, direction)] = FacingState.Open;
+    facing[this.grid.directionUtil.opposite(next, direction)] =
+      FacingState.Open;
 
     return [...this.tileInstances.values()].some((tile) =>
       this.tileFits(tile, facing)

@@ -2,45 +2,45 @@
   <h1 id="settings" class="pt-14 -mt-8">Settings</h1>
 
   <section class="bg-light p-4 space-y-8">
-      <div class="radio flex gap-2 flex-wrap">
-        <div class="w-full">Tile shape</div>
+    <div class="radio flex gap-2 flex-wrap">
+      <div class="w-full">Tile shape</div>
 
-        <label>
-          <input
-            v-model="board.type"
-            type="radio"
-            name="type"
-            value="triangle"
-            class="mr-1"
-            @change="update"
-          />
-          Triangle
-        </label>
+      <label>
+        <input
+          v-model="board.type"
+          type="radio"
+          name="type"
+          value="triangle"
+          class="mr-1"
+          @change="update"
+        />
+        Triangle
+      </label>
 
-        <label>
-          <input
-            v-model="board.type"
-            type="radio"
-            name="type"
-            value="square"
-            class="mr-1"
-            @change="update"
-          />
-          Square
-        </label>
+      <label>
+        <input
+          v-model="board.type"
+          type="radio"
+          name="type"
+          value="square"
+          class="mr-1"
+          @change="update"
+        />
+        Square
+      </label>
 
-        <label>
-          <input
-            v-model="board.type"
-            type="radio"
-            name="type"
-            value="hex"
-            class="mr-1"
-            @change="update"
-          />
-          Hexagon
-        </label>
-      </div>
+      <label>
+        <input
+          v-model="board.type"
+          type="radio"
+          name="type"
+          value="hex"
+          class="mr-1"
+          @change="update"
+        />
+        Hexagon
+      </label>
+    </div>
 
     <div class="flex">
       <label class="input">

@@ -17,7 +17,7 @@
     class="fixed left-4 top-4 lg:hidden"
     variant="dark"
     @click="flyout = true"
-    >
+  >
     Settings
   </Button>
 

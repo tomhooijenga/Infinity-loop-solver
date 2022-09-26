@@ -39,7 +39,7 @@ type Settings = {
   solvers: {
     hex: Record<HexSolverType, boolean>;
     square: Record<SquareSolverType, boolean>;
-    triangle: Record<TriangleSolverType, boolean>
+    triangle: Record<TriangleSolverType, boolean>;
   };
 };
 
