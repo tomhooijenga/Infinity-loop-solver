@@ -1,17 +1,18 @@
 <template>
-  <template v-for="(log, i) of condensed" :key="i">
-    <div
-      class="p-2"
-      :class="{
-        'hover:bg-light': isFirst,
-      }"
-      @mouseenter="isFirst && highlight(log.tiles)"
-      @mouseleave="highlight([])"
-    >
-      {{ log.solver }}<br />
-      <small class="text-neutral/70"> Solved {{ log.tiles.length }} </small>
-    </div>
-  </template>
+  <small class="p-2 block text-neutral/70"> Solved {{ solved }} tiles </small>
+  <div
+    v-for="(log, i) of condensed"
+    :key="i"
+    class="p-2"
+    :class="{
+      'hover:bg-light': isFirst,
+    }"
+    @mouseenter="isFirst && highlight(log.tiles)"
+    @mouseleave="highlight([])"
+  >
+    {{ log.solver }}<br />
+    <small class="text-neutral/70"> Solved {{ log.tiles.length }} </small>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -29,6 +30,10 @@ const props = defineProps({
     default: false,
   },
 });
+
+const solved = computed(() =>
+  props.group.reduce((sum, { tiles }) => sum + tiles.length, 0)
+);
 
 const condensed = computed(() => {
   let lastEntry = props.group[0];
