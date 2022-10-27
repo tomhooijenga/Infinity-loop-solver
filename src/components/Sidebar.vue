@@ -22,7 +22,7 @@
   </Button>
 
   <div
-    class="fixed left-0 inset-y-0 z-10 lg:translate-x-0 transition bg-dark lg:relative w-min overflow-y-auto"
+    class="fixed left-0 inset-y-0 z-10 shrink-0 lg:translate-x-0 transition bg-dark lg:relative w-min overflow-y-auto"
     :class="{ '-translate-x-full': !flyout, 'translate-x-0': flyout }"
   >
     <div class="sticky top-0 z-10 p-2 bg-dark/70 flex">
