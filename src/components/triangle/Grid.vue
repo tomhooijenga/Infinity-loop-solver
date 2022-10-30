@@ -5,16 +5,19 @@
 </template>
 
 <script setup lang="ts">
-import {
-  PropType,
-  ref,
-  watch,
-  watchEffect,
-} from "vue";
+import { computed, PropType, ref, watch, watchEffect } from "vue";
 import { Tile as TileType } from "@/lib/base/Tile";
-import { render, resize } from "@/canvas/resize";
+import {
+  hexRenderer,
+  render,
+  resize,
+  squareRenderer,
+  triangleRenderer,
+} from "@/canvas";
 import { BoardData } from "@/boards";
-
+import { Grid as TriangleGrid } from "@/lib/solver/triangle/Grid";
+import { Grid as SquareGrid } from "@/lib/solver/square/Grid";
+import { Grid as HexGrid } from "@/lib/solver/hex/Grid";
 const props = defineProps({
   type: {
     type: String as PropType<BoardData["type"]>,
@@ -38,6 +41,20 @@ defineEmits<{
   (e: "change", index: number, tile: TileType, direction: -1 | 1): void;
 }>();
 
+const grids = {
+  triangle: TriangleGrid,
+  square: SquareGrid,
+  hex: HexGrid,
+};
+const grid = computed(() => new grids[props.type](props.tiles));
+
+const renderers = {
+  triangle: triangleRenderer,
+  square: squareRenderer,
+  hex: hexRenderer,
+};
+const renderer = computed(() => renderers[props.type]);
+
 const wrapper = ref<HTMLDivElement>();
 const canvas = ref<HTMLCanvasElement>();
 let ctx: CanvasRenderingContext2D;
@@ -54,8 +71,8 @@ watchEffect((onCleanup) => {
 
   observer = new ResizeObserver((entries) => {
     const { width, height } = entries[0].contentRect;
-    resize(props, ctx, width, height);
-    render(props, ctx);
+    resize(grid.value, renderer.value, ctx, width, height);
+    render(grid.value, renderer.value, ctx);
   });
 
   observer.observe(wrapper.value);
@@ -67,14 +84,16 @@ watch([() => props.type, () => props.width, () => props.height], () => {
   }
 
   const { width, height } = wrapper.value.getBoundingClientRect();
-  resize(props, ctx, width, height);
-  render(props, ctx);
+  resize(grid.value, renderer.value, ctx, width, height);
+  render(grid.value, renderer.value, ctx);
 });
 
 watch(
   () => props.tiles,
-  () => {
-    render(props, ctx);
+  (tiles) => {
+    grid.value.setTiles(tiles);
+
+    render(grid.value, renderer.value, ctx)
   }
 );
 </script>
