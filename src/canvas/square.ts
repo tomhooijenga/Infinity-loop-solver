@@ -3,12 +3,7 @@ import { GridRenderer, TileRenderer } from "@/canvas";
 import { Grid } from "@/lib/base/Grid";
 
 function ratio(grid: Grid): number {
-  const x = grid.width;
-  const y = grid.height;
-
-  console.log(x, y);
-
-  return x / y;
+  return grid.width / grid.height;
 }
 
 function render(ctx: CanvasRenderingContext2D, grid: Grid, tile: Tile) {
@@ -52,7 +47,7 @@ const renderers: Record<string, TileRenderer> = {
 
     // top left
     ctx.beginPath();
-    ctx.arc(x, y, size / 2, 0,0.5 * Math.PI);
+    ctx.arc(x, y, size / 2, 0, 0.5 * Math.PI);
     ctx.stroke();
 
     ctx.beginPath();
@@ -87,7 +82,7 @@ const renderers: Record<string, TileRenderer> = {
   Junction(ctx: CanvasRenderingContext2D, tile: Tile, size, x, y) {
     ctx.fillStyle = "red";
     ctx.strokeStyle = "red";
-    ctx.lineWidth = size / 100 * 6;
+    ctx.lineWidth = (size / 100) * 6;
 
     ctx.beginPath();
     ctx.arc(x + size, y, size / 2, 0.5 * Math.PI, Math.PI);
@@ -115,4 +110,4 @@ const renderers: Record<string, TileRenderer> = {
 export const renderer: GridRenderer = {
   ratio,
   render,
-}
+};
