@@ -5,21 +5,30 @@
 </template>
 
 <script setup lang="ts">
-import { computed, CSSProperties, onMounted, PropType, ref, watch, watchEffect } from "vue";
+import {
+  PropType,
+  ref,
+  watch,
+  watchEffect,
+} from "vue";
 import { Tile as TileType } from "@/lib/base/Tile";
 import { render, resize } from "@/canvas/resize";
-import { useBoard } from "@/use-board";
+import { BoardData } from "@/boards";
 
 const props = defineProps({
+  type: {
+    type: String as PropType<BoardData["type"]>,
+    required: true,
+  },
   tiles: {
     type: Array as PropType<TileType[]>,
     required: true,
   },
-  x: {
+  width: {
     type: Number,
     required: true,
   },
-  y: {
+  height: {
     type: Number,
     required: true,
   },
@@ -29,20 +38,9 @@ defineEmits<{
   (e: "change", index: number, tile: TileType, direction: -1 | 1): void;
 }>();
 
-const gridStyle = computed((): CSSProperties => {
-  const x = (props.x + 1) / 2;
-  const y = props.y * 0.8660254037844386;
-
-  return {
-    "aspect-ratio": `${x}/${y}`,
-  };
-});
-
 const wrapper = ref<HTMLDivElement>();
 const canvas = ref<HTMLCanvasElement>();
 let ctx: CanvasRenderingContext2D;
-const { board } = useBoard();
-
 let observer: ResizeObserver;
 watchEffect((onCleanup) => {
   onCleanup(() => observer?.disconnect());
@@ -56,23 +54,27 @@ watchEffect((onCleanup) => {
 
   observer = new ResizeObserver((entries) => {
     const { width, height } = entries[0].contentRect;
-    resize(board, ctx, width, height);
-    render(board, ctx);
+    resize(props, ctx, width, height);
+    render(props, ctx);
   });
 
   observer.observe(wrapper.value);
 });
 
-watch([() => board.width, () => board.height], () => {
+watch([() => props.type, () => props.width, () => props.height], () => {
   if (!ctx || !wrapper.value) {
     return;
   }
 
-  const { width, height } = wrapper.value.getBoundingClientRect()
-  resize(board, ctx, width, height);
+  const { width, height } = wrapper.value.getBoundingClientRect();
+  resize(props, ctx, width, height);
+  render(props, ctx);
 });
 
-watch(() => board.tiles, () => {
-  render(board, ctx);
-})
+watch(
+  () => props.tiles,
+  () => {
+    render(props, ctx);
+  }
+);
 </script>

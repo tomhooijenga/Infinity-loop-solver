@@ -1,29 +1,9 @@
 <template>
   <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
     <TriangleGrid
-      :tiles="board.tiles"
-      :x="board.width"
-      :y="board.height"
+      v-bind="board"
       @change="nextTile"
     />
-
-<!--    <SquareGrid-->
-<!--      v-if="board.type === 'square'"-->
-<!--      :tiles="board.tiles"-->
-<!--      :x="board.width"-->
-<!--      :y="board.height"-->
-<!--      class="max-h-full m-auto"-->
-<!--      @change="nextTile"-->
-<!--    />-->
-
-<!--    <HexGrid-->
-<!--      v-if="board.type === 'hex'"-->
-<!--      :tiles="board.tiles"-->
-<!--      :x="board.width"-->
-<!--      :y="board.height"-->
-<!--      class="max-h-full m-auto"-->
-<!--      @change="nextTile"-->
-<!--    />-->
 
     <section class="flex flex-wrap bg-dark p-2">
       <Button :disabled="isRunning" @click="generateBoard"> Generate </Button>
@@ -41,8 +21,6 @@ import { defineComponent, ref } from "vue";
 import { BoardData, solve } from "@/boards";
 import Button from "@/components/Button.vue";
 import TriangleGrid from "@/components/triangle/Grid.vue";
-// import SquareGrid from "@/components/square/Grid.vue";
-// import HexGrid from "@/components/hex/Grid.vue";
 import { useBoard } from "@/use-board";
 import { Tile, TileConstructor } from "@/lib/base/Tile";
 import * as tri from "@/lib/solver/triangle/tiles";
@@ -78,8 +56,6 @@ export default defineComponent({
   components: {
     Button,
     TriangleGrid,
-    // SquareGrid,
-    // HexGrid,
   },
 
   setup() {

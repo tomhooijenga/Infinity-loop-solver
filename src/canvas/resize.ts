@@ -1,7 +1,12 @@
 import { BoardData } from "@/boards";
 import { Tile } from "@/lib/base/Tile";
 
-export function resize(board: BoardData, ctx: CanvasRenderingContext2D, maxW: number, maxH: number) {
+export function resize(
+  board: BoardData,
+  ctx: CanvasRenderingContext2D,
+  maxW: number,
+  maxH: number
+) {
   const canvas = ctx.canvas;
 
   const ratio = squareRatio(board);
@@ -23,8 +28,8 @@ function triangleRatio(board: BoardData): number {
 }
 
 function squareRatio(board: BoardData): number {
-  const x = board.width
-  const y = board.height
+  const x = board.width;
+  const y = board.height;
 
   return x / y;
 }
