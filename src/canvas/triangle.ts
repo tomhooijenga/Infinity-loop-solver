@@ -1,93 +1,96 @@
 import { GridRenderer, TileRenderer } from "@/canvas/index";
 import { Tile } from "@/lib/base/Tile";
 import { Grid } from "@/lib/solver/triangle/Grid";
+import { arc, rad } from "@/canvas/util";
 
-const TRIANGLE_RATIO = 0.8660254037844386;
+const HEIGHT_RATIO = 1 / (2 / Math.sqrt(3)); // 0.8660
+const CENTER_OFFSET = 1 / 1.5; // 0.6666
 
 function ratio(grid: Grid) {
   const width = grid.width / 2 + 0.5;
-  const height = grid.height * TRIANGLE_RATIO;
+  const height = grid.height * HEIGHT_RATIO;
 
   return width / height;
 }
-
-// const gridStyle = computed((): CSSProperties => {
-//   const x = (props.x + 1) / 2;
-//   const y = props.y * 0.8660254037844386;
-//
-//   return {
-//     "grid-template-columns": `repeat(${props.x + 1}, 1fr)`,
-//     "grid-template-rows": `repeat(${props.y}, 1fr)`,
-//     "aspect-ratio": `${x}/${y}`,
-//   };
-// });
 
 function render(ctx: CanvasRenderingContext2D, grid: Grid, tile: Tile) {
   const horizontalTiles = grid.width / 2 + 0.5;
   const width = ctx.canvas.width / horizontalTiles;
   const height = ctx.canvas.height / grid.height;
   const { x, y, direction } = tile;
-  const dy = height * y;
-  const dx = width * (x / 2);
+  const tileX = width * (x / 2);
+  const tileY = height * y;
+  const squareCx = tileX + width / 2;
+  const squareCy = tileY + height / 2;
 
   ctx.save();
 
   if (!grid.isPointyUp(tile)) {
-    ctx.translate(dx + width / 2, dy + height / 2);
+    ctx.translate(squareCx, squareCy);
     ctx.rotate(Math.PI);
-    ctx.translate((dx + width / 2) * -1, (dy + height / 2) * -1);
+    ctx.translate(-squareCx, -squareCy);
   }
 
-  ctx.strokeStyle = "green";
-  ctx.beginPath();
-  ctx.strokeRect(dx, dy, width, height);
+  const triangleCx = squareCx;
+  const triangleCy = tileY + height * CENTER_OFFSET;
 
-  ctx.strokeStyle = "blue";
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(dx + width / 2, dy);
-  ctx.lineTo(dx + width, dy + height);
-  ctx.lineTo(dx, dy + height);
-  ctx.closePath();
-  ctx.stroke();
+  ctx.translate(triangleCx, triangleCy);
+  let rotate = rad(120 * direction);
 
-  // ctx.translate(dx + width / 2, dy + width / 2);
-  // const rotate =
-  //   ((360 / grid.directionUtil.numSides) * direction * Math.PI) / 180;
-  // ctx.rotate(rotate);
-  // ctx.translate((dx + width / 2) * -1, (dy + width / 2) * -1);
+  if (!grid.isPointyUp(tile)) {
+    rotate += rad(120);
+  }
 
-  renderers[tile.type]?.(ctx, tile, width, dx, dy);
+  ctx.rotate(rotate);
+  ctx.translate(-triangleCx, -triangleCy);
+
+  renderers[tile.type](ctx, tile, width, height, tileX, tileY);
   ctx.restore();
 }
 
-// function tileStyle(tile: TileType): CSSProperties {
-//   let rotate = tile.direction * 120;
-//
-//   if (!pointyUp(tile)) {
-//     // 180 to flip it, 120 to make down actually down again.
-//     rotate += 300;
-//   }
-//
-//   return {
-//     gridRow: `${tile.y + 1} / span 1`,
-//     gridColumn: `${tile.x + 1} / span 2`,
-//     transform: `rotate(${rotate}deg)`,
-//     transformOrigin: "50% 66.66666%",
-//     position: "relative",
-//     top: pointyUp(tile) ? 0 : "-33%",
-//   };
-// }
-
 const renderers: Record<string, TileRenderer> = {
-  None(ctx, tile, size, x, y) {
-    const cx = x + size / 2;
-    const cy = y + size / 2;
+  None(ctx, tile, width, height, x, y) {
+    const cx = x + width / 2;
+    const cy = y + height * CENTER_OFFSET;
 
-    ctx.fillStyle = "red";
-    ctx.beginPath();
-    ctx.arc(cx, cy, (size / 100) * 2, 0, 2 * Math.PI);
-    ctx.fill();
+    arc(ctx, width, cx, cy, (width / 100) * 2, 0, 360, false, "fill");
+  },
+  End(ctx, tile, width, height, x, y) {
+    const cx = x + width / 2;
+    const cy = y + height * CENTER_OFFSET;
+    const r = (width / 100) * 15;
+
+    arc(ctx, width, cx, cy, r, 0, 360);
+
+    ctx.translate(cx, cy);
+    ctx.rotate(rad(-120));
+    ctx.translate(-cx, -cy);
+
+    const percent = width / 100;
+    const incircleR = (Math.sqrt(3) / 6) * width;
+
+    ctx.fillStyle = 'darkRed';
+    ctx.fillRect(
+      cx - percent * 5,
+      cy + r + percent * 3,
+      percent * 10,
+      incircleR - r - percent * 3
+    );
+    ctx.fillStyle = 'red';
+    ctx.fillRect(
+      cx - percent * 3,
+      cy + r + percent * 2, //  Tiny overlap to prevent edges
+      percent * 6,
+      incircleR - r - percent * 2
+    );
+  },
+  Turn(ctx, tile, width, height, x, y) {
+    arc(ctx, width, x + width, y + height, width / 2, 180, 60);
+  },
+  Triangle(ctx, tile, width, height, x, y) {
+    arc(ctx, width, x + width, y + height, width / 2, 180, 60);
+    arc(ctx, width, x, y + height, width / 2, 300, 60);
+    arc(ctx, width, x + width / 2, y, width / 2, 60, 60);
   },
 };
 
@@ -95,17 +98,3 @@ export const renderer: GridRenderer = {
   ratio,
   render,
 };
-
-//
-// function triangle(ctx: CanvasRenderingContext2D, w, x, y) {
-//   const h = w * 0.8660254037844386;
-//   const dx = w * x;
-//   const dy = h * y;
-//
-//   ctx.beginPath();
-//
-//   ctx.moveTo(dx + w / 2, dy);
-//   ctx.lineTo(dx + w, dy + h);
-//   ctx.lineTo(dx, dy + h);
-//   ctx.fill();
-// }

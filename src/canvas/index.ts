@@ -16,7 +16,8 @@ export type GridRenderer = {
 export type TileRenderer = (
   ctx: CanvasRenderingContext2D,
   tile: Tile,
-  size: number,
+  width: number,
+  height: number,
   x: number,
   y: number
 ) => void;

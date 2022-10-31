@@ -28,12 +28,12 @@ function render(ctx: CanvasRenderingContext2D, grid: Grid, tile: Tile) {
   ctx.rotate(rotate);
   ctx.translate((dx + size / 2) * -1, (dy + size / 2) * -1);
 
-  renderers[tile.type](ctx, tile, size, dx, dy);
+  renderers[tile.type](ctx, tile, size, size, dx, dy);
   ctx.restore();
 }
 
 const renderers: Record<string, TileRenderer> = {
-  None(ctx, tile, size, x, y) {
+  None(ctx, tile, size, _, x, y) {
     const cx = x + size / 2;
     const cy = y + size / 2;
 
@@ -42,7 +42,7 @@ const renderers: Record<string, TileRenderer> = {
     ctx.arc(cx, cy, (size / 100) * 2, 0, 2 * Math.PI);
     ctx.fill();
   },
-  Cross(ctx, tile, size, x, y) {
+  Cross(ctx, tile, size, _, x, y) {
     ctx.strokeStyle = "red";
     ctx.lineWidth = (size / 100) * 6;
 
@@ -63,7 +63,7 @@ const renderers: Record<string, TileRenderer> = {
     ctx.arc(x, y + size, size / 2, 1.5 * Math.PI, 2 * Math.PI);
     ctx.stroke();
   },
-  End(ctx, tile, size, x, y) {
+  End(ctx, tile, size, _, x, y) {
     const cx = x + size / 2;
     const cy = y + size / 2;
     const lineWidth = (size / 100) * 6;
@@ -80,7 +80,7 @@ const renderers: Record<string, TileRenderer> = {
     ctx.beginPath();
     ctx.fillRect(x + size / 2 - lineWidth / 2, y, lineWidth, r);
   },
-  Junction(ctx, tile, size, x, y) {
+  Junction(ctx, tile, size, _, x, y) {
     ctx.fillStyle = "red";
     ctx.strokeStyle = "red";
     ctx.lineWidth = (size / 100) * 6;
@@ -93,13 +93,13 @@ const renderers: Record<string, TileRenderer> = {
     ctx.arc(x + size, y + size, size / 2, Math.PI, 1.5 * Math.PI);
     ctx.stroke();
   },
-  Line(ctx, tile, size, x, y) {
+  Line(ctx, tile, size, _, x, y) {
     const lineWidth = (size / 100) * 6;
     ctx.beginPath();
     ctx.fillStyle = "red";
     ctx.fillRect(x + size / 2 - lineWidth / 2, y, lineWidth, size);
   },
-  Turn(ctx, tile, size, x, y) {
+  Turn(ctx, tile, size, _, x, y) {
     ctx.beginPath();
     ctx.strokeStyle = "red";
     ctx.lineWidth = (size / 100) * 6;
