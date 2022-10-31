@@ -27,7 +27,7 @@ function render(ctx: CanvasRenderingContext2D, grid: Grid, tile: Tile) {
 
   if (!grid.isPointyUp(tile)) {
     ctx.translate(squareCx, squareCy);
-    ctx.rotate(Math.PI);
+    ctx.rotate(rad(180));
     ctx.translate(-squareCx, -squareCy);
   }
 

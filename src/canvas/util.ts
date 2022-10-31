@@ -14,20 +14,18 @@ export function arc(
   draw: 'stroke' | 'fill'  = "stroke"
 ): void {
   if (shadow) {
+    ctx.beginPath();
     ctx.fillStyle = "darkRed";
     ctx.strokeStyle = "darkRed";
     ctx.lineWidth = (width / 100) * 10;
-
-    ctx.beginPath();
     ctx.arc(x, y, r, rad(start), rad(start + amount));
     ctx.stroke();
   }
 
+  ctx.beginPath();
   ctx.fillStyle = "red";
   ctx.strokeStyle = "red";
   ctx.lineWidth = (width / 100) * 6;
-
-  ctx.beginPath();
   ctx.arc(x, y, r, rad(start), rad(start + amount));
 
   if (draw === "stroke") {
