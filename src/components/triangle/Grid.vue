@@ -78,23 +78,22 @@ watchEffect((onCleanup) => {
   observer.observe(wrapper.value);
 });
 
-watch([() => props.type, () => props.width, () => props.height], () => {
+watch(props, () => {
   if (!ctx || !wrapper.value) {
     return;
   }
 
+  grid.value.setTiles(props.tiles);
+
   const { width, height } = wrapper.value.getBoundingClientRect();
+
   resize(grid.value, renderer.value, ctx, width, height);
   render(grid.value, renderer.value, ctx);
 });
 
 watch(
   () => props.tiles,
-  (tiles) => {
-    grid.value.setTiles(tiles);
-
-    render(grid.value, renderer.value, ctx);
-  },
+  () => render(grid.value, renderer.value, ctx),
   { deep: true }
 );
 </script>
