@@ -1,11 +1,11 @@
 <template>
   <div ref="wrapper" class="w-full h-full min-w-0 flex">
-    <canvas ref="canvas" class="m-auto ring" />
+    <canvas ref="canvas" class="m-auto" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed, PropType, ref, watch, watchEffect } from "vue";
+import { computed, isReactive, PropType, ref, watch, watchEffect } from "vue";
 import { Tile as TileType } from "@/lib/base/Tile";
 import {
   hexRenderer,
@@ -93,7 +93,8 @@ watch(
   (tiles) => {
     grid.value.setTiles(tiles);
 
-    render(grid.value, renderer.value, ctx)
-  }
+    render(grid.value, renderer.value, ctx);
+  },
+  { deep: true }
 );
 </script>
