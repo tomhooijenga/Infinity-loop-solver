@@ -1,6 +1,7 @@
 import { Tile } from "@/lib/base/Tile";
 import { GridRenderer, TileRenderer } from "@/canvas";
 import { Grid } from "@/lib/base/Grid";
+import { arc } from "@/canvas/util";
 
 function ratio(grid: Grid): number {
   return grid.width / grid.height;
@@ -36,75 +37,49 @@ const renderers: Record<string, TileRenderer> = {
   None(ctx, tile, size, _, x, y) {
     const cx = x + size / 2;
     const cy = y + size / 2;
+    const r = (size / 100) * 2;
 
-    ctx.fillStyle = "red";
-    ctx.beginPath();
-    ctx.arc(cx, cy, (size / 100) * 2, 0, 2 * Math.PI);
-    ctx.fill();
+    arc(ctx, size, cx, cy, r, 0, 360, false, "fill");
   },
   Cross(ctx, tile, size, _, x, y) {
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = (size / 100) * 6;
+    const r = size / 2;
 
-    // top left
-    ctx.beginPath();
-    ctx.arc(x, y, size / 2, 0, 0.5 * Math.PI);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(x + size, y, size / 2, 0.5 * Math.PI, Math.PI);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(x + size, y + size, size / 2, Math.PI, 1.5 * Math.PI);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(x, y + size, size / 2, 1.5 * Math.PI, 2 * Math.PI);
-    ctx.stroke();
+    arc(ctx, size, x, y, r, 0, 90);
+    arc(ctx, size, x + size, y, r, 90, 90);
+    arc(ctx, size, x + size, y + size, r, 180, 90);
+    arc(ctx, size, x, y + size, r, 270, 90);
   },
   End(ctx, tile, size, _, x, y) {
     const cx = x + size / 2;
     const cy = y + size / 2;
-    const lineWidth = (size / 100) * 6;
-    const r = (size / 100) * 25;
+    const percent = size / 100;
+    const r = percent * 25;
 
+    arc(ctx, size, cx, cy, r, 0, 360);
+
+    ctx.fillStyle = "darkRed";
+    ctx.fillRect(cx - percent * 5, y, percent * 10, size / 2 - r - percent * 4);
     ctx.fillStyle = "red";
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = lineWidth;
-
-    ctx.beginPath();
-    ctx.arc(cx, cy, r, 0, 2 * Math.PI);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.fillRect(x + size / 2 - lineWidth / 2, y, lineWidth, r);
+    ctx.fillRect(cx - percent * 3, y, percent * 6, size / 2 - r - percent * 2);
   },
   Junction(ctx, tile, size, _, x, y) {
-    ctx.fillStyle = "red";
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = (size / 100) * 6;
+    const r = (size / 100) * 50;
 
-    ctx.beginPath();
-    ctx.arc(x + size, y, size / 2, 0.5 * Math.PI, Math.PI);
-    ctx.stroke();
-
-    ctx.beginPath();
-    ctx.arc(x + size, y + size, size / 2, Math.PI, 1.5 * Math.PI);
-    ctx.stroke();
+    arc(ctx, size, x + size, y, r, 90, 90);
+    arc(ctx, size, x + size, y + size, r, 180, 90);
   },
   Line(ctx, tile, size, _, x, y) {
-    const lineWidth = (size / 100) * 6;
-    ctx.beginPath();
+    const percent = size / 100;
+
+    ctx.fillStyle = "darkRed";
+    ctx.fillRect(x + size / 2 - percent * 5, y, percent * 10, size);
     ctx.fillStyle = "red";
-    ctx.fillRect(x + size / 2 - lineWidth / 2, y, lineWidth, size);
+    ctx.fillRect(x + size / 2 - percent * 3, y, percent * 6, size);
   },
   Turn(ctx, tile, size, _, x, y) {
-    ctx.beginPath();
-    ctx.strokeStyle = "red";
-    ctx.lineWidth = (size / 100) * 6;
-    ctx.arc(x + size, y, size / 2, 0.5 * Math.PI, Math.PI);
-    ctx.stroke();
+    const r = (size / 100) * 50;
+
+    arc(ctx, size, x + size, y, r, 90, 90);
   },
 };
 
