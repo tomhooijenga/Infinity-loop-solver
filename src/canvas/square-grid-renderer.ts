@@ -1,34 +1,33 @@
-import { Tile } from "@/lib/base/Tile";
 import { GridRenderer, TileRenderer } from "@/canvas";
-import { Grid } from "@/lib/base/Grid";
 import { arc, rad } from "@/canvas/util";
 
-function ratio(grid: Grid): number {
-  return grid.width / grid.height;
-}
+export class SquareGridRenderer extends GridRenderer {
+  ratio(): number {
+    const { width, height } = this.grid;
+    return width / height;
+  }
 
-function render(ctx: CanvasRenderingContext2D, grid: Grid, tile: Tile) {
-  const size = ctx.canvas.width / grid.width;
-  const { x, y, direction } = tile;
-  const dx = size * x;
-  const dy = size * y;
+  render(): void {
+    super.render();
 
-  // ctx.beginPath();
-  // ctx.strokeStyle = "blue";
-  // ctx.strokeRect(dx, dy, size, size);
-  //
-  // ctx.beginPath();
-  // ctx.fillStyle = "green";
-  // ctx.fillRect(dx + size / 2 - 0.5, dy, 1, size);
-  // ctx.fillRect(dx, dy + size / 2 - 0.5, size, 1);
+    const { ctx, grid } = this;
+    const size = ctx.canvas.width / grid.width;
 
-  ctx.save();
-  ctx.translate(dx + size / 2, dy + size / 2);
-  ctx.rotate(rad(90 * direction));
-  ctx.translate((dx + size / 2) * -1, (dy + size / 2) * -1);
+    grid.tiles.forEach((tile) => {
+      const { x, y, direction } = tile;
+      const dx = size * x;
+      const dy = size * y;
 
-  renderers[tile.type](ctx, tile, size, size, dx, dy);
-  ctx.restore();
+      ctx.save();
+      ctx.translate(dx + size / 2, dy + size / 2);
+      ctx.rotate(rad(90 * direction));
+      ctx.translate((dx + size / 2) * -1, (dy + size / 2) * -1);
+
+      renderers[tile.type](ctx, tile, size, size, dx, dy);
+
+      ctx.restore();
+    });
+  }
 }
 
 const renderers: Record<string, TileRenderer> = {
@@ -79,9 +78,4 @@ const renderers: Record<string, TileRenderer> = {
 
     arc(ctx, size, x + size, y, r, 90, 90);
   },
-};
-
-export const renderer: GridRenderer = {
-  ratio,
-  render,
 };
