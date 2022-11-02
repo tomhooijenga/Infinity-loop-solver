@@ -11,7 +11,7 @@ export function arc(
   start: number,
   amount: number,
   shadow = true,
-  draw: 'stroke' | 'fill'  = "stroke"
+  draw: "stroke" | "fill" = "stroke"
 ): void {
   if (shadow) {
     ctx.beginPath();
