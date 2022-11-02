@@ -28,10 +28,18 @@
 // };
 
 import { GridRenderer } from "@/canvas/grid-renderer";
+import { TileRenderer } from "@/canvas/index";
 
 export class HexGridRenderer extends GridRenderer {
+  tileRenderers: Record<string, TileRenderer> = {
+    None: () => null,
+  };
+
   ratio(): number {
     return 0;
   }
 
+  tileSize(): { width: number; height: number } {
+    return { height: 0, width: 0 };
+  }
 }

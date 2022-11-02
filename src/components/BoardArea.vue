@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import { BoardData, solve } from "@/boards";
 import Button from "@/components/Button.vue";
 import TriangleGrid from "@/components/triangle/Grid.vue";
