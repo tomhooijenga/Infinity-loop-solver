@@ -29,6 +29,7 @@
 
 import { GridRenderer } from "@/canvas/grid-renderer";
 import { TileRenderer } from "@/canvas/index";
+import { Tile } from "@/lib/base/Tile";
 
 export class HexGridRenderer extends GridRenderer {
   tileRenderers: Record<string, TileRenderer> = {
@@ -41,5 +42,13 @@ export class HexGridRenderer extends GridRenderer {
 
   tileSize(): { width: number; height: number } {
     return { height: 0, width: 0 };
+  }
+
+  render(tiles = this.grid.tiles): void {
+    //
+  }
+
+  clearTile(tile: Tile, x: number, y: number, width: number, height: number) {
+    //
   }
 }

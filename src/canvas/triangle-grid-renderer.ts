@@ -1,6 +1,7 @@
 import { GridRenderer, TileRenderer } from "@/canvas";
 import { arc, rad } from "@/canvas/util";
 import { Grid } from "@/lib/solver/triangle/Grid";
+import { Tile } from "@/lib/base/Tile";
 
 const HEIGHT_RATIO = 1 / (2 / Math.sqrt(3)); // 0.8660
 const CENTER_OFFSET = 1 / 1.5; // 0.6666
@@ -64,18 +65,18 @@ export class TriangleGridRenderer extends GridRenderer {
     return w / h;
   }
 
-  render(): void {
-    super.render();
-
+  render(tiles = this.grid.tiles): void {
     const { ctx, grid } = this;
     const { height, width } = this.tileSize();
 
-    grid.tiles.forEach((tile) => {
+    tiles.forEach((tile) => {
       const { x, y, direction } = tile;
       const tileX = width * (x / 2);
       const tileY = height * y;
       const squareCx = tileX + width / 2;
       const squareCy = tileY + height / 2;
+
+      this.clearTile(tile, tileX, tileY, width, height);
 
       ctx.save();
 
@@ -102,6 +103,27 @@ export class TriangleGridRenderer extends GridRenderer {
 
       ctx.restore();
     });
+  }
+
+  clearTile(tile: Tile, x: number, y: number, width: number, height: number) {
+    const ctx = this.ctx;
+
+    ctx.save();
+    ctx.beginPath();
+
+    if (this.grid.isPointyUp(tile)) {
+      ctx.moveTo(x + width / 2, y);
+      ctx.lineTo(x + width, y + height);
+      ctx.lineTo(x, y + height);
+    } else {
+      ctx.moveTo(x, y);
+      ctx.lineTo(x + width, y);
+      ctx.lineTo(x + width / 2, y + height);
+    }
+    ctx.closePath();
+    ctx.clip();
+    ctx.clearRect(x, y, width, height);
+    ctx.restore();
   }
 
   tileSize(): { width: number; height: number } {

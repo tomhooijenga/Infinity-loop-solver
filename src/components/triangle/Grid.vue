@@ -33,6 +33,12 @@ defineEmits<{
   (e: "change", index: number, tile: TileType, direction: -1 | 1): void;
 }>();
 
+const renderer = ref<GridRenderer>();
+
+defineExpose({
+  renderer,
+});
+
 const renderers = {
   triangle: (ctx: CanvasRenderingContext2D) =>
     new TriangleGridRenderer(new TriangleGrid(toRaw(props.tiles)), ctx),
@@ -46,7 +52,6 @@ const wrapper = ref<HTMLDivElement>();
 const canvas = ref<HTMLCanvasElement>();
 let ctx: CanvasRenderingContext2D;
 let observer: ResizeObserver;
-let renderer: GridRenderer;
 
 watchEffect((onCleanup) => {
   onCleanup(() => observer?.disconnect());
@@ -57,30 +62,24 @@ watchEffect((onCleanup) => {
 
   // eslint-disable-next-line
   ctx = canvas.value.getContext("2d")!;
-  renderer = renderers[props.type](ctx);
+  renderer.value = renderers[props.type](ctx);
 
   observer = new ResizeObserver((entries) => {
     const { width, height } = entries[0].contentRect;
 
-    renderer.resize(width, height);
-    renderer.render();
+    renderer.value?.resize(width, height);
+    renderer.value?.render();
   });
 
   observer.observe(wrapper.value);
 
   const { width, height } = wrapper.value.getBoundingClientRect();
 
-  renderer.resize(width, height);
+  renderer.value.resize(width, height);
 });
 
 watch(
   () => props.tiles,
-  () => renderer.grid.setTiles(toRaw(props.tiles))
-);
-
-watch(
-  () => props.tiles,
-  () => renderer.render(),
-  { deep: true }
+  () => renderer.value?.grid.setTiles(toRaw(props.tiles))
 );
 </script>

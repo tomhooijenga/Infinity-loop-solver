@@ -1,9 +1,6 @@
 <template>
   <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
-    <TriangleGrid
-      v-bind="board"
-      @change="nextTile"
-    />
+    <TriangleGrid v-bind="board" ref="grid" @change="nextTile" />
 
     <section class="flex flex-wrap bg-dark p-2">
       <Button :disabled="isRunning" @click="generateBoard"> Generate </Button>
@@ -69,6 +66,8 @@ export default defineComponent({
 
     const isRunning = ref(false);
 
+    const grid = ref();
+
     async function solveBoard() {
       startGroup();
       const progress = solve(board);
@@ -82,6 +81,8 @@ export default defineComponent({
         if (done) {
           break;
         }
+
+        grid.value.renderer.render(value.tiles);
 
         log(value);
 
@@ -113,6 +114,7 @@ export default defineComponent({
     }
 
     return {
+      grid,
       board,
       generateBoard,
       scrambleBoard,

@@ -9,11 +9,7 @@ export abstract class GridRenderer {
 
   constructor(public grid: Grid, protected ctx: CanvasRenderingContext2D) {}
 
-  public render() {
-    const { ctx } = this;
-
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-  }
+  abstract render(tiles: Tile[]): void;
 
   protected renderTile(
     tile: Tile,
@@ -24,6 +20,14 @@ export abstract class GridRenderer {
   ): void {
     this.ctx.drawImage(this.tileCache[tile.type], x, y, width, height);
   }
+
+  abstract clearTile(
+    tile: Tile,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ): void;
 
   abstract tileSize(): { width: number; height: number };
 

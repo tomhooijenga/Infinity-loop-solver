@@ -1,5 +1,6 @@
 import { GridRenderer, TileRenderer } from "@/canvas";
 import { arc, rad } from "@/canvas/util";
+import { Tile } from "@/lib/base/Tile";
 
 export class SquareGridRenderer extends GridRenderer {
   tileRenderers: Record<string, TileRenderer> = {
@@ -67,16 +68,16 @@ export class SquareGridRenderer extends GridRenderer {
     return width / height;
   }
 
-  render(): void {
-    super.render();
-
-    const { ctx, grid } = this;
+  render(tiles = this.grid.tiles): void {
+    const { ctx } = this;
     const { width: size } = this.tileSize();
 
-    grid.tiles.forEach((tile) => {
+    tiles.forEach((tile) => {
       const { x, y, direction } = tile;
       const tileX = size * x;
       const tileY = size * y;
+
+      this.clearTile(tile, tileX, tileY, size, size);
 
       ctx.save();
       ctx.translate(tileX + size / 2, tileY + size / 2);
@@ -88,6 +89,10 @@ export class SquareGridRenderer extends GridRenderer {
 
       ctx.restore();
     });
+  }
+
+  clearTile(tile: Tile, x: number, y: number, width: number, height: number) {
+    this.ctx.clearRect(x, y, width, height);
   }
 
   tileSize(): { width: number; height: number } {

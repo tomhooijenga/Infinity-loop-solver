@@ -52,6 +52,8 @@ function scrambleBoard() {
   board.tiles.forEach((tile) => {
     tile.direction = grid.directionUtil.random();
   });
+
+  board.tiles = [...board.tiles];
 }
 
 function highlight(tiles: Tile[]) {
