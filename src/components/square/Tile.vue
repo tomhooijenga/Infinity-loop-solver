@@ -43,9 +43,14 @@
 
     <template v-else-if="tile.type === 'Cross'">
       <path
+        class="fill-transparent stroke-light stroke-[10px]"
+        d="M0,50 a50,50 0 0,1 50,-50"
+      />
+      <path
         class="fill-transparent stroke-red stroke-[6px]"
         d="M 0 -50 A50,50 0 0,0 50,0"
       />
+
       <path
         class="fill-transparent stroke-light stroke-[10px]"
         d="M0,50 a50,50 0 0,1 50,-50"
@@ -54,22 +59,30 @@
         class="fill-transparent stroke-red stroke-[6px]"
         d="M0,50 a50,50 0 0,1 50,-50"
       />
+
+      <path
+        class="fill-transparent stroke-light stroke-[10px]"
+        d="M-50,0 a50,50 0 0,1 50,50"
+      />
+      <path
+        class="fill-transparent stroke-red stroke-[6px]"
+        d="M-50,0 a50,50 0 0,1 50,50"
+      />
+
+      <path
+        class="fill-transparent stroke-light stroke-[10px]"
+        d="M-50,0 a50,50 0 0,0 50,-50"
+      />
+      <path
+        class="fill-transparent stroke-red stroke-[6px]"
+        d="M-50,0 a50,50 0 0,0 50,-50"
+      />
     </template>
   </svg>
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
 import { Tile } from "@/lib/base/Tile";
 
-export default defineComponent({
-  name: "Tile",
-
-  props: {
-    tile: {
-      type: Tile,
-      required: true,
-    },
-  },
-});
+defineProps<{ tile: Tile }>();
 </script>
