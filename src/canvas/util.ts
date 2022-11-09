@@ -1,3 +1,5 @@
+import { colors } from "@/canvas";
+
 export function rad(deg: number): number {
   return (deg * Math.PI) / 180;
 }
@@ -15,16 +17,16 @@ export function arc(
 ): void {
   if (shadow) {
     ctx.beginPath();
-    ctx.fillStyle = "darkRed";
-    ctx.strokeStyle = "darkRed";
+    ctx.fillStyle = colors.light;
+    ctx.strokeStyle = colors.light;
     ctx.lineWidth = (width / 100) * 10;
     ctx.arc(x, y, r, rad(start), rad(start + amount));
     ctx.stroke();
   }
 
   ctx.beginPath();
-  ctx.fillStyle = "red";
-  ctx.strokeStyle = "red";
+  ctx.fillStyle = colors.red;
+  ctx.strokeStyle = colors.red;
   ctx.lineWidth = (width / 100) * 6;
   ctx.arc(x, y, r, rad(start), rad(start + amount));
 

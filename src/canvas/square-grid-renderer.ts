@@ -1,4 +1,4 @@
-import { GridRenderer, TileRenderer } from "@/canvas";
+import { GridRenderer, TileRenderer, colors } from "@/canvas";
 import { arc, rad } from "@/canvas/util";
 import { Tile } from "@/lib/base/Tile";
 
@@ -27,14 +27,14 @@ export class SquareGridRenderer extends GridRenderer {
 
       arc(ctx, size, cx, cy, r, 0, 360);
 
-      ctx.fillStyle = "darkRed";
+      ctx.fillStyle = colors.light;
       ctx.fillRect(
         cx - percent * 5,
         y,
         percent * 10,
         size / 2 - r - percent * 4
       );
-      ctx.fillStyle = "red";
+      ctx.fillStyle = colors.red;
       ctx.fillRect(
         cx - percent * 3,
         y,
@@ -51,9 +51,9 @@ export class SquareGridRenderer extends GridRenderer {
     Line(ctx, size, _, x, y) {
       const percent = size / 100;
 
-      ctx.fillStyle = "darkRed";
+      ctx.fillStyle = colors.light;
       ctx.fillRect(x + size / 2 - percent * 5, y, percent * 10, size);
-      ctx.fillStyle = "red";
+      ctx.fillStyle = colors.red;
       ctx.fillRect(x + size / 2 - percent * 3, y, percent * 6, size);
     },
     Turn(ctx, size, _, x, y) {

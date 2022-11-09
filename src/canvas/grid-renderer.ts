@@ -1,5 +1,5 @@
 import { Grid } from "@/lib/base/Grid";
-import { TileRenderer } from "@/canvas/index";
+import { TileRenderer } from "@/canvas";
 import { Tile } from "@/lib/base/Tile";
 
 export abstract class GridRenderer {

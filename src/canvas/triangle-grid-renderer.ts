@@ -1,4 +1,4 @@
-import { GridRenderer, TileRenderer } from "@/canvas";
+import { GridRenderer, TileRenderer, colors } from "@/canvas";
 import { arc, rad } from "@/canvas/util";
 import { Grid } from "@/lib/solver/triangle/Grid";
 import { Tile } from "@/lib/base/Tile";
@@ -28,14 +28,14 @@ export class TriangleGridRenderer extends GridRenderer {
       const percent = width / 100;
       const incircleR = (Math.sqrt(3) / 6) * width;
 
-      ctx.fillStyle = "darkRed";
+      ctx.fillStyle = colors.light;
       ctx.fillRect(
         cx - percent * 5,
         cy + r + percent * 3,
         percent * 10,
         incircleR - r - percent * 3
       );
-      ctx.fillStyle = "red";
+      ctx.fillStyle = colors.red;
       ctx.fillRect(
         cx - percent * 3,
         cy + r + percent * 2, //  Tiny overlap to prevent edges
