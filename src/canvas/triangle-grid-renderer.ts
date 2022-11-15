@@ -1,4 +1,4 @@
-import { GridRenderer, TileRenderer, colors } from "@/canvas";
+import { colors, GridRenderer, TileRenderer } from "@/canvas";
 import { arc, rad } from "@/canvas/util";
 import { Grid } from "@/lib/solver/triangle/Grid";
 import { Tile } from "@/lib/base/Tile";
@@ -50,7 +50,7 @@ export class TriangleGridRenderer extends GridRenderer {
       arc(ctx, width, x + width, y + height, width / 2, 180, 60);
       arc(ctx, width, x, y + height, width / 2, 300, 60);
       arc(ctx, width, x + width / 2, y, width / 2, 60, 60);
-    },
+    }
   };
 
   constructor(public grid: Grid, ctx: CanvasRenderingContext2D) {
@@ -76,8 +76,6 @@ export class TriangleGridRenderer extends GridRenderer {
       const squareCx = tileX + width / 2;
       const squareCy = tileY + height / 2;
 
-      this.clearTile(tile, tileX, tileY, width, height);
-
       ctx.save();
 
       if (!grid.isPointyUp(tile)) {
@@ -99,6 +97,7 @@ export class TriangleGridRenderer extends GridRenderer {
       ctx.rotate(rotate);
       ctx.translate(-triangleCx, -triangleCy);
 
+      this.clearTile(tile, tileX, tileY, width, height);
       this.renderTile(tile, tileX, tileY, width, height);
 
       ctx.restore();
@@ -109,18 +108,9 @@ export class TriangleGridRenderer extends GridRenderer {
     const ctx = this.ctx;
 
     ctx.save();
-    ctx.beginPath();
 
-    if (this.grid.isPointyUp(tile)) {
-      ctx.moveTo(x + width / 2, y);
-      ctx.lineTo(x + width, y + height);
-      ctx.lineTo(x, y + height);
-    } else {
-      ctx.moveTo(x, y);
-      ctx.lineTo(x + width, y);
-      ctx.lineTo(x + width / 2, y + height);
-    }
-    ctx.closePath();
+    this.drawTileOutline(tile, x, y, width, height, 0);
+
     ctx.clip();
     ctx.clearRect(x, y, width, height);
     ctx.restore();
@@ -133,5 +123,22 @@ export class TriangleGridRenderer extends GridRenderer {
     const height = ctx.canvas.height / grid.height;
 
     return { height, width };
+  }
+
+  drawTileOutline(
+    tile: Tile,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    inset: number
+  ) {
+    const ctx = this.ctx;
+
+    ctx.beginPath();
+    ctx.moveTo(x + width / 2, y + inset);
+    ctx.lineTo(x + width - inset, y + height - inset);
+    ctx.lineTo(x + inset, y + height - inset);
+    ctx.closePath();
   }
 }

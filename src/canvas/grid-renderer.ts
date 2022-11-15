@@ -1,5 +1,5 @@
 import { Grid } from "@/lib/base/Grid";
-import { TileRenderer } from "@/canvas";
+import { TileRenderer, colors } from "@/canvas";
 import { Tile } from "@/lib/base/Tile";
 
 export abstract class GridRenderer {
@@ -18,7 +18,16 @@ export abstract class GridRenderer {
     width: number,
     height: number
   ): void {
-    this.ctx.drawImage(this.tileCache[tile.type], x, y, width, height);
+    const ctx = this.ctx;
+
+    if (!tile.solved) {
+      this.drawTileOutline(tile, x, y, width, height, width / 100 * 5);
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = colors.red;
+      ctx.stroke();
+    }
+
+    ctx.drawImage(this.tileCache[tile.type], x, y, width, height);
   }
 
   abstract clearTile(
@@ -30,6 +39,8 @@ export abstract class GridRenderer {
   ): void;
 
   abstract tileSize(): { width: number; height: number };
+
+  abstract drawTileOutline(tile: Tile, x: number, y: number, width: number, height: number, inset: number): void;
 
   abstract ratio(): number;
 

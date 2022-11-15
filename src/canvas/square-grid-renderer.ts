@@ -1,4 +1,4 @@
-import { GridRenderer, TileRenderer, colors } from "@/canvas";
+import { colors, GridRenderer, TileRenderer } from "@/canvas";
 import { arc, rad } from "@/canvas/util";
 import { Tile } from "@/lib/base/Tile";
 
@@ -60,7 +60,7 @@ export class SquareGridRenderer extends GridRenderer {
       const r = (size / 100) * 50;
 
       arc(ctx, size, x + size, y, r, 90, 90);
-    },
+    }
   };
 
   ratio(): number {
@@ -100,5 +100,23 @@ export class SquareGridRenderer extends GridRenderer {
     const size = ctx.canvas.width / grid.width;
 
     return { height: size, width: size };
+  }
+
+  drawTileOutline(
+    tile: Tile,
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    inset: number
+  ) {
+    const ctx = this.ctx;
+    inset /= 2;
+    ctx.beginPath();
+    ctx.moveTo(x + inset, y + inset);
+    ctx.lineTo(x + width - inset, y + inset);
+    ctx.lineTo(x + width - inset, y + height - inset);
+    ctx.lineTo(x + inset, y + height - inset);
+    ctx.closePath();
   }
 }
