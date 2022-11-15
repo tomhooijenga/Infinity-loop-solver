@@ -71,18 +71,31 @@ export default defineComponent({
     async function solveBoard() {
       startGroup();
       const progress = solve(board);
+      const tiles = new Map();
+
+      grid.value.renderer.render();
 
       isRunning.value = true;
 
       while (isRunning.value) {
         const start = Date.now();
+
+        tiles.clear();
+        board.tiles.forEach((tile) => tiles.set(tile, tile.direction));
+
         const { done, value } = progress.next();
+
+        board.tiles.forEach((tile) => {
+          if (tile.direction !== tiles.get(tile)) {
+            grid.value.renderer.animate(tile, tiles.get(tile));
+          } else if (tile.solved) {
+            grid.value.renderer.render([tile]);
+          }
+        });
 
         if (done) {
           break;
         }
-
-        grid.value.renderer.render(value.tiles);
 
         log(value);
 

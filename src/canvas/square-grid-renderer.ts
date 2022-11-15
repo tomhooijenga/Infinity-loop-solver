@@ -77,9 +77,17 @@ export class SquareGridRenderer extends GridRenderer {
       const tileX = size * x;
       const tileY = size * y;
 
+      ctx.save();
+
+      this.drawTileOutline(tile, tileX, tileY, size, size, 0);
+      ctx.clip();
+
       this.clearTile(tile, tileX, tileY, size, size);
 
-      ctx.save();
+      if (!tile.solved) {
+        this.renderOutline(tile, tileX, tileY, size, size);
+      }
+
       ctx.translate(tileX + size / 2, tileY + size / 2);
       // todo: maybe batch per directions
       ctx.rotate(rad(90 * direction));

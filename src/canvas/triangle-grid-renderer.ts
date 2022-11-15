@@ -78,10 +78,20 @@ export class TriangleGridRenderer extends GridRenderer {
 
       ctx.save();
 
+      // Flip upside down
       if (!grid.isPointyUp(tile)) {
         ctx.translate(squareCx, squareCy);
         ctx.rotate(rad(180));
         ctx.translate(-squareCx, -squareCy);
+      }
+
+      this.drawTileOutline(tile, tileX, tileY, width, height, 0);
+      ctx.clip();
+
+      this.clearTile(tile, tileX, tileY, width, height);
+
+      if (!tile.solved) {
+        this.renderOutline(tile, tileX, tileY, width, height);
       }
 
       const triangleCx = squareCx;
@@ -97,7 +107,6 @@ export class TriangleGridRenderer extends GridRenderer {
       ctx.rotate(rotate);
       ctx.translate(-triangleCx, -triangleCy);
 
-      this.clearTile(tile, tileX, tileY, width, height);
       this.renderTile(tile, tileX, tileY, width, height);
 
       ctx.restore();
