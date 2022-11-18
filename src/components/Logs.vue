@@ -21,7 +21,7 @@
   >
 
   <div
-    class="fixed right-0 inset-y-0 z-10 shrink-0 lg:translate-x-0 transition bg-dark lg:relative w-min overflow-y-auto"
+    class="fixed right-0 inset-y-0 z-10 shrink-0 lg:translate-x-0 transition bg-dark lg:relative w-min overflow-y-auto [scrollbar-gutter:stable]"
     :class="{ 'translate-x-full': !flyout, 'translate-x-0': flyout }"
   >
     <h1 class="m-6">Progress</h1>
