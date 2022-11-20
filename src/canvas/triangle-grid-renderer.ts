@@ -148,10 +148,23 @@ export class TriangleGridRenderer extends GridRenderer {
   ) {
     const ctx = this.ctx;
 
+    const cx = x + width / 2;
+    const cy = y + height * CENTER_OFFSET;
+    const circumRadius = (height * 2) / 3 - inset / 2;
+    const [move, ...angles] = [60, 180, 300];
+
     ctx.beginPath();
-    ctx.moveTo(x + width / 2, y + inset);
-    ctx.lineTo(x + width - inset, y + height - inset);
-    ctx.lineTo(x + inset, y + height - inset);
+    ctx.moveTo(
+      cx + circumRadius * Math.sin(rad(move)),
+      cy + circumRadius * Math.cos(rad(move))
+    );
+
+    for (const angle of angles) {
+      ctx.lineTo(
+        cx + circumRadius * Math.sin(rad(angle)),
+        cy + circumRadius * Math.cos(rad(angle))
+      );
+    }
     ctx.closePath();
   }
 }
