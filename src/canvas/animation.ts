@@ -2,29 +2,33 @@ import { Tile, TileConstructor } from "@/lib/base/Tile";
 import { GridRenderer } from "@/canvas/grid-renderer";
 
 export class Animation {
-
   protected clone: Tile;
   protected rafId = 0;
-  protected duration = 200;
-  
+  protected duration = 100;
+
   constructor(
     protected tile: Tile,
     protected renderer: GridRenderer,
-    protected animation: { from: number; to: number; }
+    protected animation: { from: number; to: number }
   ) {
     const TileCtor = tile.constructor as TileConstructor;
     this.clone = new TileCtor(tile);
   }
-  
+
   start() {
-    const { clone, renderer, duration, animation: { from, to} } = this;
+    const {
+      clone,
+      renderer,
+      animation: { from, to },
+    } = this;
 
     if (to === from) {
       return;
     }
 
     const start = window.performance.now();
-    const step = (to - from) / 100
+    const step = (to - from) / 100;
+    const duration = this.duration * (to - from);
 
     const animate: FrameRequestCallback = (timestamp) => {
       const elapsed = timestamp - start;
@@ -38,7 +42,7 @@ export class Animation {
       }
 
       this.rafId = requestAnimationFrame(animate);
-    }
+    };
 
     this.rafId = requestAnimationFrame(animate);
   }
