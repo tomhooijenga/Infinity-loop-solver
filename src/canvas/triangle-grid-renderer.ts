@@ -50,7 +50,7 @@ export class TriangleGridRenderer extends GridRenderer {
       arc(ctx, width, x + width, y + height, width / 2, 180, 60);
       arc(ctx, width, x, y + height, width / 2, 300, 60);
       arc(ctx, width, x + width / 2, y, width / 2, 60, 60);
-    }
+    },
   };
 
   constructor(public grid: Grid, ctx: CanvasRenderingContext2D) {
@@ -89,6 +89,10 @@ export class TriangleGridRenderer extends GridRenderer {
       ctx.clip();
 
       this.clearTile(tile, tileX, tileY, width, height);
+
+      if (this.highlighted.has(tile)) {
+        this.renderHighlight(tile, tileX, tileY, width, height);
+      }
 
       if (!tile.solved) {
         this.renderOutline(tile, tileX, tileY, width, height);

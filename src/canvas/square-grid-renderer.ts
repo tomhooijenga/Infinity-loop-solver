@@ -60,7 +60,7 @@ export class SquareGridRenderer extends GridRenderer {
       const r = (size / 100) * 50;
 
       arc(ctx, size, x + size, y, r, 90, 90);
-    }
+    },
   };
 
   ratio(): number {
@@ -83,6 +83,10 @@ export class SquareGridRenderer extends GridRenderer {
       ctx.clip();
 
       this.clearTile(tile, tileX, tileY, size, size);
+
+      if (this.highlighted.has(tile)) {
+        this.renderHighlight(tile, tileX, tileY, size, size);
+      }
 
       if (!tile.solved) {
         this.renderOutline(tile, tileX, tileY, size, size);

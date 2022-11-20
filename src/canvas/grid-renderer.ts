@@ -10,6 +10,8 @@ export abstract class GridRenderer {
 
   protected animations = new Map<Tile, Animation>();
 
+  protected highlighted = new Set<Tile>();
+
   constructor(public grid: Grid, protected ctx: CanvasRenderingContext2D) {}
 
   abstract render(tiles: Tile[]): void;
@@ -36,6 +38,33 @@ export abstract class GridRenderer {
     ctx.lineWidth = width / 100;
     ctx.strokeStyle = colors.redOutline;
     ctx.stroke();
+  }
+
+  public highlight(tiles: Tile[]) {
+    const previous = [...this.highlighted];
+    this.highlighted.clear();
+    tiles.forEach((tile) => this.highlighted.add(tile));
+
+    this.render([...previous, ...tiles]);
+  }
+
+  protected renderHighlight(
+    tile: Tile,
+    x: number,
+    y: number,
+    width: number,
+    height: number
+  ) {
+    const ctx = this.ctx;
+
+    ctx.save();
+
+    this.drawTileOutline(tile, x, y, width, height, 0);
+
+    ctx.clip();
+    ctx.fillStyle = colors.hover;
+    ctx.fillRect(x, y, width, height);
+    ctx.restore();
   }
 
   abstract clearTile(

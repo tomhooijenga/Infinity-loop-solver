@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { reactive, readonly } from "vue";
 import { BoardData, boards } from "@/boards";
 import { Tile } from "@/lib/base/Tile";
 import { Generator } from "@/lib/generator/generator";
@@ -68,6 +68,7 @@ function isHighlighted(tile: Tile): boolean {
 export function useBoard() {
   return {
     board,
+    highlighted: readonly(highlighted),
     loadBoard,
     generateBoard,
     scrambleBoard,

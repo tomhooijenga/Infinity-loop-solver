@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import { BoardData, solve } from "@/boards";
 import Button from "@/components/Button.vue";
 import TriangleGrid from "@/components/triangle/Grid.vue";
@@ -56,7 +56,7 @@ export default defineComponent({
   },
 
   setup() {
-    const { board, setTile, generateBoard, scrambleBoard } = useBoard();
+    const { board, highlighted, setTile, generateBoard, scrambleBoard } = useBoard();
     const { settings } = useSettings();
     const { startGroup, log } = useLogs();
 
@@ -105,6 +105,10 @@ export default defineComponent({
 
       isRunning.value = false;
     }
+
+    watchEffect(() => {
+      grid.value?.renderer?.highlight([...highlighted]);
+    })
 
     function nextTile(index: number, tile: Tile, direction: -1 | 1): void {
       const typeOrder = order[board.type];
