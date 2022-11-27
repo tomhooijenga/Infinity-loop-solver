@@ -120,7 +120,7 @@ export class HexGridRenderer extends GridRenderer {
       }
 
       ctx.translate(squareCx, squareCy);
-      const rotate = rad(120 * direction);
+      const rotate = rad(60 * direction);
 
       ctx.rotate(rotate);
       ctx.translate(-squareCx, -squareCy);
