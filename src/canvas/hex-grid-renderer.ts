@@ -1,36 +1,7 @@
-// import { GridRenderer } from "@/canvas";
-// import { Grid } from "@/lib/base/Grid";
-// import { Tile } from "@/lib/base/Tile";
-//
-// function ratio(grid: Grid) {
-//   const tileRatio = 1.1547;
-//
-//   // Horizontally, each tile shares a "wing"
-//   const width = grid.width * 0.75 * tileRatio + 0.25 * tileRatio;
-//
-//   let height = grid.height;
-//
-//   // Add half a tile if an odd columns have an even count
-//   if ((grid.tiles.length % grid.width) % 2 === 0) {
-//     height += 0.5;
-//   }
-//
-//   return width / height;
-// }
-//
-// function render(ctx: CanvasRenderingContext2D, grid: Grid, tile: Tile) {
-//   //
-// }
-//
-// export const renderer: GridRenderer = {
-//   ratio,
-//   render,
-// };
-
 import { GridRenderer } from "@/canvas/grid-renderer";
-import { TileRenderer } from "@/canvas";
+import { colors, TileRenderer } from "@/canvas";
 import { Tile } from "@/lib/base/Tile";
-import { arc, rad } from "@/canvas/util";
+import { arc, curve, rad } from "@/canvas/util";
 
 const HEIGHT_RATIO = 1 / (2 / Math.sqrt(3)); // 0.8660
 
@@ -43,18 +14,140 @@ export class HexGridRenderer extends GridRenderer {
 
       arc(ctx, width, cx, cy, r, 0, 360, false, "fill");
     },
-    End: (...args) => this.tileRenderers.None(...args),
-    TurnS: (...args) => this.tileRenderers.None(...args),
-    TurnL: (...args) => this.tileRenderers.None(...args),
-    Line: (...args) => this.tileRenderers.None(...args),
-    Junction: (...args) => this.tileRenderers.None(...args),
-    CheckL: (...args) => this.tileRenderers.None(...args),
-    CheckR: (...args) => this.tileRenderers.None(...args),
-    Square: (...args) => this.tileRenderers.None(...args),
-    Knuckles: (...args) => this.tileRenderers.None(...args),
-    Triangle: (...args) => this.tileRenderers.None(...args),
-    Diamond: (...args) => this.tileRenderers.None(...args),
-    Star: (...args) => this.tileRenderers.None(...args),
+    End(ctx, width, height, x, y) {
+      const cx = x + width / 2;
+      const cy = y + height / 2;
+      const percent = width / 100;
+      const r = percent * 15;
+
+      arc(ctx, width, cx, cy, r, 0, 360);
+
+      ctx.fillStyle = colors.light;
+      ctx.fillRect(
+        cx - percent * 5,
+        y,
+        percent * 10,
+        height / 2 - r - percent * 4
+      );
+      ctx.fillStyle = colors.red;
+      ctx.fillRect(
+        cx - percent * 3,
+        y,
+        percent * 6,
+        height / 2 - r - percent * 2
+      );
+    },
+    TurnS(ctx, width) {
+      arc(ctx, width, width * 0.75, 0, (width / 100) * 25, 60, 120);
+    },
+    TurnL(ctx, width, height) {
+      curve(ctx, width, height, width * 0.5, 0, width * 0.875, height * 0.75);
+    },
+    Line(ctx, width, height, x, y) {
+      const percent = width / 100;
+
+      ctx.fillStyle = colors.light;
+      ctx.fillRect(x + width / 2 - percent * 5, y, percent * 10, height);
+      ctx.fillStyle = colors.red;
+      ctx.fillRect(x + width / 2 - percent * 3, y, percent * 6, height);
+    },
+    Junction(ctx, width, height) {
+      const r = (width / 100) * 25;
+
+      arc(ctx, width, width * 0.75, 0, r, 60, 120);
+      arc(ctx, width, width, height / 2, r, 120, 120);
+    },
+    CheckL(ctx, width, height) {
+      arc(ctx, width, width * 0.75, height, (width / 100) * 25, 180, 120);
+      curve(
+        ctx,
+        width,
+        height,
+        width * 0.125,
+        height * 0.25,
+        width * 0.5,
+        height
+      );
+    },
+    CheckR(ctx, width, height) {
+      arc(ctx, width, width * 0.25, height, (width / 100) * 25, 240, 120);
+      curve(
+        ctx,
+        width,
+        height,
+        width * 0.875,
+        height * 0.25,
+        width * 0.5,
+        height
+      );
+    },
+    Square(ctx, width, height) {
+      const r = (width / 100) * 25;
+
+      curve(ctx, width, height, width * 0.5, 0, width * 0.875, height * 0.75);
+      arc(ctx, width, width * 0.75, height, r, 180, 120);
+      curve(
+        ctx,
+        width,
+        height,
+        width * 0.125,
+        height * 0.25,
+        width * 0.5,
+        height
+      );
+      arc(ctx, width, width * 0.25, 0, r, 360, 120);
+    },
+    Knuckles(ctx, width, height) {
+      const r = (width / 100) * 25;
+
+      arc(ctx, width, width * 0.75, 0, r, 60, 120);
+      arc(ctx, width, width, height / 2, r, 120, 120);
+      arc(ctx, width, width * 0.75, height, r, 180, 120);
+    },
+    Triangle(ctx, width, height) {
+      curve(ctx, width, height, width * 0.5, 0, width * 0.875, height * 0.75);
+      curve(
+        ctx,
+        width,
+        height,
+        width * 0.875,
+        height * 0.75,
+        width * 0.125,
+        height * 0.75
+      );
+      curve(ctx, width, height, width * 0.125, height * 0.75, width * 0.5, 0);
+    },
+    Diamond(ctx, width, height) {
+      const r = (width / 100) * 25;
+
+      arc(ctx, width, width * 0.75, 0, r, 60, 120);
+      curve(
+        ctx,
+        width,
+        height,
+        width * 0.875,
+        height * 0.25,
+        width * 0.5,
+        height
+      );
+      curve(
+        ctx,
+        width,
+        height,
+        width * 0.125,
+        height * 0.25,
+        width * 0.5,
+        height
+      );
+      arc(ctx, width, width * 0.25, 0, r, 360, 120);
+    },
+    Star(ctx, width, height) {
+      const r = (width / 100) * 25;
+
+      arc(ctx, width, width * 0.75, 0, r, 60, 120);
+      arc(ctx, width, width * 0.75, height, r, 180, 120);
+      arc(ctx, width, 0, height / 2, r, 300, 120);
+    },
   };
 
   ratio(): number {
@@ -90,7 +183,7 @@ export class HexGridRenderer extends GridRenderer {
   }
 
   render(tiles = this.grid.tiles): void {
-    const { ctx, grid } = this;
+    const { ctx } = this;
     const { height, width } = this.tileSize();
 
     tiles.forEach((tile) => {
@@ -105,9 +198,9 @@ export class HexGridRenderer extends GridRenderer {
       // ctx.strokeRect(tileX, tileY, width, height);
 
       this.drawTileOutline(tile, tileX, tileY, width, height, 0);
-      // ctx.strokeStyle = 'green';
+      // ctx.strokeStyle = "green";
       // ctx.stroke();
-      ctx.clip();
+      // ctx.clip();
 
       this.clearTile(tile, tileX, tileY, width, height);
 

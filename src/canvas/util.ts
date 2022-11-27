@@ -36,3 +36,27 @@ export function arc(
     ctx.fill();
   }
 }
+
+export function curve(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number,
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+): void {
+  ctx.beginPath();
+  ctx.lineWidth = width / 100 * 10;
+  ctx.strokeStyle = colors.light;
+  ctx.moveTo(x1, y1);
+  ctx.quadraticCurveTo(width / 2, height / 2, x2, y2);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.lineWidth = width / 100 * 6;
+  ctx.strokeStyle = colors.red;
+  ctx.moveTo(x1, y1);
+  ctx.quadraticCurveTo(width / 2, height / 2, x2, y2);
+  ctx.stroke();
+}
