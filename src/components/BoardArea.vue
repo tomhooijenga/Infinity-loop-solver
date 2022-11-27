@@ -85,17 +85,17 @@ export default defineComponent({
 
         const { done, value } = progress.next();
 
-        board.tiles.forEach((tile) => {
+        if (done) {
+          break;
+        }
+
+        value.tiles.forEach((tile) => {
           if (tile.direction !== tiles.get(tile)) {
             grid.value.renderer.animate(tile, tiles.get(tile));
           } else if (tile.solved) {
             grid.value.renderer.render([tile]);
           }
         });
-
-        if (done) {
-          break;
-        }
 
         log(value);
 
