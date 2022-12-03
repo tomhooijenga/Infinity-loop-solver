@@ -93,7 +93,6 @@ export class SquareGridRenderer extends GridRenderer {
       }
 
       ctx.translate(tileX + size / 2, tileY + size / 2);
-      // todo: maybe batch per directions
       ctx.rotate(rad(90 * direction));
       ctx.translate((tileX + size / 2) * -1, (tileY + size / 2) * -1);
 

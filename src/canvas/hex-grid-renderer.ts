@@ -195,12 +195,9 @@ export class HexGridRenderer extends GridRenderer {
 
       ctx.save();
 
-      // ctx.strokeRect(tileX, tileY, width, height);
-
       this.drawTileOutline(tile, tileX, tileY, width, height, 0);
-      // ctx.strokeStyle = "green";
-      // ctx.stroke();
-      // ctx.clip();
+
+      ctx.clip();
 
       this.clearTile(tile, tileX, tileY, width, height);
 
