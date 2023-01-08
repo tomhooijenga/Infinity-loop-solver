@@ -70,38 +70,32 @@ export class TriangleGridRenderer extends GridRenderer {
     const { height, width } = this.tileSize();
 
     tiles.forEach((tile) => {
-      const { x, y, direction } = tile;
-      const tileX = width * (x / 2);
-      const tileY = height * y;
-      const squareCx = tileX + width / 2;
-      const squareCy = tileY + height / 2;
+      const { direction } = tile;
+      const { x, y, shapeCx, shapeCy, cy, cx } = this.tilePosition(tile);
 
       ctx.save();
 
       // Flip upside down
       if (!grid.isPointyUp(tile)) {
-        ctx.translate(squareCx, squareCy);
+        ctx.translate(cx, cy);
         ctx.rotate(rad(180));
-        ctx.translate(-squareCx, -squareCy);
+        ctx.translate(-cx, -cy);
       }
 
-      this.drawTileOutline(tile, tileX, tileY, width, height, 0);
+      this.drawTileOutline(tile, x, y, width, height, 0);
       ctx.clip();
 
-      this.clearTile(tile, tileX, tileY, width, height);
+      this.clearTile(tile, x, y, width, height);
 
       if (this.highlighted.has(tile)) {
-        this.renderHighlight(tile, tileX, tileY, width, height);
+        this.renderHighlight(tile, x, y, width, height);
       }
 
       if (!tile.solved) {
-        this.renderOutline(tile, tileX, tileY, width, height);
+        this.renderOutline(tile, x, y, width, height);
       }
 
-      const triangleCx = squareCx;
-      const triangleCy = tileY + height * CENTER_OFFSET;
-
-      ctx.translate(triangleCx, triangleCy);
+      ctx.translate(shapeCx, shapeCy);
       let rotate = rad(120 * direction);
 
       if (!grid.isPointyUp(tile)) {
@@ -109,9 +103,9 @@ export class TriangleGridRenderer extends GridRenderer {
       }
 
       ctx.rotate(rotate);
-      ctx.translate(-triangleCx, -triangleCy);
+      ctx.translate(-shapeCx, -shapeCy);
 
-      this.renderTile(tile, tileX, tileY, width, height);
+      this.renderTile(tile, x, y, width, height);
 
       ctx.restore();
     });
@@ -136,6 +130,26 @@ export class TriangleGridRenderer extends GridRenderer {
     const height = ctx.canvas.height / grid.height;
 
     return { height, width };
+  }
+
+  tilePosition(tile: Tile) {
+    const { width, height } = this.tileSize();
+    const { x, y } = tile;
+    const rectX = width * (x / 2);
+    const rectY = height * y;
+    const rectCx = rectX + width / 2;
+    const rectCy = rectY + height / 2;
+    const triangleCx = rectCx;
+    const triangleCy = rectY + height * CENTER_OFFSET;
+
+    return {
+      x: rectX,
+      y: rectY,
+      cx: rectCx,
+      cy: rectCy,
+      shapeCx: triangleCx,
+      shapeCy: triangleCy,
+    };
   }
 
   drawTileOutline(

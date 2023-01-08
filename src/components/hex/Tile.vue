@@ -1,4 +1,4 @@
-<template>
+<template v-once>
   <svg viewBox="-60 -52 120 104">
     <template v-if="tile.type === 'None'">
       <circle r="2" class="fill-red" />

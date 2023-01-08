@@ -182,40 +182,55 @@ export class HexGridRenderer extends GridRenderer {
     };
   }
 
+  tilePosition(tile: Tile) {
+    const { width, height } = this.tileSize();
+    const { x, y } = tile;
+    const rectX = width * (x * 0.75);
+    const rectY = height * (y + (x % 2 === 1 ? 0.5 : 0));
+    const cx = rectX + width / 2;
+    const cy = rectY + height / 2;
+
+    return {
+      x: rectX,
+      y: rectY,
+      cx,
+      cy,
+      shapeCx: cx,
+      shapeCy: cy,
+    };
+  }
+
   render(tiles = this.grid.tiles): void {
     const { ctx } = this;
     const { height, width } = this.tileSize();
 
     tiles.forEach((tile) => {
-      const { x, y, direction } = tile;
-      const tileX = width * (x * 0.75);
-      const tileY = height * (y + (x % 2 === 1 ? 0.5 : 0));
-      const squareCx = tileX + width / 2;
-      const squareCy = tileY + height / 2;
+      const { direction } = tile;
+      const { x, y, cy, cx } = this.tilePosition(tile);
 
       ctx.save();
 
-      this.drawTileOutline(tile, tileX, tileY, width, height, 0);
+      this.drawTileOutline(tile, x, y, width, height, 0);
 
       ctx.clip();
 
-      this.clearTile(tile, tileX, tileY, width, height);
+      this.clearTile(tile, x, y, width, height);
 
       if (this.highlighted.has(tile)) {
-        this.renderHighlight(tile, tileX, tileY, width, height);
+        this.renderHighlight(tile, x, y, width, height);
       }
 
       if (!tile.solved) {
-        this.renderOutline(tile, tileX, tileY, width, height);
+        this.renderOutline(tile, x, y, width, height);
       }
 
-      ctx.translate(squareCx, squareCy);
+      ctx.translate(cx, cy);
       const rotate = rad(60 * direction);
 
       ctx.rotate(rotate);
-      ctx.translate(-squareCx, -squareCy);
+      ctx.translate(-cx, -cy);
 
-      this.renderTile(tile, tileX, tileY, width, height);
+      this.renderTile(tile, x, y, width, height);
 
       ctx.restore();
     });

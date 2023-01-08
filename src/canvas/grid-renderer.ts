@@ -77,6 +77,15 @@ export abstract class GridRenderer {
 
   abstract tileSize(): { width: number; height: number };
 
+  abstract tilePosition(tile: Tile): {
+    x: number;
+    y: number;
+    cx: number;
+    cy: number;
+    shapeCx: number;
+    shapeCy: number;
+  };
+
   abstract drawTileOutline(
     tile: Tile,
     x: number,

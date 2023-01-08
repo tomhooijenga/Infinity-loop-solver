@@ -73,30 +73,29 @@ export class SquareGridRenderer extends GridRenderer {
     const { width: size } = this.tileSize();
 
     tiles.forEach((tile) => {
-      const { x, y, direction } = tile;
-      const tileX = size * x;
-      const tileY = size * y;
+      const { direction } = tile;
+      const { x, y, cx, cy } = this.tilePosition(tile);
 
       ctx.save();
 
-      this.drawTileOutline(tile, tileX, tileY, size, size, 0);
+      this.drawTileOutline(tile, x, y, size, size, 0);
       ctx.clip();
 
-      this.clearTile(tile, tileX, tileY, size, size);
+      this.clearTile(tile, x, y, size, size);
 
       if (this.highlighted.has(tile)) {
-        this.renderHighlight(tile, tileX, tileY, size, size);
+        this.renderHighlight(tile, x, y, size, size);
       }
 
       if (!tile.solved) {
-        this.renderOutline(tile, tileX, tileY, size, size);
+        this.renderOutline(tile, x, y, size, size);
       }
 
-      ctx.translate(tileX + size / 2, tileY + size / 2);
+      ctx.translate(cx, cy);
       ctx.rotate(rad(90 * direction));
-      ctx.translate((tileX + size / 2) * -1, (tileY + size / 2) * -1);
+      ctx.translate(-cx, -cy);
 
-      this.renderTile(tile, tileX, tileY, size, size);
+      this.renderTile(tile, x, y, size, size);
 
       ctx.restore();
     });
@@ -111,6 +110,24 @@ export class SquareGridRenderer extends GridRenderer {
     const size = ctx.canvas.width / grid.width;
 
     return { height: size, width: size };
+  }
+
+  tilePosition(tile: Tile) {
+    const { width: size } = this.tileSize();
+    const { x, y } = tile;
+    const rectX = size * x;
+    const rectY = size * y;
+    const cx = rectX + size / 2;
+    const cy = rectY + size / 2;
+
+    return {
+      x: rectX,
+      y: rectY,
+      cx,
+      cy,
+      shapeCx: cx,
+      shapeCy: cy,
+    };
   }
 
   drawTileOutline(
