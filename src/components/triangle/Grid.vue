@@ -3,6 +3,8 @@
     <canvas
       ref="canvas"
       class="m-auto"
+      @click="change($event, 1)"
+      @contextmenu.prevent="change($event, -1)"
       @mousemove="highlightTile($event)"
       @mouseout="$emit('hover', undefined)"
     />
@@ -86,8 +88,24 @@ watchEffect((onCleanup) => {
 
 watch(
   () => props.tiles,
-  () => renderer.value?.grid.setTiles(toRaw(props.tiles))
+  () => {
+    renderer.value?.grid.setTiles(toRaw(props.tiles));
+    renderer.value?.render();
+  }
 );
+
+function change(event: MouseEvent, direction: 1 | -1): void {
+  if (!renderer.value) {
+    return;
+  }
+
+  const tile = renderer.value?.getTileFromPoint(event.offsetX, event.offsetY);
+
+  if (tile) {
+    const index = renderer.value?.grid.tiles.indexOf(tile);
+    emit("change", index, tile, direction);
+  }
+}
 
 function highlightTile(event: MouseEvent): void {
   if (!renderer.value) {

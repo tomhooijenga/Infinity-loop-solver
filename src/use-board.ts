@@ -24,6 +24,7 @@ const loadBoard = (name: keyof typeof boards) => {
 
 function setTile(index: number, tile: Tile) {
   board.tiles[index] = tile;
+  board.tiles = [...board.tiles];
 }
 
 function makeGrid() {
