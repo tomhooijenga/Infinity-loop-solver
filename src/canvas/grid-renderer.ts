@@ -14,7 +14,7 @@ export abstract class GridRenderer {
 
   constructor(public grid: Grid, protected ctx: CanvasRenderingContext2D) {}
 
-  abstract render(tiles: Tile[]): void;
+  abstract render(tiles?: Tile[]): void;
 
   protected renderTile(
     tile: Tile,

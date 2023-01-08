@@ -122,7 +122,7 @@ export default defineComponent({
       grid.value?.renderer?.highlight([...highlighted]);
     });
 
-    function highlightTile(tile: Tile): void {
+    function highlightTile(tile: Tile | undefined): void {
       if (tile) {
         highlight([tile]);
       } else {
