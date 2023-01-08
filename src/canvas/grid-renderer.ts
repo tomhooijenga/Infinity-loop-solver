@@ -97,6 +97,16 @@ export abstract class GridRenderer {
 
   abstract ratio(): number;
 
+  getTileFromPoint(pointX: number, pointY: number): Tile | undefined {
+    const { width, height } = this.tileSize();
+    return this.grid.tiles.find((tile) => {
+      const { x, y } = this.tilePosition(tile);
+      this.drawTileOutline(tile, x, y, width, height, 0);
+
+      return this.ctx.isPointInPath(pointX, pointY);
+    });
+  }
+
   animate(tile: Tile, from: number) {
     const anim = new Animation(tile, this, {
       from,

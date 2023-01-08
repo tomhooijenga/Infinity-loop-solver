@@ -1,6 +1,11 @@
 <template>
   <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
-    <TriangleGrid v-bind="board" ref="grid" @change="nextTile" />
+    <TriangleGrid
+      v-bind="board"
+      ref="grid"
+      @change="nextTile"
+      @hover="highlightTile($event)"
+    />
 
     <section class="flex flex-wrap bg-dark p-2">
       <Button :disabled="isRunning" @click="generateBoard"> Generate </Button>
@@ -56,7 +61,14 @@ export default defineComponent({
   },
 
   setup() {
-    const { board, highlighted, setTile, generateBoard, scrambleBoard } = useBoard();
+    const {
+      board,
+      highlighted,
+      highlight,
+      setTile,
+      generateBoard,
+      scrambleBoard,
+    } = useBoard();
     const { settings } = useSettings();
     const { startGroup, log } = useLogs();
 
@@ -108,7 +120,15 @@ export default defineComponent({
 
     watchEffect(() => {
       grid.value?.renderer?.highlight([...highlighted]);
-    })
+    });
+
+    function highlightTile(tile: Tile): void {
+      if (tile) {
+        highlight([tile]);
+      } else {
+        highlight([]);
+      }
+    }
 
     function nextTile(index: number, tile: Tile, direction: -1 | 1): void {
       const typeOrder = order[board.type];
@@ -137,6 +157,7 @@ export default defineComponent({
       scrambleBoard,
       solveBoard,
       nextTile,
+      highlightTile,
       isRunning,
     };
   },

@@ -1,6 +1,11 @@
 <template>
   <div ref="wrapper" class="w-full h-full min-w-0 flex">
-    <canvas ref="canvas" class="m-auto" />
+    <canvas
+      ref="canvas"
+      class="m-auto"
+      @mousemove="highlightTile($event)"
+      @mouseout="$emit('hover', undefined)"
+    />
   </div>
 </template>
 
@@ -29,8 +34,9 @@ const props = defineProps({
   },
 });
 
-defineEmits<{
+const emit = defineEmits<{
   (e: "change", index: number, tile: TileType, direction: -1 | 1): void;
+  (e: "hover", tile: TileType | undefined): void;
 }>();
 
 const renderer = ref<GridRenderer>();
@@ -82,4 +88,14 @@ watch(
   () => props.tiles,
   () => renderer.value?.grid.setTiles(toRaw(props.tiles))
 );
+
+function highlightTile(event: MouseEvent): void {
+  if (!renderer.value) {
+    return;
+  }
+
+  const tile = renderer.value?.getTileFromPoint(event.offsetX, event.offsetY);
+
+  emit("hover", tile);
+}
 </script>
