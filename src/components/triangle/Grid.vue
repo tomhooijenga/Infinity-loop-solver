@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, toRaw, watch, watchEffect } from "vue";
+import { PropType, ref, shallowRef, toRaw, watchEffect } from "vue";
 import { Tile as TileType } from "@/lib/base/Tile";
 import {
   GridRenderer,
@@ -41,19 +41,20 @@ const emit = defineEmits<{
   (e: "hover", tile: TileType | undefined): void;
 }>();
 
-const renderer = ref<GridRenderer>();
+const renderer = shallowRef<GridRenderer>();
 
 defineExpose({
   renderer,
 });
 
-const renderers = {
-  triangle: (ctx: CanvasRenderingContext2D) =>
-    new TriangleGridRenderer(new TriangleGrid(toRaw(props.tiles)), ctx),
-  square: (ctx: CanvasRenderingContext2D) =>
-    new SquareGridRenderer(new SquareGrid(toRaw(props.tiles)), ctx),
-  hex: (ctx: CanvasRenderingContext2D) =>
-    new HexGridRenderer(new HexGrid(toRaw(props.tiles)), ctx),
+const renderers: Record<
+  BoardData["type"],
+  (tiles: TileType[], ctx: CanvasRenderingContext2D) => GridRenderer
+> = {
+  triangle: (tiles, ctx) =>
+    new TriangleGridRenderer(new TriangleGrid(tiles), ctx),
+  square: (tiles, ctx) => new SquareGridRenderer(new SquareGrid(tiles), ctx),
+  hex: (tiles, ctx) => new HexGridRenderer(new HexGrid(tiles), ctx),
 };
 
 const wrapper = ref<HTMLDivElement>();
@@ -70,7 +71,7 @@ watchEffect((onCleanup) => {
 
   // eslint-disable-next-line
   ctx = canvas.value.getContext("2d")!;
-  renderer.value = renderers[props.type](ctx);
+  renderer.value = renderers[props.type](toRaw(props.tiles), ctx);
 
   observer = new ResizeObserver((entries) => {
     const { width, height } = entries[0].contentRect;
@@ -85,14 +86,6 @@ watchEffect((onCleanup) => {
 
   renderer.value.resize(width, height);
 });
-
-watch(
-  () => props.tiles,
-  () => {
-    renderer.value?.grid.setTiles(toRaw(props.tiles));
-    renderer.value?.render();
-  }
-);
 
 function change(event: MouseEvent, direction: 1 | -1): void {
   if (!renderer.value) {
