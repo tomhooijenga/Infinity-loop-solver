@@ -73,7 +73,7 @@ export default defineComponent({
     const { startGroup, log } = useLogs();
 
     function sleep(ms: number): Promise<void> {
-      return new Promise((resolve) => setTimeout(resolve, ms));
+      return new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
     }
 
     const isRunning = ref(false);
@@ -89,8 +89,9 @@ export default defineComponent({
 
       isRunning.value = true;
 
+      let frameStart = performance.now();
       while (isRunning.value) {
-        const start = Date.now();
+        const start = performance.now();
 
         tiles.clear();
         board.tiles.forEach((tile) => tiles.set(tile, tile.direction));
@@ -111,8 +112,13 @@ export default defineComponent({
 
         log(value);
 
-        const delay = settings.delay - (Date.now() - start);
-        await sleep(delay);
+        const delay = settings.delay - (performance.now() - start);
+        const frameElapsed = performance.now() - frameStart;
+
+        if (delay > 0 || frameElapsed > (1000 / 60)) {
+          await sleep(delay);
+          frameStart = performance.now()
+        }
       }
 
       isRunning.value = false;
