@@ -19,7 +19,7 @@ import {
   HexGridRenderer,
   SquareGridRenderer,
   TriangleGridRenderer,
-} from "@/canvas";
+} from "@/renderer";
 
 import { BoardData } from "@/boards";
 import { Grid as TriangleGrid } from "@/lib/solver/triangle/Grid";
@@ -92,10 +92,10 @@ function change(event: MouseEvent, direction: 1 | -1): void {
     return;
   }
 
-  const tile = renderer.value?.getTileFromPoint(event.offsetX, event.offsetY);
+  const tile = renderer.value.getTileFromPoint(event.offsetX, event.offsetY);
 
   if (tile) {
-    const index = renderer.value?.grid.tiles.indexOf(tile);
+    const index = renderer.value.grid.tiles.indexOf(tile);
     emit("change", index, tile, direction);
   }
 }
@@ -105,7 +105,7 @@ function highlightTile(event: MouseEvent): void {
     return;
   }
 
-  const tile = renderer.value?.getTileFromPoint(event.offsetX, event.offsetY);
+  const tile = renderer.value.getTileFromPoint(event.offsetX, event.offsetY);
 
   emit("hover", tile);
 }

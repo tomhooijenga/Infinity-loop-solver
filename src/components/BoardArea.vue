@@ -1,8 +1,9 @@
 <template>
   <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
-    <TriangleGrid
-      v-bind="board"
+    <Grid
       ref="grid"
+      :type="board.type"
+      :tiles="board.tiles"
       @change="nextTile"
       @hover="highlightTile($event)"
     />
@@ -22,7 +23,7 @@
 import { defineComponent, ref, watchEffect } from "vue";
 import { BoardData, solve } from "@/boards";
 import Button from "@/components/Button.vue";
-import TriangleGrid from "@/components/triangle/Grid.vue";
+import Grid from "@/components/Grid.vue";
 import { useBoard } from "@/use-board";
 import { Tile, TileConstructor } from "@/lib/base/Tile";
 import * as tri from "@/lib/solver/triangle/tiles";
@@ -56,8 +57,8 @@ export default defineComponent({
   name: "BoardArea",
 
   components: {
+    Grid,
     Button,
-    TriangleGrid,
   },
 
   setup() {
@@ -115,9 +116,9 @@ export default defineComponent({
         const delay = settings.delay - (performance.now() - start);
         const frameElapsed = performance.now() - frameStart;
 
-        if (delay > 0 || frameElapsed > (1000 / 60)) {
+        if (delay > 0 || frameElapsed > 1000 / 60) {
           await sleep(delay);
-          frameStart = performance.now()
+          frameStart = performance.now();
         }
       }
 

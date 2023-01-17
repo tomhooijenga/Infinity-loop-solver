@@ -1,5 +1,5 @@
-import { colors, GridRenderer, TileRenderer } from "@/canvas";
-import { arc, rad } from "@/canvas/util";
+import { colors, GridRenderer, TileRenderer } from "@/renderer";
+import { arc, rad } from "@/renderer/util";
 import { Tile } from "@/lib/base/Tile";
 
 export class SquareGridRenderer extends GridRenderer {

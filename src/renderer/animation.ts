@@ -1,5 +1,5 @@
 import { Tile, TileConstructor } from "@/lib/base/Tile";
-import { GridRenderer } from "@/canvas/grid-renderer";
+import { GridRenderer } from "@/renderer/grid-renderer";
 
 export class Animation {
   protected clone: Tile;

@@ -1,6 +1,6 @@
 <template>
   <h1 id="examples" class="pt-14 -mt-14">Examples</h1>
-  <TriangleBoard
+  <Grid
     v-for="[name, boardData] of boards"
     :key="name"
     :type="boardData.type"
@@ -14,7 +14,7 @@
 
 <script lang="ts">
 import { BoardData, boards } from "@/boards";
-import TriangleBoard from "@/components/triangle/Grid.vue";
+import Grid from "@/components/Grid.vue";
 import { defineComponent } from "vue";
 import { useBoard } from "@/use-board";
 
@@ -22,7 +22,7 @@ export default defineComponent({
   name: "Examples",
 
   components: {
-    TriangleBoard,
+    Grid,
   },
 
   setup() {

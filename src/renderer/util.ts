@@ -1,4 +1,4 @@
-import { colors } from "@/canvas";
+import { colors } from "@/renderer";
 
 export function rad(deg: number): number {
   return (deg * Math.PI) / 180;
@@ -47,14 +47,14 @@ export function curve(
   y2: number
 ): void {
   ctx.beginPath();
-  ctx.lineWidth = width / 100 * 10;
+  ctx.lineWidth = (width / 100) * 10;
   ctx.strokeStyle = colors.light;
   ctx.moveTo(x1, y1);
   ctx.quadraticCurveTo(width / 2, height / 2, x2, y2);
   ctx.stroke();
 
   ctx.beginPath();
-  ctx.lineWidth = width / 100 * 6;
+  ctx.lineWidth = (width / 100) * 6;
   ctx.strokeStyle = colors.red;
   ctx.moveTo(x1, y1);
   ctx.quadraticCurveTo(width / 2, height / 2, x2, y2);

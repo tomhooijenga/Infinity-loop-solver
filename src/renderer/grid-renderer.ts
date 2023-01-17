@@ -1,7 +1,7 @@
 import { Grid } from "@/lib/base/Grid";
-import { colors, TileRenderer } from "@/canvas";
+import { colors, TileRenderer } from "@/renderer";
 import { Tile } from "@/lib/base/Tile";
-import { Animation } from "@/canvas/animation";
+import { Animation } from "@/renderer/animation";
 
 export abstract class GridRenderer {
   protected tileCache: Record<string, HTMLCanvasElement> = {};

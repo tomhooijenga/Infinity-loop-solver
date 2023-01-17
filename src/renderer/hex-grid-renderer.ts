@@ -1,7 +1,7 @@
-import { GridRenderer } from "@/canvas/grid-renderer";
-import { colors, TileRenderer } from "@/canvas";
+import { GridRenderer } from "@/renderer/grid-renderer";
+import { colors, TileRenderer } from "@/renderer";
 import { Tile } from "@/lib/base/Tile";
-import { arc, curve, rad } from "@/canvas/util";
+import { arc, curve, rad } from "@/renderer/util";
 
 const HEIGHT_RATIO = 1 / (2 / Math.sqrt(3)); // 0.8660
 
