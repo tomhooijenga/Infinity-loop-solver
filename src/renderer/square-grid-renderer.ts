@@ -108,7 +108,9 @@ export class SquareGridRenderer extends GridRenderer {
 
   tileSize(): { width: number; height: number } {
     const { ctx, grid } = this;
-    const size = ctx.canvas.width / grid.width;
+    const { width } = ctx.canvas.getBoundingClientRect();
+    // const width = ctx.canvas.width;
+    const size = width / grid.width;
 
     return { height: size, width: size };
   }

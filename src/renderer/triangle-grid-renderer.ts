@@ -127,8 +127,10 @@ export class TriangleGridRenderer extends GridRenderer {
   tileSize(): { width: number; height: number } {
     const { ctx, grid } = this;
     const horizontalTiles = grid.width / 2 + 0.5;
-    const width = ctx.canvas.width / horizontalTiles;
-    const height = ctx.canvas.height / grid.height;
+    const { width: canvasWidth, height: canvasHeight } =
+      ctx.canvas.getBoundingClientRect();
+    const width = canvasWidth / horizontalTiles;
+    const height = canvasHeight / grid.height;
 
     return { height, width };
   }

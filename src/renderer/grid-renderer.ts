@@ -99,11 +99,13 @@ export abstract class GridRenderer {
 
   getTileFromPoint(pointX: number, pointY: number): Tile | undefined {
     const { width, height } = this.tileSize();
+    const dpr = window.devicePixelRatio;
+
     return this.grid.tiles.find((tile) => {
       const { x, y } = this.tilePosition(tile);
       this.drawTileOutline(tile, x, y, width, height, 0);
 
-      return this.ctx.isPointInPath(pointX, pointY);
+      return this.ctx.isPointInPath(pointX * dpr, pointY * dpr);
     });
   }
 
@@ -122,14 +124,19 @@ export abstract class GridRenderer {
   resize(maxW: number, maxH: number) {
     const canvas = this.ctx.canvas;
     const ratio = this.ratio();
+    const dpr = window.devicePixelRatio;
+    // const dpr = 2;
 
-    if (maxH * ratio > maxW) {
-      canvas.width = maxW;
-      canvas.height = maxW / ratio;
-    } else {
-      canvas.width = maxH * ratio;
-      canvas.height = maxH;
-    }
+    const [width, height] =
+      maxH * ratio > maxW ? [maxW, maxW / ratio] : [maxH * ratio, maxH];
+
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+
+    this.ctx.scale(dpr, dpr);
+
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
 
     this.cacheTiles();
   }
@@ -139,13 +146,18 @@ export abstract class GridRenderer {
 
     Object.entries(this.tileRenderers).forEach(([type, renderer]) => {
       const canvas = document.createElement("canvas");
-      canvas.width = width;
-      canvas.height = height;
+      const dpr = window.devicePixelRatio;
+
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+
       const ctx = canvas.getContext("2d");
 
       if (!ctx) {
         throw new Error("Could not get context");
       }
+
+      ctx.scale(dpr, dpr);
 
       renderer(ctx, width, height, 0, 0);
 

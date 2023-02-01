@@ -166,6 +166,8 @@ export class HexGridRenderer extends GridRenderer {
 
   tileSize(): { width: number; height: number } {
     const { ctx } = this;
+    const { width: canvasWidth, height: canvasHeight } =
+      ctx.canvas.getBoundingClientRect();
     let { width, height } = this.grid;
 
     // Horizontally, each tile shares a "wing"
@@ -177,8 +179,8 @@ export class HexGridRenderer extends GridRenderer {
     }
 
     return {
-      width: ctx.canvas.width / width,
-      height: ctx.canvas.height / height,
+      width: canvasWidth / width,
+      height: canvasHeight / height,
     };
   }
 
