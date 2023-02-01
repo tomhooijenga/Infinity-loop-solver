@@ -1,4 +1,4 @@
-import { reactive, readonly } from "vue";
+import { readonly, shallowReactive } from "vue";
 import { BoardData, boards } from "@/boards";
 import { Tile } from "@/lib/base/Tile";
 import { Generator } from "@/lib/generator/generator";
@@ -9,14 +9,14 @@ import * as tri from "@/lib/solver/triangle/tiles";
 import * as sq from "@/lib/solver/square/tiles";
 import * as hex from "@/lib/solver/hex/tiles";
 
-const board = reactive<BoardData>({
+const board = shallowReactive<BoardData>({
   type: "square",
   tiles: [],
   width: 0,
   height: 0,
 });
 
-const highlighted = reactive(new Set<Tile>());
+const highlighted = shallowReactive(new Set<Tile>());
 
 const loadBoard = (name: keyof typeof boards) => {
   Object.assign(board, boards[name]());

@@ -1,37 +1,40 @@
 <template>
   <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
-    <Grid
-      ref="grid"
-      :type="board.type"
-      :tiles="board.tiles"
-      @change="nextTile"
-      @hover="highlightTile($event)"
-    />
+    <div ref="wrapper" class="w-full h-full min-w-0 flex overflow-hidden">
+      <canvas
+        ref="canvas"
+        class="m-auto"
+        @click="nextTile($event, 1)"
+        @contextmenu.prevent="nextTile($event, -1)"
+        @mousemove="highlightTile($event)"
+        @mouseout="highlight([])"
+      />
+    </div>
 
     <section class="flex flex-wrap bg-dark p-2">
-      <Button :disabled="isRunning" @click="generateBoard"> Generate </Button>
+      <Button :disabled="isRunning" @click="generateBoard"> Generate</Button>
       <span class="mx-auto space-x-2">
         <Button :disabled="isRunning" @click="scrambleBoard"> Scramble </Button>
         <Button :disabled="isRunning" @click="solveBoard"> Solve </Button>
       </span>
-      <Button :disabled="!isRunning" @click="isRunning = false"> Stop </Button>
+      <Button :disabled="!isRunning" @click="isRunning = false"> Stop</Button>
     </section>
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, watchEffect } from "vue";
+<script setup lang="ts">
+import { ref, shallowRef, watchEffect } from "vue";
 import { BoardData, solve } from "@/boards";
 import Button from "@/components/Button.vue";
-import Grid from "@/components/Grid.vue";
 import { useBoard } from "@/use-board";
-import { Tile, TileConstructor } from "@/lib/base/Tile";
+import { TileConstructor } from "@/lib/base/Tile";
 import * as tri from "@/lib/solver/triangle/tiles";
 import * as sq from "@/lib/solver/square/tiles";
 import * as hex from "@/lib/solver/hex/tiles";
 import { None } from "@/lib/base/None";
 import { useSettings } from "@/use-settings";
 import { useLogs } from "@/use-logs";
+import { factory, type GridRenderer } from "@/renderer";
 
 const order: Record<BoardData["type"], TileConstructor[]> = {
   triangle: [None, tri.End, tri.Turn, tri.Triangle],
@@ -53,120 +56,143 @@ const order: Record<BoardData["type"], TileConstructor[]> = {
   ],
 };
 
-export default defineComponent({
-  name: "BoardArea",
+const { board, highlighted, highlight, setTile, generateBoard, scrambleBoard } =
+  useBoard();
+const { settings } = useSettings();
+const { startGroup, log } = useLogs();
 
-  components: {
-    Grid,
-    Button,
-  },
+const canvas = shallowRef<HTMLCanvasElement>();
+const renderer = shallowRef<GridRenderer>();
 
-  setup() {
-    const {
-      board,
-      highlighted,
-      highlight,
-      setTile,
-      generateBoard,
-      scrambleBoard,
-    } = useBoard();
-    const { settings } = useSettings();
-    const { startGroup, log } = useLogs();
+const observer = new ResizeObserver((entries) => {
+  const { width, height } = entries[0].contentRect;
 
-    function sleep(ms: number): Promise<void> {
-      return new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
+  if (!renderer.value) {
+    return;
+  }
+
+  renderer.value?.resize(width, height);
+  renderer.value?.render();
+});
+
+watchEffect((onCleanup) => {
+  onCleanup(() => observer?.disconnect());
+
+  if (!canvas.value) {
+    return;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const wrapper = canvas.value.parentElement!;
+
+  observer.observe(wrapper);
+});
+
+watchEffect(() => {
+  if (!canvas.value) {
+    return;
+  }
+
+  const ctx = canvas.value?.getContext("2d");
+
+  if (!ctx) {
+    return;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  const { width, height } = canvas.value.parentElement!.getBoundingClientRect();
+  const r = factory(board.type, board.tiles, ctx);
+  r.resize(width, height);
+  r.render();
+  renderer.value = r;
+});
+
+const isRunning = ref(false);
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, Math.max(0, ms)));
+}
+
+async function solveBoard() {
+  startGroup();
+  const progress = solve(board);
+  const tiles = new Map();
+
+  renderer.value?.render();
+
+  isRunning.value = true;
+
+  let frameStart = performance.now();
+  while (isRunning.value) {
+    const start = performance.now();
+
+    tiles.clear();
+    board.tiles.forEach((tile) => tiles.set(tile, tile.direction));
+
+    const { done, value } = progress.next();
+
+    if (done) {
+      break;
     }
 
-    const isRunning = ref(false);
-
-    const grid = ref();
-
-    async function solveBoard() {
-      startGroup();
-      const progress = solve(board);
-      const tiles = new Map();
-
-      grid.value.renderer.render();
-
-      isRunning.value = true;
-
-      let frameStart = performance.now();
-      while (isRunning.value) {
-        const start = performance.now();
-
-        tiles.clear();
-        board.tiles.forEach((tile) => tiles.set(tile, tile.direction));
-
-        const { done, value } = progress.next();
-
-        if (done) {
-          break;
-        }
-
-        value.tiles.forEach((tile) => {
-          if (tile.direction !== tiles.get(tile)) {
-            grid.value.renderer.animate(tile, tiles.get(tile));
-          } else if (tile.solved) {
-            grid.value.renderer.render([tile]);
-          }
-        });
-
-        log(value);
-
-        const delay = settings.delay - (performance.now() - start);
-        const frameElapsed = performance.now() - frameStart;
-
-        if (delay > 0 || frameElapsed > 1000 / 60) {
-          await sleep(delay);
-          frameStart = performance.now();
-        }
+    value.tiles.forEach((tile) => {
+      if (tile.direction !== tiles.get(tile)) {
+        renderer.value?.animate(tile, tiles.get(tile));
+      } else if (tile.solved) {
+        renderer.value?.render([tile]);
       }
-
-      isRunning.value = false;
-    }
-
-    watchEffect(() => {
-      grid.value?.renderer?.highlight([...highlighted]);
     });
 
-    function highlightTile(tile: Tile | undefined): void {
-      if (tile) {
-        highlight([tile]);
-      } else {
-        highlight([]);
-      }
+    log(value);
+
+    const delay = settings.delay - (performance.now() - start);
+    const frameElapsed = performance.now() - frameStart;
+
+    if (delay > 0 || frameElapsed > 1000 / 60) {
+      await sleep(delay);
+      frameStart = performance.now();
     }
+  }
 
-    function nextTile(index: number, tile: Tile, direction: -1 | 1): void {
-      const typeOrder = order[board.type];
-      let typeIndex =
-        (typeOrder.indexOf(tile.constructor as TileConstructor) + direction) %
-        typeOrder.length;
-      if (typeIndex < 0) {
-        typeIndex += typeOrder.length;
-      }
-      const TileType = typeOrder[typeIndex];
+  isRunning.value = false;
+}
 
-      setTile(
-        index,
-        new TileType({
-          solved: true,
-          x: tile.x,
-          y: tile.y,
-        })
-      );
-    }
-
-    return {
-      grid,
-      board,
-      generateBoard,
-      scrambleBoard,
-      solveBoard,
-      nextTile,
-      highlightTile,
-      isRunning,
-    };
-  },
+watchEffect(() => {
+  renderer.value?.highlight([...highlighted]);
 });
+
+function highlightTile(event: MouseEvent): void {
+  const tile = renderer.value?.getTileFromPoint(event.offsetX, event.offsetY);
+
+  if (tile) {
+    highlight([tile]);
+  }
+}
+
+function nextTile(event: MouseEvent, direction: -1 | 1): void {
+  const tile = renderer.value?.getTileFromPoint(event.offsetX, event.offsetY);
+
+  if (!tile) {
+    return;
+  }
+
+  const tileIndex = renderer.value?.grid.tiles.indexOf(tile) ?? 0;
+  const typeOrder = order[board.type];
+  let typeIndex =
+    (typeOrder.indexOf(tile.constructor as TileConstructor) + direction) %
+    typeOrder.length;
+  if (typeIndex < 0) {
+    typeIndex += typeOrder.length;
+  }
+  const TileType = typeOrder[typeIndex];
+
+  setTile(
+    tileIndex,
+    new TileType({
+      solved: true,
+      x: tile.x,
+      y: tile.y,
+    })
+  );
+}
 </script>

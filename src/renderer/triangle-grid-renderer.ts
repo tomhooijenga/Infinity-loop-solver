@@ -1,4 +1,5 @@
-import { colors, GridRenderer, TileRenderer } from "@/renderer";
+import { colors, TileRenderer } from "@/renderer";
+import { GridRenderer } from "@/renderer/grid-renderer";
 import { arc, rad } from "@/renderer/util";
 import { Grid } from "@/lib/solver/triangle/Grid";
 import { Tile } from "@/lib/base/Tile";
