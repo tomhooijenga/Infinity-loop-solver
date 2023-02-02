@@ -63,7 +63,7 @@
           v-model.number="board.width"
           min="1"
           type="number"
-          @change="update"
+          @change="update()"
         />
       </label>
       <span class="mt-auto mb-2 mx-4 text-neutral/70">&times;</span>
@@ -73,7 +73,7 @@
           v-model.number="board.height"
           min="1"
           type="number"
-          @change="update"
+          @change="update()"
         />
       </label>
     </div>
