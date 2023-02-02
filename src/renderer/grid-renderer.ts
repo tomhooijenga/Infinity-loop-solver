@@ -125,8 +125,6 @@ export abstract class GridRenderer {
     const canvas = this.ctx.canvas;
     const ratio = this.ratio();
     const dpr = window.devicePixelRatio;
-    // const dpr = 2;
-
     const [width, height] =
       maxH * ratio > maxW ? [maxW, maxW / ratio] : [maxH * ratio, maxH];
 
