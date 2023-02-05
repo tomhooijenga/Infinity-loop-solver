@@ -1,5 +1,5 @@
 import { GridRenderer } from "@/renderer/grid-renderer";
-import { colors, TileRenderer } from "@/renderer";
+import { colors, TilePosition, TileRenderer, TileSize } from "@/renderer";
 import { Tile } from "@/lib/base/Tile";
 import { arc, curve, rad } from "@/renderer/util";
 
@@ -150,7 +150,7 @@ export class HexGridRenderer extends GridRenderer {
     },
   };
 
-  ratio(): number {
+  gridRatio(): number {
     let { width, height } = this.grid;
 
     // Horizontally, each tile shares a "wing"
@@ -204,76 +204,60 @@ export class HexGridRenderer extends GridRenderer {
 
   render(tiles = this.grid.tiles): void {
     const { ctx } = this;
-    const { height, width } = this.tileSize();
 
     tiles.forEach((tile) => {
-      const { direction } = tile;
-      const { x, y, cy, cx } = this.tilePosition(tile);
+      const info = this.tileInfo(tile);
+      const { position, highlighted, direction } = info;
+      const { shapeCx, shapeCy } = position;
+      const rotate = rad(60 * direction);
 
       ctx.save();
 
-      this.drawTileOutline(tile, x, y, width, height, 0);
+      this.clearTile(tile);
 
-      ctx.clip();
-
-      this.clearTile(tile, x, y, width, height);
-
-      if (this.highlighted.has(tile)) {
-        this.renderHighlight(tile, x, y, width, height);
+      if (highlighted) {
+        this.renderHighlight(tile);
       }
 
       if (!tile.solved) {
-        this.renderOutline(tile, x, y, width, height);
+        this.renderOutline(tile);
       }
 
-      ctx.translate(cx, cy);
-      const rotate = rad(60 * direction);
-
+      ctx.translate(shapeCx, shapeCy);
       ctx.rotate(rotate);
-      ctx.translate(-cx, -cy);
+      ctx.translate(-shapeCx, -shapeCy);
 
-      this.renderTile(tile, x, y, width, height);
+      this.renderTile(tile);
 
       ctx.restore();
+
+      info.direction = tile.direction;
     });
   }
 
-  clearTile(tile: Tile, x: number, y: number, width: number, height: number) {
-    const ctx = this.ctx;
-    ctx.save();
-    this.drawTileOutline(tile, x, y, width, height, 0);
-    ctx.clip();
-    ctx.clearRect(x, y, width, height);
-    ctx.restore();
-  }
-
-  drawTileOutline(
-    tile: Tile,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    inset: number
-  ): void {
-    const ctx = this.ctx;
+  tileOutline(size: TileSize, position: TilePosition, inset: number) {
+    const { width, height } = size;
+    const { x, y } = position;
 
     const cx = x + width / 2;
     const cy = y + height / 2;
     const circumRadius = width / 2 - inset / 2;
     const [move, ...angles] = [30, 90, 150, 210, 270, 330];
 
-    ctx.beginPath();
-    ctx.moveTo(
+    const path = new Path2D();
+    path.moveTo(
       cx + circumRadius * Math.sin(rad(move)),
       cy + circumRadius * Math.cos(rad(move))
     );
 
     for (const angle of angles) {
-      ctx.lineTo(
+      path.lineTo(
         cx + circumRadius * Math.sin(rad(angle)),
         cy + circumRadius * Math.cos(rad(angle))
       );
     }
-    ctx.closePath();
+    path.closePath();
+
+    return path;
   }
 }

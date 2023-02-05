@@ -1,4 +1,4 @@
-import { readonly, shallowReactive } from "vue";
+import { shallowReactive } from "vue";
 import { BoardData, boards } from "@/boards";
 import { Tile } from "@/lib/base/Tile";
 import { Generator } from "@/lib/generator/generator";
@@ -62,19 +62,14 @@ function highlight(tiles: Tile[]) {
   tiles.forEach((tile) => highlighted.add(tile));
 }
 
-function isHighlighted(tile: Tile): boolean {
-  return highlighted.has(tile);
-}
-
 export function useBoard() {
   return {
     board,
-    highlighted: readonly(highlighted),
+    highlighted,
     loadBoard,
     generateBoard,
     scrambleBoard,
     setTile,
     highlight,
-    isHighlighted,
   };
 }

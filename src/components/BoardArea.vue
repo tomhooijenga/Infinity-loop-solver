@@ -105,6 +105,9 @@ watchEffect(() => {
   r.resize(width, height);
   r.render();
   renderer.value = r;
+
+  // un-highlight because it might have old tiles
+  highlight([]);
 });
 
 const isRunning = ref(false);
@@ -116,7 +119,6 @@ function sleep(ms: number): Promise<void> {
 async function solveBoard() {
   startGroup();
   const progress = solve(board);
-  const tiles = new Map();
 
   renderer.value?.render();
 
@@ -126,9 +128,6 @@ async function solveBoard() {
   while (isRunning.value) {
     const start = performance.now();
 
-    tiles.clear();
-    board.tiles.forEach((tile) => tiles.set(tile, tile.direction));
-
     const { done, value } = progress.next();
 
     if (done) {
@@ -136,11 +135,7 @@ async function solveBoard() {
     }
 
     value.tiles.forEach((tile) => {
-      if (tile.direction !== tiles.get(tile)) {
-        renderer.value?.animate(tile, tiles.get(tile));
-      } else if (tile.solved) {
-        renderer.value?.render([tile]);
-      }
+      renderer.value?.animate(tile);
     });
 
     log(value);

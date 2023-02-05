@@ -1,8 +1,7 @@
-import { Tile, TileConstructor } from "@/lib/base/Tile";
+import { Tile } from "@/lib/base/Tile";
 import { GridRenderer } from "@/renderer/grid-renderer";
 
 export class Animation {
-  protected clone: Tile;
   protected rafId = 0;
   protected duration = 100;
 
@@ -10,14 +9,11 @@ export class Animation {
     protected tile: Tile,
     protected renderer: GridRenderer,
     protected animation: { from: number; to: number }
-  ) {
-    const TileCtor = tile.constructor as TileConstructor;
-    this.clone = new TileCtor(tile);
-  }
+  ) {}
 
   start() {
     const {
-      clone,
+      tile,
       renderer,
       animation: { from, to },
     } = this;
@@ -26,6 +22,7 @@ export class Animation {
       return;
     }
 
+    const info = this.renderer.tileInfo(tile);
     const start = window.performance.now();
     const step = (to - from) / 100;
     const duration = this.duration * Math.abs(to - from);
@@ -33,9 +30,9 @@ export class Animation {
     const animate: FrameRequestCallback = (timestamp) => {
       const elapsed = timestamp - start;
 
-      clone.direction = from + step * Math.min(elapsed * (100 / duration), 100);
+      info.direction = from + step * Math.min(elapsed * (100 / duration), 100);
 
-      renderer.render([clone]);
+      renderer.render([tile]);
 
       if (elapsed >= duration) {
         return;

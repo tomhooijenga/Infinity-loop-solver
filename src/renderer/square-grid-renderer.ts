@@ -1,4 +1,4 @@
-import { colors, TileRenderer } from "@/renderer";
+import { colors, TilePosition, TileRenderer, TileSize } from "@/renderer";
 import { GridRenderer } from "@/renderer/grid-renderer";
 import { arc, rad } from "@/renderer/util";
 import { Tile } from "@/lib/base/Tile";
@@ -64,46 +64,42 @@ export class SquareGridRenderer extends GridRenderer {
     },
   };
 
-  ratio(): number {
+  gridRatio(): number {
     const { width, height } = this.grid;
     return width / height;
   }
 
   render(tiles = this.grid.tiles): void {
     const { ctx } = this;
-    const { width: size } = this.tileSize();
 
     tiles.forEach((tile) => {
-      const { direction } = tile;
-      const { x, y, cx, cy } = this.tilePosition(tile);
+      const info = this.tileInfo(tile);
+      const { position, highlighted, direction } = info;
+      const { shapeCx, shapeCy } = position;
+      const rotate = rad(90 * direction);
 
       ctx.save();
 
-      this.drawTileOutline(tile, x, y, size, size, 0);
-      ctx.clip();
+      this.clearTile(tile);
 
-      this.clearTile(tile, x, y, size, size);
-
-      if (this.highlighted.has(tile)) {
-        this.renderHighlight(tile, x, y, size, size);
+      if (highlighted) {
+        this.renderHighlight(tile);
       }
 
       if (!tile.solved) {
-        this.renderOutline(tile, x, y, size, size);
+        this.renderOutline(tile);
       }
 
-      ctx.translate(cx, cy);
-      ctx.rotate(rad(90 * direction));
-      ctx.translate(-cx, -cy);
+      ctx.translate(shapeCx, shapeCy);
+      ctx.rotate(rotate);
+      ctx.translate(-shapeCx, -shapeCy);
 
-      this.renderTile(tile, x, y, size, size);
+      this.renderTile(tile);
 
       ctx.restore();
-    });
-  }
 
-  clearTile(tile: Tile, x: number, y: number, width: number, height: number) {
-    this.ctx.clearRect(x, y, width, height);
+      info.direction = tile.direction;
+    });
   }
 
   tileSize(): { width: number; height: number } {
@@ -133,21 +129,19 @@ export class SquareGridRenderer extends GridRenderer {
     };
   }
 
-  drawTileOutline(
-    tile: Tile,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    inset: number
-  ) {
-    const ctx = this.ctx;
+  tileOutline(size: TileSize, position: TilePosition, inset: number) {
     inset /= 2;
-    ctx.beginPath();
-    ctx.moveTo(x + inset, y + inset);
-    ctx.lineTo(x + width - inset, y + inset);
-    ctx.lineTo(x + width - inset, y + height - inset);
-    ctx.lineTo(x + inset, y + height - inset);
-    ctx.closePath();
+
+    const { width, height } = size;
+    const { x, y } = position;
+
+    const path = new Path2D();
+    path.moveTo(x + inset, y + inset);
+    path.lineTo(x + width - inset, y + inset);
+    path.lineTo(x + width - inset, y + height - inset);
+    path.lineTo(x + inset, y + height - inset);
+    path.closePath();
+
+    return path;
   }
 }

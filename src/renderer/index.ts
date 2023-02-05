@@ -6,6 +6,7 @@ import { SquareGridRenderer } from "@/renderer/square-grid-renderer";
 import { HexGridRenderer } from "@/renderer/hex-grid-renderer";
 import { TriangleGridRenderer } from "@/renderer/triangle-grid-renderer";
 import { type GridRenderer } from "@/renderer/grid-renderer";
+import { Animation } from "@/renderer/animation";
 
 export { GridRenderer } from "@/renderer/grid-renderer";
 
@@ -18,6 +19,26 @@ export type TileRenderer = (
   x: number,
   y: number
 ) => void;
+
+export type TileInfo = {
+  position: TilePosition;
+  animation: Animation | null;
+  direction: number;
+  highlighted: boolean;
+  size: TileSize;
+  outline: Path2D;
+};
+
+export type TilePosition = {
+  x: number;
+  y: number;
+  cx: number;
+  cy: number;
+  shapeCx: number;
+  shapeCy: number;
+};
+
+export type TileSize = { width: number; height: number };
 
 export function factory(
   type: "triangle" | "square" | "hex",

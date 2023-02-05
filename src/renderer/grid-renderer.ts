@@ -1,129 +1,146 @@
 import { Grid } from "@/lib/base/Grid";
-import { colors, TileRenderer } from "@/renderer";
+import {
+  colors,
+  TileInfo,
+  TilePosition,
+  TileRenderer,
+  TileSize,
+} from "@/renderer";
 import { Tile } from "@/lib/base/Tile";
 import { Animation } from "@/renderer/animation";
 
 export abstract class GridRenderer {
-  protected tileCache: Record<string, HTMLCanvasElement> = {};
+  protected tileRendererCache: Record<string, HTMLCanvasElement> = {};
 
   protected tileRenderers: Record<string, TileRenderer> = {};
 
-  protected animations = new Map<Tile, Animation>();
-
-  protected highlighted = new Set<Tile>();
+  protected tileCache = new Map<Tile, TileInfo>();
 
   constructor(public grid: Grid, protected ctx: CanvasRenderingContext2D) {}
 
   abstract render(tiles?: Tile[]): void;
 
-  protected renderTile(
-    tile: Tile,
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ): void {
-    this.ctx.drawImage(this.tileCache[tile.type], x, y, width, height);
+  protected renderTile(tile: Tile): void {
+    const {
+      size: { width, height },
+      position: { x, y },
+    } = this.tileInfo(tile);
+
+    this.ctx.drawImage(this.tileRendererCache[tile.type], x, y, width, height);
   }
 
-  protected renderOutline(
-    tile: Tile,
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ): void {
-    this.drawTileOutline(tile, x, y, width, height, (width / 100) * 5);
+  protected renderOutline(tile: Tile): void {
+    const { size, position } = this.tileInfo(tile);
+    const outline = this.tileOutline(size, position, (size.width / 100) * 5);
     const ctx = this.ctx;
-    ctx.lineWidth = width / 100;
+
+    ctx.lineWidth = size.width / 100;
     ctx.strokeStyle = colors.redOutline;
-    ctx.stroke();
+    ctx.stroke(outline);
   }
 
   public highlight(tiles: Tile[]) {
-    const previous = [...this.highlighted];
-    this.highlighted.clear();
-    tiles.forEach((tile) => this.highlighted.add(tile));
+    for (const [tile, info] of this.tileCache) {
+      if (info.highlighted) {
+        info.highlighted = false;
+        this.render([tile]);
+      }
+    }
 
-    this.render([...previous, ...tiles]);
+    tiles.forEach((tile) => {
+      const info = this.tileInfo(tile);
+
+      info.highlighted = true;
+    });
+
+    this.render(tiles);
   }
 
-  protected renderHighlight(
-    tile: Tile,
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ) {
+  protected renderHighlight(tile: Tile) {
     const ctx = this.ctx;
+    const {
+      outline,
+      size: { width, height },
+      position: { x, y },
+    } = this.tileInfo(tile);
 
     ctx.save();
-
-    this.drawTileOutline(tile, x, y, width, height, 0);
-
-    ctx.clip();
+    ctx.clip(outline);
     ctx.fillStyle = colors.hover;
     ctx.fillRect(x, y, width, height);
     ctx.restore();
   }
 
-  abstract clearTile(
-    tile: Tile,
-    x: number,
-    y: number,
-    width: number,
-    height: number
-  ): void;
+  protected clearTile(tile: Tile) {
+    const ctx = this.ctx;
+    const {
+      outline,
+      size: { width, height },
+      position: { x, y },
+    } = this.tileInfo(tile);
 
-  abstract tileSize(): { width: number; height: number };
+    ctx.save();
+    ctx.clip(outline);
+    ctx.clearRect(x, y, width, height);
+    ctx.restore();
+  }
 
-  abstract tilePosition(tile: Tile): {
-    x: number;
-    y: number;
-    cx: number;
-    cy: number;
-    shapeCx: number;
-    shapeCy: number;
-  };
+  abstract tileSize(): TileSize;
 
-  abstract drawTileOutline(
-    tile: Tile,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
+  abstract tilePosition(tile: Tile, size: TileSize): TilePosition;
+
+  abstract tileOutline(
+    size: TileSize,
+    position: TilePosition,
     inset: number
-  ): void;
+  ): Path2D;
 
-  abstract ratio(): number;
+  abstract gridRatio(): number;
 
   getTileFromPoint(pointX: number, pointY: number): Tile | undefined {
-    const { width, height } = this.tileSize();
     const dpr = window.devicePixelRatio;
 
     return this.grid.tiles.find((tile) => {
-      const { x, y } = this.tilePosition(tile);
-      this.drawTileOutline(tile, x, y, width, height, 0);
+      const { outline } = this.tileInfo(tile);
 
-      return this.ctx.isPointInPath(pointX * dpr, pointY * dpr);
+      return this.ctx.isPointInPath(outline, pointX * dpr, pointY * dpr);
     });
   }
 
-  animate(tile: Tile, from: number) {
+  animate(tile: Tile) {
+    const info = this.tileInfo(tile);
+
+    if (info.direction === tile.direction) {
+      info.animation?.stop();
+
+      this.render([tile]);
+
+      return;
+    }
+
     const anim = new Animation(tile, this, {
-      from,
+      from: info.direction,
       to: tile.direction,
     });
 
-    this.animations.get(tile)?.stop();
-    this.animations.set(tile, anim);
+    info.animation = anim;
 
     anim.start();
   }
 
+  tileInfo(tile: Tile): TileInfo {
+    const tileInfo = this.tileCache.get(tile);
+
+    if (!tileInfo) {
+      throw new Error("Invalid tile");
+    }
+
+    return tileInfo;
+  }
+
   resize(maxW: number, maxH: number) {
     const canvas = this.ctx.canvas;
-    const ratio = this.ratio();
+    const ratio = this.gridRatio();
     const dpr = window.devicePixelRatio;
     const [width, height] =
       maxH * ratio > maxW ? [maxW, maxW / ratio] : [maxH * ratio, maxH];
@@ -136,10 +153,11 @@ export abstract class GridRenderer {
     canvas.style.width = width + "px";
     canvas.style.height = height + "px";
 
-    this.cacheTiles();
+    this.cacheTilesRenderers();
+    this.cacheTileInfo();
   }
 
-  cacheTiles() {
+  protected cacheTilesRenderers() {
     const { width, height } = this.tileSize();
 
     Object.entries(this.tileRenderers).forEach(([type, renderer]) => {
@@ -159,7 +177,25 @@ export abstract class GridRenderer {
 
       renderer(ctx, width, height, 0, 0);
 
-      this.tileCache[type] = canvas;
+      this.tileRendererCache[type] = canvas;
+    });
+  }
+
+  protected cacheTileInfo() {
+    const size = this.tileSize();
+
+    this.grid.tiles.forEach((tile) => {
+      const position = this.tilePosition(tile, size);
+      const outline = this.tileOutline(size, position, 0);
+
+      this.tileCache.set(tile, {
+        animation: null,
+        highlighted: false,
+        direction: tile.direction,
+        outline,
+        position,
+        size,
+      });
     });
   }
 }

@@ -1,4 +1,4 @@
-import { colors, TileRenderer } from "@/renderer";
+import { colors, TilePosition, TileRenderer, TileSize } from "@/renderer";
 import { GridRenderer } from "@/renderer/grid-renderer";
 import { arc, rad } from "@/renderer/util";
 import { Grid } from "@/lib/solver/triangle/Grid";
@@ -58,7 +58,7 @@ export class TriangleGridRenderer extends GridRenderer {
     super(grid, ctx);
   }
 
-  ratio(): number {
+  gridRatio(): number {
     const { width, height } = this.grid;
     const w = width / 2 + 0.5;
     const h = height * HEIGHT_RATIO;
@@ -68,11 +68,13 @@ export class TriangleGridRenderer extends GridRenderer {
 
   render(tiles = this.grid.tiles): void {
     const { ctx, grid } = this;
-    const { height, width } = this.tileSize();
 
     tiles.forEach((tile) => {
-      const { direction } = tile;
-      const { x, y, shapeCx, shapeCy, cy, cx } = this.tilePosition(tile);
+      const info = this.tileInfo(tile);
+      const { position, highlighted, direction } = info;
+      const { cx, cy, shapeCx, shapeCy } = position;
+      const isPointyUp = grid.isPointyUp(tile);
+      const rotate = rad(120 * direction) + (isPointyUp ? 0 : rad(120));
 
       ctx.save();
 
@@ -83,45 +85,26 @@ export class TriangleGridRenderer extends GridRenderer {
         ctx.translate(-cx, -cy);
       }
 
-      this.drawTileOutline(tile, x, y, width, height, 0);
-      ctx.clip();
+      this.clearTile(tile);
 
-      this.clearTile(tile, x, y, width, height);
-
-      if (this.highlighted.has(tile)) {
-        this.renderHighlight(tile, x, y, width, height);
+      if (highlighted) {
+        this.renderHighlight(tile);
       }
 
       if (!tile.solved) {
-        this.renderOutline(tile, x, y, width, height);
+        this.renderOutline(tile);
       }
 
       ctx.translate(shapeCx, shapeCy);
-      let rotate = rad(120 * direction);
-
-      if (!grid.isPointyUp(tile)) {
-        rotate += rad(120);
-      }
-
       ctx.rotate(rotate);
       ctx.translate(-shapeCx, -shapeCy);
 
-      this.renderTile(tile, x, y, width, height);
+      this.renderTile(tile);
 
       ctx.restore();
+
+      info.direction = tile.direction;
     });
-  }
-
-  clearTile(tile: Tile, x: number, y: number, width: number, height: number) {
-    const ctx = this.ctx;
-
-    ctx.save();
-
-    this.drawTileOutline(tile, x, y, width, height, 0);
-
-    ctx.clip();
-    ctx.clearRect(x, y, width, height);
-    ctx.restore();
   }
 
   tileSize(): { width: number; height: number } {
@@ -155,33 +138,26 @@ export class TriangleGridRenderer extends GridRenderer {
     };
   }
 
-  drawTileOutline(
-    tile: Tile,
-    x: number,
-    y: number,
-    width: number,
-    height: number,
-    inset: number
-  ) {
-    const ctx = this.ctx;
-
-    const cx = x + width / 2;
-    const cy = y + height * CENTER_OFFSET;
+  tileOutline(size: TileSize, position: TilePosition, inset: number) {
+    const { height } = size;
+    const { shapeCx, shapeCy } = position;
     const circumRadius = (height * 2) / 3 - inset / 2;
     const [move, ...angles] = [60, 180, 300];
 
-    ctx.beginPath();
-    ctx.moveTo(
-      cx + circumRadius * Math.sin(rad(move)),
-      cy + circumRadius * Math.cos(rad(move))
+    const path = new Path2D();
+    path.moveTo(
+      shapeCx + circumRadius * Math.sin(rad(move)),
+      shapeCy + circumRadius * Math.cos(rad(move))
     );
 
     for (const angle of angles) {
-      ctx.lineTo(
-        cx + circumRadius * Math.sin(rad(angle)),
-        cy + circumRadius * Math.cos(rad(angle))
+      path.lineTo(
+        shapeCx + circumRadius * Math.sin(rad(angle)),
+        shapeCy + circumRadius * Math.cos(rad(angle))
       );
     }
-    ctx.closePath();
+    path.closePath();
+
+    return path;
   }
 }
