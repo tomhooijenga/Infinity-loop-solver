@@ -5,9 +5,9 @@
         ref="canvas"
         class="m-auto"
         @click="nextTile($event, 1)"
-        @contextmenu.prevent="nextTile($event, -1)"
         @mousemove="highlightTile($event)"
         @mouseout="highlight([])"
+        @contextmenu.prevent="nextTile($event, -1)"
       />
     </div>
 
@@ -22,7 +22,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import { ref, shallowRef, watchEffect } from "vue";
 import { BoardData, solve } from "@/boards";
 import Button from "@/components/Button.vue";
@@ -153,7 +153,11 @@ async function solveBoard() {
 }
 
 watchEffect(() => {
-  renderer.value?.highlight([...highlighted]);
+  try {
+    renderer.value?.highlight([...highlighted]);
+  } catch (e) {
+    // Tiles might not belong to current grid
+  }
 });
 
 function highlightTile(event: MouseEvent): void {
