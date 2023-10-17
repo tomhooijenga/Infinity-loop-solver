@@ -7,60 +7,46 @@ export class FitStep implements SolveStep {
   public name = "Fit (Generic)";
 
   public solveTile(tile: Tile, grid: Grid): boolean {
-    return this.findFit(grid, tile, this.getFacing(tile, grid));
+    const neighbours = grid.facing(tile);
+    const sides = (tile.constructor as TileConstructor).SIDES;
+    const position =
+      this.patternIndex(neighbours, sides, FacingState.Open) ??
+      this.patternIndex(neighbours, sides, FacingState.Closed);
+
+    if (position === null) {
+      return false;
+    }
+
+    tile.direction = position;
+
+    return true;
   }
 
-  protected getFacing(tile: Tile, grid: Grid): FacingState[] {
-    return grid.facing(tile);
-  }
+  protected patternIndex(
+    source: readonly FacingState[],
+    pattern: readonly FacingState[],
+    checking: FacingState
+  ): number | null {
+    const length = source.length;
 
-  protected findFit(
-    grid: Grid,
-    tile: Tile,
-    neighbours: FacingState[]
-  ): boolean {
-    const startDirection = tile.direction;
+    source = source.concat(source);
 
-    for (const direction of grid.directionUtil) {
-      tile.direction = direction;
+    for (let i = 0; i <= length; i++) {
+      let j = 0;
+      for (; j < length; j++) {
+        if (pattern[j] !== checking) {
+          continue;
+        }
+        if (source[i + j] !== pattern[j]) {
+          break;
+        }
+      }
 
-      if (this.fits(grid, tile, neighbours)) {
-        return true;
+      if (j === length) {
+        return i;
       }
     }
 
-    tile.direction = startDirection;
-
-    return false;
-  }
-
-  protected fits(grid: Grid, tile: Tile, neighbours: FacingState[]): boolean {
-    let checkedOpen = 0;
-    let checkedClosed = 0;
-
-    const openSides = (tile.constructor as TileConstructor).SIDES.filter(
-      Boolean
-    ).length;
-
-    const couldFit = neighbours.every((facing, side) => {
-      if (facing === FacingState.Unknown) {
-        return true;
-      }
-
-      // Match this tile's side to the neighbour's side
-      if (facing === grid.getTileSide(tile, side)) {
-        facing ? checkedOpen++ : checkedClosed++;
-
-        return true;
-      }
-
-      return false;
-    });
-
-    return (
-      couldFit &&
-      (checkedOpen === openSides ||
-        checkedClosed === grid.directionUtil.numSides - openSides)
-    );
+    return null;
   }
 }
