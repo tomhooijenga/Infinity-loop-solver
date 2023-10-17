@@ -1,6 +1,6 @@
 <template>
   <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
-    <div ref="wrapper" class="w-full h-full min-w-0 flex overflow-hidden">
+    <div class="w-full h-full min-w-0 flex overflow-hidden">
       <canvas
         ref="canvas"
         class="m-auto"
@@ -93,7 +93,7 @@ watchEffect(() => {
     return;
   }
 
-  const ctx = canvas.value?.getContext("2d");
+  const ctx = canvas.value.getContext("2d");
 
   if (!ctx) {
     return;
