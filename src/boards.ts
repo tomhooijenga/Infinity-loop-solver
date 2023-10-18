@@ -244,6 +244,7 @@ export function solve(boardData: BoardData): Generator<SolveProgress, boolean> {
   boardData.tiles.forEach((tile) => {
     tile.solved = false;
   });
+  boardData.tiles = [...boardData.tiles];
 
   const solver = {
     triangle: solveTriangle,

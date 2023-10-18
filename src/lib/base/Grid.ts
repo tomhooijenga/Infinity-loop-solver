@@ -9,6 +9,14 @@ export abstract class Grid {
 
   public abstract directionUtil: DirectionUtil;
 
+  get width(): number {
+    return this.grid.length;
+  }
+
+  get height() {
+    return this.grid[0]?.length ?? 0;
+  }
+
   constructor(tiles: Tile[] = []) {
     this.setTiles(tiles);
   }
@@ -53,7 +61,7 @@ export abstract class Grid {
    */
   public replaceTile(old: Tile, tile: Tile): void {
     const { x, y } = old;
-    const width = this.grid.length;
+    const width = this.width;
     const index = y * width + x;
 
     this.grid[x][y] = tile;

@@ -7,36 +7,36 @@
 
       <label>
         <input
-          v-model="board.type"
           type="radio"
           name="type"
           value="triangle"
           class="mr-1"
-          @change="update"
+          :checked="board.type === 'triangle'"
+          @change="update({ type: 'triangle' })"
         />
         Triangle
       </label>
 
       <label>
         <input
-          v-model="board.type"
           type="radio"
           name="type"
           value="square"
           class="mr-1"
-          @change="update"
+          :checked="board.type === 'square'"
+          @change="update({ type: 'square' })"
         />
         Square
       </label>
 
       <label>
         <input
-          v-model="board.type"
           type="radio"
           name="type"
           value="hex"
           class="mr-1"
-          @change="update"
+          :checked="board.type === 'hex'"
+          @change="update({ type: 'hex' })"
         />
         Hexagon
       </label>
@@ -63,7 +63,7 @@
           v-model.number="board.width"
           min="1"
           type="number"
-          @change="update"
+          @change="update()"
         />
       </label>
       <span class="mt-auto mb-2 mx-4 text-neutral/70">&times;</span>
@@ -73,7 +73,7 @@
           v-model.number="board.height"
           min="1"
           type="number"
-          @change="update"
+          @change="update()"
         />
       </label>
     </div>
@@ -84,7 +84,7 @@
 import { defineComponent } from "vue";
 import { useBoard } from "@/use-board";
 import { None } from "@/lib/base/None";
-import { constructTiles } from "@/boards";
+import { BoardData, constructTiles } from "@/boards";
 import { useSettings } from "@/use-settings";
 
 export default defineComponent({
@@ -96,8 +96,8 @@ export default defineComponent({
     const { board, generateBoard } = useBoard();
     const { settings } = useSettings();
 
-    function update() {
-      const { type, width, height } = board;
+    function update(settings: Partial<BoardData> = {}) {
+      const { type, width, height } = { ...board, ...settings };
       const tiles = new Array(width * height).fill(None);
       Object.assign(board, constructTiles(type, width, tiles));
 
