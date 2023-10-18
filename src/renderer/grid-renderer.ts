@@ -16,7 +16,10 @@ export abstract class GridRenderer {
 
   protected tileCache = new Map<Tile, TileInfo>();
 
-  constructor(public grid: Grid, protected ctx: CanvasRenderingContext2D) {}
+  constructor(
+    public grid: Grid,
+    protected ctx: CanvasRenderingContext2D,
+  ) {}
 
   abstract render(tiles?: Tile[]): void;
 
@@ -92,7 +95,7 @@ export abstract class GridRenderer {
   abstract tileOutline(
     size: TileSize,
     position: TilePosition,
-    inset: number
+    inset: number,
   ): Path2D;
 
   abstract gridRatio(): number;

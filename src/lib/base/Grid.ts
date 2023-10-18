@@ -71,7 +71,7 @@ export abstract class Grid {
   public getTileSide(tile: Tile, direction: number): FacingState {
     const translatedDirection = this.directionUtil.rotate(
       direction,
-      -tile.direction
+      -tile.direction,
     );
     return (tile.constructor as TileConstructor).SIDES[translatedDirection];
   }

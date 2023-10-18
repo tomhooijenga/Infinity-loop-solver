@@ -13,7 +13,7 @@ export function arc(
   start: number,
   amount: number,
   shadow = true,
-  draw: "stroke" | "fill" = "stroke"
+  draw: "stroke" | "fill" = "stroke",
 ): void {
   if (shadow) {
     ctx.beginPath();
@@ -44,7 +44,7 @@ export function curve(
   x1: number,
   y1: number,
   x2: number,
-  y2: number
+  y2: number,
 ): void {
   ctx.beginPath();
   ctx.lineWidth = (width / 100) * 10;

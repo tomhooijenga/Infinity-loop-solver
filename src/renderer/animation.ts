@@ -8,7 +8,7 @@ export class Animation {
   constructor(
     protected tile: Tile,
     protected renderer: GridRenderer,
-    protected animation: { from: number; to: number }
+    protected animation: { from: number; to: number },
   ) {}
 
   start() {

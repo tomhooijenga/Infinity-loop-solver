@@ -6,9 +6,12 @@ import { FacingState } from "@/lib/base/FacingState";
 export class Generator {
   protected tileInstances: Map<TileConstructor, Tile>;
 
-  constructor(private grid: Grid, private tileTypes: TileConstructor[]) {
+  constructor(
+    private grid: Grid,
+    private tileTypes: TileConstructor[],
+  ) {
     this.tileInstances = new Map(
-      tileTypes.map((TileType) => [TileType, new TileType()])
+      tileTypes.map((TileType) => [TileType, new TileType()]),
     );
   }
 
@@ -20,7 +23,7 @@ export class Generator {
           solved: true,
           x: index % width,
           y: Math.floor(index / width),
-        })
+        }),
     );
 
     this.grid.setTiles(tiles);
@@ -77,7 +80,7 @@ export class Generator {
             y: tile.y,
             direction: t.direction,
             solved: true,
-          })
+          }),
         );
         return true;
       }
@@ -96,7 +99,7 @@ export class Generator {
       FacingState.Open;
 
     return [...this.tileInstances.values()].some((tile) =>
-      this.tileFits(tile, facing)
+      this.tileFits(tile, facing),
     );
   }
 

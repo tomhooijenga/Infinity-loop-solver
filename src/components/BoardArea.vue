@@ -199,7 +199,7 @@ function nextTile(event: MouseEvent, direction: -1 | 1): void {
       solved: true,
       x: tile.x,
       y: tile.y,
-    })
+    }),
   );
 }
 </script>

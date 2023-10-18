@@ -20,6 +20,6 @@ import ExampleBoard from "@/components/ExampleBoard.vue";
 const { loadBoard } = useBoard();
 
 const boardData: [keyof typeof boards, BoardData][] = Object.entries(
-  boards
+  boards,
 ).map(([name, board]) => [name as keyof typeof boards, board()]);
 </script>

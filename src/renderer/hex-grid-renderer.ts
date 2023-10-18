@@ -27,14 +27,14 @@ export class HexGridRenderer extends GridRenderer {
         cx - percent * 5,
         y,
         percent * 10,
-        height / 2 - r - percent * 4
+        height / 2 - r - percent * 4,
       );
       ctx.fillStyle = colors.red;
       ctx.fillRect(
         cx - percent * 3,
         y,
         percent * 6,
-        height / 2 - r - percent * 2
+        height / 2 - r - percent * 2,
       );
     },
     TurnS(ctx, width) {
@@ -66,7 +66,7 @@ export class HexGridRenderer extends GridRenderer {
         width * 0.125,
         height * 0.25,
         width * 0.5,
-        height
+        height,
       );
     },
     CheckR(ctx, width, height) {
@@ -78,7 +78,7 @@ export class HexGridRenderer extends GridRenderer {
         width * 0.875,
         height * 0.25,
         width * 0.5,
-        height
+        height,
       );
     },
     Square(ctx, width, height) {
@@ -93,7 +93,7 @@ export class HexGridRenderer extends GridRenderer {
         width * 0.125,
         height * 0.25,
         width * 0.5,
-        height
+        height,
       );
       arc(ctx, width, width * 0.25, 0, r, 360, 120);
     },
@@ -113,7 +113,7 @@ export class HexGridRenderer extends GridRenderer {
         width * 0.875,
         height * 0.75,
         width * 0.125,
-        height * 0.75
+        height * 0.75,
       );
       curve(ctx, width, height, width * 0.125, height * 0.75, width * 0.5, 0);
     },
@@ -128,7 +128,7 @@ export class HexGridRenderer extends GridRenderer {
         width * 0.875,
         height * 0.25,
         width * 0.5,
-        height
+        height,
       );
       curve(
         ctx,
@@ -137,7 +137,7 @@ export class HexGridRenderer extends GridRenderer {
         width * 0.125,
         height * 0.25,
         width * 0.5,
-        height
+        height,
       );
       arc(ctx, width, width * 0.25, 0, r, 360, 120);
     },
@@ -247,13 +247,13 @@ export class HexGridRenderer extends GridRenderer {
     const path = new Path2D();
     path.moveTo(
       cx + circumRadius * Math.sin(rad(move)),
-      cy + circumRadius * Math.cos(rad(move))
+      cy + circumRadius * Math.cos(rad(move)),
     );
 
     for (const angle of angles) {
       path.lineTo(
         cx + circumRadius * Math.sin(rad(angle)),
-        cy + circumRadius * Math.cos(rad(angle))
+        cy + circumRadius * Math.cos(rad(angle)),
       );
     }
     path.closePath();

@@ -34,14 +34,14 @@ export class TriangleGridRenderer extends GridRenderer {
         cx - percent * 5,
         cy + r + percent * 3,
         percent * 10,
-        incircleR - r - percent * 3
+        incircleR - r - percent * 3,
       );
       ctx.fillStyle = colors.red;
       ctx.fillRect(
         cx - percent * 3,
         cy + r + percent * 2, //  Tiny overlap to prevent edges
         percent * 6,
-        incircleR - r - percent * 2
+        incircleR - r - percent * 2,
       );
     },
     Turn(ctx, width, height, x, y) {
@@ -54,7 +54,10 @@ export class TriangleGridRenderer extends GridRenderer {
     },
   };
 
-  constructor(public grid: Grid, ctx: CanvasRenderingContext2D) {
+  constructor(
+    public grid: Grid,
+    ctx: CanvasRenderingContext2D,
+  ) {
     super(grid, ctx);
   }
 
@@ -147,13 +150,13 @@ export class TriangleGridRenderer extends GridRenderer {
     const path = new Path2D();
     path.moveTo(
       shapeCx + circumRadius * Math.sin(rad(move)),
-      shapeCy + circumRadius * Math.cos(rad(move))
+      shapeCy + circumRadius * Math.cos(rad(move)),
     );
 
     for (const angle of angles) {
       path.lineTo(
         shapeCx + circumRadius * Math.sin(rad(angle)),
-        shapeCy + circumRadius * Math.cos(rad(angle))
+        shapeCy + circumRadius * Math.cos(rad(angle)),
       );
     }
     path.closePath();

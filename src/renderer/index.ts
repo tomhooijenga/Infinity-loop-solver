@@ -17,7 +17,7 @@ export type TileRenderer = (
   width: number,
   height: number,
   x: number,
-  y: number
+  y: number,
 ) => void;
 
 export type TileInfo = {
@@ -43,7 +43,7 @@ export type TileSize = { width: number; height: number };
 export function factory(
   type: "triangle" | "square" | "hex",
   tiles: Tile[],
-  ctx: CanvasRenderingContext2D
+  ctx: CanvasRenderingContext2D,
 ): GridRenderer {
   const renderers: Record<
     "triangle" | "square" | "hex",

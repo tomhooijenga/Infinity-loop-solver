@@ -32,7 +32,7 @@ const props = defineProps({
 });
 
 const solved = computed(() =>
-  props.group.reduce((sum, { tiles }) => sum + tiles.length, 0)
+  props.group.reduce((sum, { tiles }) => sum + tiles.length, 0),
 );
 
 const condensed = computed(() => {

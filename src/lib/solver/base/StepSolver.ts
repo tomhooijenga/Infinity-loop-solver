@@ -6,7 +6,10 @@ import { SolveProgress } from "@/lib/solver/base/SolveProgress";
 export class StepSolver implements Solver {
   public name = "";
 
-  constructor(protected grid: Grid, protected steps: SolveStep[]) {}
+  constructor(
+    protected grid: Grid,
+    protected steps: SolveStep[],
+  ) {}
 
   /**
    * Attempt to solve the grid with the given steps. Solvers are called with each tile until no progress is made.

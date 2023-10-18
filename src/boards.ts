@@ -19,7 +19,7 @@ export interface BoardData {
 export function constructTiles(
   type: BoardData["type"],
   width: number,
-  tiles: TileConstructor[]
+  tiles: TileConstructor[],
 ): BoardData {
   return {
     type,
@@ -31,7 +31,7 @@ export function constructTiles(
           x: index % width,
           y: Math.floor(index / width),
           solved: true,
-        })
+        }),
     ),
   };
 }

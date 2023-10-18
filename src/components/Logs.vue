@@ -53,7 +53,7 @@ const logs = computed(() =>
   rawLogs
     .slice()
     .reverse()
-    .filter((group) => group.length)
+    .filter((group) => group.length),
 );
 
 const flyout = ref(false);

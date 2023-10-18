@@ -2,49 +2,49 @@ import { Tile } from "@/lib/base/Tile";
 
 export const End = Tile.fromSides(
   [true, false, false, false, false, false],
-  "End"
+  "End",
 );
 export const TurnS = Tile.fromSides(
   [true, true, false, false, false, false],
-  "TurnS"
+  "TurnS",
 );
 export const TurnL = Tile.fromSides(
   [true, false, true, false, false, false],
-  "TurnL"
+  "TurnL",
 );
 export const Line = Tile.fromSides(
   [true, false, false, true, false, false],
-  "Line"
+  "Line",
 );
 export const Junction = Tile.fromSides(
   [true, true, true, false, false, false],
-  "Junction"
+  "Junction",
 );
 export const CheckL = Tile.fromSides(
   [false, false, true, true, false, true],
-  "CheckL"
+  "CheckL",
 );
 export const CheckR = Tile.fromSides(
   [false, true, false, true, true, false],
-  "CheckR"
+  "CheckR",
 );
 export const Square = Tile.fromSides(
   [true, false, true, true, false, true],
-  "Square"
+  "Square",
 );
 export const Knuckles = Tile.fromSides(
   [true, true, true, true, false, false],
-  "Knuckles"
+  "Knuckles",
 );
 export const Triangle = Tile.fromSides(
   [true, false, true, false, true, false],
-  "Triangle"
+  "Triangle",
 );
 export const Diamond = Tile.fromSides(
   [true, true, false, true, false, true],
-  "Diamond"
+  "Diamond",
 );
 export const Star = Tile.fromSides(
   [true, true, true, true, true, true],
-  "Star"
+  "Star",
 );

@@ -29,7 +29,7 @@ export default defineComponent({
 
     const { settings } = useSettings();
     const solverSettings = computed<Record<string, boolean>>(
-      () => settings.solvers[board.type]
+      () => settings.solvers[board.type],
     );
 
     return {

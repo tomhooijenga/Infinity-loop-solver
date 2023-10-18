@@ -18,5 +18,5 @@ export const NONE = Object.freeze(
     x: Infinity,
     y: Infinity,
     solved: true,
-  })
+  }),
 );

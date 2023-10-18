@@ -33,7 +33,7 @@ export class Tile {
   public static fromSides(sides: boolean[], type: string): TileConstructor {
     return class extends this {
       static SIDES = sides.map((side) =>
-        side ? FacingState.Open : FacingState.Closed
+        side ? FacingState.Open : FacingState.Closed,
       );
 
       static TYPE = type;

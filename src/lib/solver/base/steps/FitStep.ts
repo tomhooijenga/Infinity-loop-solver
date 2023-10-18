@@ -25,7 +25,7 @@ export class FitStep implements SolveStep {
   protected patternIndex(
     source: readonly FacingState[],
     pattern: readonly FacingState[],
-    checking: FacingState
+    checking: FacingState,
   ): number | null {
     const length = source.length;
 

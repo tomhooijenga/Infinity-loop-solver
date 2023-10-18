@@ -14,10 +14,13 @@ export class PatternStep implements SolveStep {
    * This solver is for tiles that can be solved with a pattern, instead of all sides of a type. For example, a line
    * on a square grid can be solved while knowing only one open or closed side.
    */
-  constructor(protected type: TileConstructor, patterns: boolean[][]) {
+  constructor(
+    protected type: TileConstructor,
+    patterns: boolean[][],
+  ) {
     this.patterns = patterns.map((pattern) => {
       return pattern.map((open) =>
-        open ? FacingState.Open : FacingState.Closed
+        open ? FacingState.Open : FacingState.Closed,
       );
     });
   }
@@ -44,7 +47,7 @@ export class PatternStep implements SolveStep {
 
   protected patternIndex(
     source: ReadonlyArray<FacingState>,
-    pattern: FacingState[]
+    pattern: FacingState[],
   ): number {
     // Double the facing to allow for patterns that go from last to first.
     source = source.concat(source);

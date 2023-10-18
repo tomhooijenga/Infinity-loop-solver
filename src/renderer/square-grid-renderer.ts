@@ -33,14 +33,14 @@ export class SquareGridRenderer extends GridRenderer {
         cx - percent * 5,
         y,
         percent * 10,
-        size / 2 - r - percent * 4
+        size / 2 - r - percent * 4,
       );
       ctx.fillStyle = colors.red;
       ctx.fillRect(
         cx - percent * 3,
         y,
         percent * 6,
-        size / 2 - r - percent * 2
+        size / 2 - r - percent * 2,
       );
     },
     Junction(ctx, size, _, x, y) {
