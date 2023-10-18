@@ -134,9 +134,17 @@ async function solveBoard() {
       break;
     }
 
-    value.tiles.forEach((tile) => {
-      renderer.value?.animate(tile);
-    });
+    if (value.tiles.length) {
+      value.tiles.forEach((tile) => {
+        renderer.value?.animate(tile);
+      });
+    } else {
+      board.tiles
+        .filter((tile) => tile.solved)
+        .forEach((tile) => {
+          renderer.value?.animate(tile);
+        });
+    }
 
     log(value);
 
