@@ -42,7 +42,6 @@ watchEffect((onCleanup) => {
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const wrapper = canvas.value.parentElement!;
 
   observer.observe(wrapper);
@@ -59,7 +58,6 @@ watchEffect(() => {
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { width, height } = canvas.value.parentElement!.getBoundingClientRect();
   const r = factory(props.type, props.tiles, ctx);
   r.resize(width, height);

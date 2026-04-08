@@ -3,7 +3,7 @@ import { Tile } from "@/lib/base/Tile";
 export class DirectionUtil {
   constructor(public numSides: number) {}
 
-  public opposite(tile: Tile, dir: number): number {
+  public opposite(_tile: Tile, dir: number): number {
     return this.rotate(dir, this.numSides / 2);
   }
 

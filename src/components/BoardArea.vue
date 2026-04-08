@@ -1,5 +1,5 @@
 <template>
-  <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
+  <div class="grid grid-rows-[1fr_auto] flex-1 bg-light min-h-0">
     <div class="w-full h-full min-w-0 flex overflow-hidden">
       <canvas
         ref="canvas"
@@ -82,7 +82,6 @@ watchEffect((onCleanup) => {
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const wrapper = canvas.value.parentElement!;
 
   observer.observe(wrapper);
@@ -99,7 +98,6 @@ watchEffect(() => {
     return;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { width, height } = canvas.value.parentElement!.getBoundingClientRect();
   const r = factory(board.type, board.tiles, ctx);
   r.resize(width, height);
@@ -163,7 +161,7 @@ async function solveBoard() {
 watchEffect(() => {
   try {
     renderer.value?.highlight([...highlighted]);
-  } catch (e) {
+  } catch {
     // Tiles might not belong to current grid
   }
 });

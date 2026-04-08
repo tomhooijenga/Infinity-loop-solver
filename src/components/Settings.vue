@@ -2,10 +2,10 @@
   <h1 id="settings" class="pt-14 -mt-8">Settings</h1>
 
   <section class="bg-light p-4 space-y-8">
-    <div class="radio flex gap-2 flex-wrap">
+    <div class="flex gap-2 flex-wrap">
       <div class="w-full">Tile shape</div>
 
-      <label>
+      <label class="inline-block bg-dark py-2 px-4 rounded-full items-center">
         <input
           type="radio"
           name="type"
@@ -17,7 +17,7 @@
         Triangle
       </label>
 
-      <label>
+      <label class="inline-block bg-dark py-2 px-4 rounded-full items-center">
         <input
           type="radio"
           name="type"
@@ -29,7 +29,7 @@
         Square
       </label>
 
-      <label>
+      <label class="inline-block bg-dark py-2 px-4 rounded-full items-center">
         <input
           type="radio"
           name="type"
@@ -43,10 +43,11 @@
     </div>
 
     <div class="flex">
-      <label class="input">
-        <span class="label">Animation delay</span>
+      <label>
+        <span class="text-sm text-neutral/70">Animation delay</span>
         <input
           v-model.number="settings.delay"
+          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           type="number"
           min="0"
           max="500"
@@ -57,20 +58,22 @@
     </div>
 
     <div class="flex">
-      <label class="input">
-        <span class="label">Width</span>
+      <label>
+        <span class="text-sm text-neutral/70">Width</span>
         <input
           v-model.number="board.width"
+          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           min="1"
           type="number"
           @change="update()"
         />
       </label>
       <span class="mt-auto mb-2 mx-4 text-neutral/70">&times;</span>
-      <label class="input">
-        <span class="label">Height</span>
+      <label>
+        <span class="text-sm text-neutral/70">Height</span>
         <input
           v-model.number="board.height"
+          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           min="1"
           type="number"
           @change="update()"
@@ -112,17 +115,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.label {
-  @apply text-sm text-neutral/70;
-}
-
-.input > input {
-  @apply text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full;
-}
-
-.radio > label {
-  @apply inline-block bg-dark py-2 px-4 rounded-full items-center;
-}
-</style>
