@@ -46,8 +46,8 @@
       <label >
         <span class="text-sm text-neutral/70">Animation delay</span>
         <input
-          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           v-model.number="settings.delay"
+          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           type="number"
           min="0"
           max="500"
@@ -61,8 +61,8 @@
       <label >
         <span class="text-sm text-neutral/70">Width</span>
         <input
-          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           v-model.number="board.width"
+          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           min="1"
           type="number"
           @change="update()"
@@ -72,8 +72,8 @@
       <label >
         <span class="text-sm text-neutral/70">Height</span>
         <input
-          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           v-model.number="board.height"
+          class="text-xl p-2 border-b-2 border-b-dark bg-transparent block w-full"
           min="1"
           type="number"
           @change="update()"

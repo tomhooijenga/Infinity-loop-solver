@@ -13,7 +13,7 @@ export class BruteForceSolver extends ClusteredSolver {
     super(grid);
   }
 
-  // eslint-disable-next-line require-yield
+   
   protected *solveCluster(cluster: Tile[]): Generator<void, boolean> {
     const invalid = this.invalid(cluster);
     const combinations = this.combinations(cluster, invalid);
