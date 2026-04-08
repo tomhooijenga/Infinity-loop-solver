@@ -1,5 +1,5 @@
 <template>
-  <div class="grid [grid-template-rows:1fr_auto] flex-1 bg-light min-h-0">
+  <div class="grid grid-rows-[1fr_auto] flex-1 bg-light min-h-0">
     <div class="w-full h-full min-w-0 flex overflow-hidden">
       <canvas
         ref="canvas"
