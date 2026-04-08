@@ -43,7 +43,7 @@
     </div>
 
     <div class="flex">
-      <label >
+      <label>
         <span class="text-sm text-neutral/70">Animation delay</span>
         <input
           v-model.number="settings.delay"
@@ -58,7 +58,7 @@
     </div>
 
     <div class="flex">
-      <label >
+      <label>
         <span class="text-sm text-neutral/70">Width</span>
         <input
           v-model.number="board.width"
@@ -69,7 +69,7 @@
         />
       </label>
       <span class="mt-auto mb-2 mx-4 text-neutral/70">&times;</span>
-      <label >
+      <label>
         <span class="text-sm text-neutral/70">Height</span>
         <input
           v-model.number="board.height"

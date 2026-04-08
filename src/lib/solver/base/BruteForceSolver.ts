@@ -13,7 +13,6 @@ export class BruteForceSolver extends ClusteredSolver {
     super(grid);
   }
 
-   
   protected *solveCluster(cluster: Tile[]): Generator<void, boolean> {
     const invalid = this.invalid(cluster);
     const combinations = this.combinations(cluster, invalid);

@@ -82,7 +82,6 @@ watchEffect((onCleanup) => {
     return;
   }
 
-   
   const wrapper = canvas.value.parentElement!;
 
   observer.observe(wrapper);
@@ -99,7 +98,6 @@ watchEffect(() => {
     return;
   }
 
-   
   const { width, height } = canvas.value.parentElement!.getBoundingClientRect();
   const r = factory(board.type, board.tiles, ctx);
   r.resize(width, height);

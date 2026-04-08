@@ -9,12 +9,11 @@
     "noUnusedParameters": true,
     "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
-    "verbatimModuleSyntax": false ,
+    "verbatimModuleSyntax": false,
 
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"],
-
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
 }
