@@ -8,7 +8,7 @@ export class Generator {
 
   constructor(
     private grid: Grid,
-    private tileTypes: TileConstructor[],
+    tileTypes: TileConstructor[],
   ) {
     this.tileInstances = new Map(
       tileTypes.map((TileType) => [TileType, new TileType()]),
@@ -29,13 +29,13 @@ export class Generator {
     this.grid.setTiles(tiles);
 
     for (let i = 0; i < amount / 4; i++) {
-      this.addLine(tiles, width, height);
+      this.addLine(width, height);
     }
 
     return tiles;
   }
 
-  protected addLine(tiles: Tile[], width: number, height: number): void {
+  protected addLine(width: number, height: number): void {
     const x = this.random(0, width - 1);
     const y = this.random(0, height - 1);
     const length = this.random(2, 10);
